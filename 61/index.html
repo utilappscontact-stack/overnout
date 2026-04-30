@@ -1,0 +1,4092 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Over &amp; Out</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  --navy:#0a1628;
+  --navy2:#0d1e3a;
+  --navy3:#162640;
+  --gold:#d4a548;
+  --gold2:#f0c060;
+  --white:#f0f4ff;
+  --red:#e63946;
+  --green:#4ade80;
+  --muted:#7a8fa8;
+  --card-bg:#0b1a30;
+}
+html,body{height:100%;overflow:hidden}
+body{
+  background:var(--navy);
+  color:var(--white);
+  font-family:'Rajdhani',sans-serif;
+  font-size:16px;
+  touch-action:manipulation;
+}
+#app{
+  width:100%;
+  max-width:430px;
+  margin:0 auto;
+  height:100%;
+  position:relative;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+}
+
+/* ======= SCREEN BASE ======= */
+.screen{
+  width:100%;height:100%;
+  display:flex;flex-direction:column;
+  position:absolute;top:0;left:0;
+  overflow:hidden;
+}
+
+/* ======= HOME SCREEN ======= */
+.home-bg{
+  background:radial-gradient(ellipse at 50% 30%,#0f2550 0%,var(--navy) 70%);
+  justify-content:center;align-items:center;gap:24px;padding:40px 24px;
+}
+.home-bg::before{
+  content:'';position:absolute;top:0;left:0;right:0;bottom:0;
+  background:repeating-linear-gradient(
+    90deg,
+    rgba(212,165,72,0.03) 0px,rgba(212,165,72,0.03) 1px,
+    transparent 1px,transparent 40px
+  );pointer-events:none;
+}
+.logo-wrap{text-align:center;position:relative;z-index:1}
+.logo-main{
+  font-family:'Bebas Neue',sans-serif;font-size:80px;line-height:0.9;
+  color:var(--gold);letter-spacing:6px;
+  text-shadow:0 0 60px rgba(212,165,72,0.4),0 0 120px rgba(212,165,72,0.15);
+  animation:logoGlow 3s ease-in-out infinite;
+}
+@keyframes logoGlow{0%,100%{text-shadow:0 0 40px rgba(212,165,72,0.4)}50%{text-shadow:0 0 80px rgba(212,165,72,0.7),0 0 120px rgba(212,165,72,0.3)}}
+.logo-sub{font-size:11px;letter-spacing:8px;color:var(--muted);font-weight:700;margin-top:4px}
+.tagline{font-size:16px;color:rgba(240,244,255,0.6);text-align:center;font-weight:500}
+.btn-primary{
+  background:linear-gradient(135deg,#e0b050,#c89030);
+  color:var(--navy);font-family:'Bebas Neue',sans-serif;font-size:26px;
+  letter-spacing:3px;padding:15px 0;border:none;cursor:pointer;
+  border-radius:6px;width:100%;max-width:280px;
+  box-shadow:0 6px 30px rgba(212,165,72,0.35);
+  transition:transform 0.1s,box-shadow 0.1s;position:relative;z-index:1;
+}
+.btn-primary:active{transform:scale(0.97);box-shadow:0 2px 15px rgba(212,165,72,0.2)}
+.diff-row{display:flex;gap:10px;width:100%;max-width:280px;position:relative;z-index:1}
+.diff-btn{
+  flex:1;padding:9px 4px;background:transparent;
+  border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.25);
+  font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;
+  border-radius:5px;cursor:default;letter-spacing:1px;
+}
+.diff-btn.active{border-color:var(--gold);color:var(--gold);background:rgba(212,165,72,0.08)}
+.home-deco{
+  position:absolute;font-size:200px;opacity:0.025;user-select:none;pointer-events:none;
+  font-family:'Bebas Neue',sans-serif;letter-spacing:-10px;color:var(--gold);
+}
+.home-deco-l{left:-40px;top:50%;transform:translateY(-50%)}
+.home-deco-r{right:-40px;top:50%;transform:translateY(-50%)}
+.version-tag{position:absolute;bottom:16px;font-size:11px;color:rgba(255,255,255,0.15);letter-spacing:2px}
+.home-mode-row{display:flex;gap:14px;width:100%;max-width:340px;position:relative;z-index:1}
+.home-mode-card{
+  flex:1;border-radius:10px;padding:18px 12px;cursor:pointer;text-align:center;
+  transition:transform 0.12s,box-shadow 0.12s;
+}
+.home-mode-card:active{transform:scale(0.96)}
+.home-mode-card.sp{
+  background:linear-gradient(145deg,#e0b050,#b87820);
+  box-shadow:0 6px 28px rgba(212,165,72,0.4);
+}
+.home-mode-card.mp{
+  background:transparent;
+  border:2px solid rgba(96,165,250,0.5);
+  box-shadow:0 4px 20px rgba(96,165,250,0.15);
+}
+.home-mode-icon{font-size:28px;margin-bottom:6px}
+.home-mode-title{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px;
+  color:var(--navy)}
+.home-mode-card.mp .home-mode-title{color:#93c5fd}
+.home-mode-desc{font-size:11px;font-weight:600;letter-spacing:0.5px;margin:4px 0 10px;
+  color:rgba(10,22,40,0.7)}
+.home-mode-card.mp .home-mode-desc{color:rgba(147,197,253,0.7)}
+.home-mode-btn{font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;
+  background:rgba(0,0,0,0.18);border-radius:4px;padding:5px 8px;
+  color:var(--navy);display:inline-block}
+.home-mode-card.mp .home-mode-btn{background:rgba(96,165,250,0.15);color:#93c5fd}
+
+/* ======= PITCH REVEAL ======= */
+.pitch-bg{
+  background:linear-gradient(160deg,#080f20,#0a1628 50%,#060c18);
+  justify-content:center;align-items:center;gap:20px;padding:32px 24px;
+}
+.reveal-label{
+  font-family:'Bebas Neue',sans-serif;font-size:16px;
+  letter-spacing:5px;color:var(--muted);
+}
+.flip-wrap{perspective:900px;width:190px;height:270px;cursor:pointer}
+.flip-inner{
+  width:100%;height:100%;position:relative;
+  transform-style:preserve-3d;
+  transition:transform 0.65s cubic-bezier(0.4,0,0.2,1);
+}
+.flip-inner.flipped{transform:rotateY(180deg)}
+.flip-face{
+  position:absolute;width:100%;height:100%;border-radius:14px;
+  backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  border:2px solid var(--gold);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:8px;padding:20px;
+}
+.flip-back{
+  background:linear-gradient(135deg,var(--navy2),var(--navy3));
+}
+.flip-back-pattern{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:6px;opacity:0.4;
+}
+.flip-back-pattern span{font-size:20px}
+.flip-front{
+  transform:rotateY(180deg);
+  background:linear-gradient(145deg,#0c1e3c,#081428);
+}
+.pitch-card-icon{font-size:44px;filter:drop-shadow(0 0 10px rgba(212,165,72,0.4))}
+.pitch-card-name{
+  font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--gold);
+  text-align:center;letter-spacing:1px;line-height:1.1;
+}
+.pitch-card-desc{font-size:11px;color:var(--muted);text-align:center;line-height:1.4}
+.pitch-card-buff{
+  font-size:10px;background:rgba(212,165,72,0.12);border:1px solid rgba(212,165,72,0.3);
+  border-radius:4px;padding:3px 8px;color:var(--gold);font-weight:700;letter-spacing:1px;
+  text-align:center;
+}
+.pitch-tap-hint{
+  font-size:12px;color:var(--muted);opacity:0;transition:opacity 0.5s;
+  animation:blink 1.6s ease-in-out infinite;
+}
+.pitch-tap-hint.show{opacity:1}
+@keyframes blink{0%,100%{opacity:0.4}50%{opacity:0.9}}
+
+/* ======= DEAL ======= */
+.deal-bg{
+  background:linear-gradient(160deg,#080f20,#0a1628);
+  justify-content:center;align-items:center;gap:20px;padding:32px 16px;
+}
+.deal-title{
+  font-family:'Bebas Neue',sans-serif;font-size:26px;color:var(--gold);
+  letter-spacing:4px;text-align:center;
+}
+.deal-row{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;padding:0 8px}
+.deal-mini{
+  width:50px;height:72px;border-radius:6px;
+  border:1.5px solid var(--gold);background:var(--card-bg);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:3px;font-size:9px;color:var(--muted);
+  opacity:0;transform:translateY(-40px);
+  transition:opacity 0.35s,transform 0.35s;
+}
+.deal-mini.dealt{opacity:1;transform:translateY(0)}
+.deal-mini.ai-mini{border-color:rgba(255,255,255,0.15)}
+.deal-mini-icon{font-size:16px}
+.deal-mini-label{font-size:8px;font-weight:700;letter-spacing:0.5px}
+.deal-row-label{font-size:11px;color:var(--muted);letter-spacing:3px;font-weight:700;text-align:center}
+
+/* ======= POWER PICK ======= */
+.power-bg{
+  background:var(--navy);padding:0;
+  justify-content:flex-start;
+}
+.power-header{
+  padding:20px 16px 12px;background:linear-gradient(180deg,#080f20,transparent);
+  border-bottom:1px solid rgba(212,165,72,0.15);flex-shrink:0;
+}
+.power-title{
+  font-family:'Bebas Neue',sans-serif;font-size:26px;color:var(--gold);
+  letter-spacing:3px;
+}
+.power-sub{font-size:12px;color:var(--muted);font-weight:600;margin-top:2px}
+.power-list{flex:1;overflow-y:auto;padding:12px 12px;display:flex;flex-direction:column;gap:10px}
+.pcard{
+  border:1.5px solid rgba(255,255,255,0.08);border-radius:10px;
+  background:var(--card-bg);padding:14px;cursor:pointer;
+  transition:border-color 0.2s,background 0.2s;
+}
+.pcard.selected{border-color:var(--gold);background:rgba(212,165,72,0.06)}
+.pcard:active{background:rgba(212,165,72,0.04)}
+.pcard-top{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.pcard-icon{font-size:24px}
+.pcard-name{font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--gold);letter-spacing:2px}
+.pcard-desc{font-size:13px;color:var(--white);line-height:1.4;font-weight:500}
+.pcard-flavor{font-size:11px;color:var(--muted);margin-top:5px;font-style:italic}
+.power-footer{padding:10px 12px 16px;flex-shrink:0}
+.btn-confirm{
+  width:100%;padding:13px;background:linear-gradient(135deg,#e0b050,#c89030);
+  color:var(--navy);font-family:'Bebas Neue',sans-serif;font-size:22px;
+  letter-spacing:2px;border:none;cursor:pointer;border-radius:6px;
+  transition:opacity 0.2s;
+}
+.btn-confirm:disabled{opacity:0.2;cursor:default}
+
+/* ======= SCOREBOARD ======= */
+#sb{
+  background:linear-gradient(90deg,#060c18,#0a1628);
+  border-bottom:1px solid rgba(212,165,72,0.2);
+  padding:8px 12px;display:flex;align-items:center;
+  justify-content:space-between;flex-shrink:0;min-height:56px;
+}
+.sb-score{
+  font-family:'Bebas Neue',sans-serif;font-size:38px;color:var(--white);
+  line-height:1;text-shadow:0 0 20px rgba(255,255,255,0.2);
+}
+.sb-center{display:flex;flex-direction:column;align-items:center;gap:1px}
+.sb-over{font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--muted);letter-spacing:1px}
+.sb-inn{font-size:10px;color:var(--gold);font-weight:700;letter-spacing:2px;text-align:center}
+.sb-pitch{
+  display:flex;flex-direction:column;align-items:center;gap:1px;
+  background:rgba(212,165,72,0.06);border:1px solid rgba(212,165,72,0.2);
+  border-radius:6px;padding:4px 8px;min-width:60px;
+}
+.sb-pitch-icon{font-size:15px}
+.sb-pitch-name{font-size:8px;color:var(--gold);font-weight:700;letter-spacing:0.5px;text-align:center;line-height:1.2}
+.sb-target{font-size:10px;color:var(--muted);font-weight:600}
+.sb-target span{color:var(--gold)}
+
+/* ======= PLAY SCREEN — SPORTS HUD ======= */
+.play-screen{
+  background:var(--navy);
+  justify-content:flex-start;
+  overflow:hidden;
+  flex-direction:column;
+}
+
+/* ── AI STRIP ── */
+.ai-strip{
+  background:linear-gradient(180deg,#060d1e 0%,rgba(6,13,30,0.6) 100%);
+  padding:6px 10px 7px;flex-shrink:0;border-bottom:1px solid rgba(255,255,255,0.05);
+}
+.ai-strip-label{
+  font-size:8px;font-weight:700;letter-spacing:3px;color:var(--muted);
+  text-transform:uppercase;margin-bottom:4px;
+}
+.ai-mini-row{display:flex;gap:5px}
+.ai-mini-card{
+  flex:1;height:44px;border-radius:6px;border:1px solid rgba(255,255,255,0.07);
+  background:linear-gradient(135deg,#0d1a2e,#0a1425);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  position:relative;overflow:hidden;
+}
+.ai-mini-card::after{
+  content:'';position:absolute;inset:0;
+  background:repeating-linear-gradient(45deg,transparent,transparent 4px,rgba(255,255,255,0.015) 4px,rgba(255,255,255,0.015) 5px);
+}
+.ai-mini-icon{font-size:14px;opacity:0.25}
+.ai-mini-played{font-size:9px;font-weight:700;color:var(--muted);opacity:0.5}
+.ai-chip-row{display:flex;gap:4px;align-items:center;margin-top:4px}
+.chip-label{font-size:9px;color:var(--muted);font-weight:700;letter-spacing:1px;margin-right:2px}
+.chip{
+  width:15px;height:15px;border-radius:50%;border:1.5px solid var(--gold);
+  background:rgba(212,165,72,0.15);font-size:8px;
+  display:flex;align-items:center;justify-content:center;
+  transition:opacity 0.4s,border-color 0.4s;
+}
+.chip.spent{opacity:0.2;border-color:var(--muted);background:transparent}
+
+/* ── MID HUD ── */
+.mid-hud{
+  display:flex;gap:0;flex-shrink:0;padding:6px 10px;
+  border-bottom:1px solid rgba(255,255,255,0.05);
+  min-height:100px;
+}
+.hud-center{
+  flex:1;display:flex;flex-direction:column;gap:6px;
+}
+.hud-pitch-tag{
+  display:inline-flex;align-items:center;gap:4px;
+  background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);
+  border-radius:4px;padding:3px 7px;width:fit-content;
+}
+.hud-pitch-tag span{font-size:9px;color:var(--muted);font-weight:600;letter-spacing:1px}
+.hud-selection{
+  display:flex;gap:8px;align-items:stretch;flex:1;
+}
+.hud-selected-card{
+  background:rgba(212,165,72,0.07);border:1.5px solid rgba(212,165,72,0.3);
+  border-radius:8px;padding:7px 10px;display:flex;flex-direction:column;gap:3px;
+  min-width:90px;
+}
+.hsc-rating{font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--gold);line-height:1}
+.hsc-name{font-size:10px;font-weight:700;color:var(--white);line-height:1.2}
+.hsc-nick{font-size:8px;color:var(--muted);font-style:italic}
+.hsc-special{
+  font-size:7px;color:var(--navy);background:var(--gold);
+  padding:1px 4px;border-radius:2px;font-weight:700;width:fit-content;margin-top:1px;
+}
+.hud-hint{
+  flex:1;display:flex;align-items:center;justify-content:center;
+  color:var(--muted);font-size:11px;font-weight:600;letter-spacing:2px;
+  border:1px dashed rgba(255,255,255,0.07);border-radius:8px;
+  text-align:center;padding:12px;
+}
+.shot-col{
+  display:grid;grid-template-columns:repeat(2,1fr);gap:4px;flex:1;align-content:start;
+}
+.shot-label{font-size:8px;color:var(--muted);font-weight:700;letter-spacing:2px;margin-bottom:1px;grid-column:1/-1}
+.sBtn{
+  padding:0 6px;border-radius:5px;border:1.5px solid rgba(255,255,255,0.12);
+  background:transparent;color:rgba(240,244,255,0.75);font-family:'Rajdhani',sans-serif;
+  font-size:11px;font-weight:700;cursor:pointer;transition:all 0.12s;text-align:left;
+  display:flex;align-items:center;justify-content:space-between;min-height:28px;
+}
+.sBtn.active{border-color:var(--gold);background:rgba(212,165,72,0.14);color:var(--gold)}
+.sBtn.capped{opacity:0.25;cursor:not-allowed;text-decoration:line-through}
+.sBtn:not(.capped):not([disabled]):active{background:rgba(212,165,72,0.08)}
+.sBtn.ft-risk{border-color:rgba(230,57,70,0.3);color:rgba(230,57,70,0.7)}
+.sBtn.ft-risk.active{border-color:var(--red);background:rgba(230,57,70,0.1);color:var(--red)}
+.sBtn-dots{font-size:8px;color:var(--gold);opacity:0.7}
+.sBadge{font-size:7px;font-weight:700;border-radius:3px;padding:1px 3px;margin-left:2px;white-space:nowrap}
+.sBadge.read{background:rgba(251,191,36,0.15);color:#fbbf24}
+.sBadge.warn{background:rgba(251,191,36,0.1);color:#f59e0b}
+.sBadge.danger{background:rgba(230,57,70,0.15);color:var(--red)}
+.go-wrap{display:flex;flex-direction:column;gap:5px;justify-content:flex-end}
+.go-btn{
+  width:100%;padding:10px 8px;background:linear-gradient(135deg,#e0b050,#c08828);
+  color:var(--navy);font-family:'Bebas Neue',sans-serif;font-size:18px;
+  letter-spacing:2px;border:none;cursor:pointer;border-radius:6px;
+  transition:opacity 0.2s;white-space:nowrap;
+}
+.go-btn:disabled{opacity:0.15;cursor:default}
+
+/* ── POWER RAIL (right column) ── */
+.power-rail{
+  width:46px;display:flex;flex-direction:column;align-items:center;
+  gap:6px;padding-left:8px;justify-content:flex-start;padding-top:2px;flex-shrink:0;
+}
+.pr-label{font-size:7px;color:var(--muted);font-weight:700;letter-spacing:1px;margin-bottom:2px;text-align:center}
+.pr-slot{
+  width:40px;height:40px;border-radius:8px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:1px;position:relative;cursor:default;
+  border:1px solid transparent;transition:all 0.2s;
+}
+.pr-slot.ghost{
+  border-color:rgba(255,255,255,0.06);background:rgba(255,255,255,0.02);
+  opacity:0.3;
+}
+.pr-slot.mine{
+  border-color:rgba(212,165,72,0.35);background:rgba(212,165,72,0.08);
+  cursor:pointer;opacity:1;
+}
+.pr-slot.mine:active{transform:scale(0.94)}
+.pr-slot.declared{
+  border-color:var(--gold);background:rgba(212,165,72,0.25);
+  box-shadow:0 0 10px rgba(212,165,72,0.3);
+}
+.pr-slot.used{opacity:0.2;cursor:default;border-style:dashed}
+.pr-slot.pick-me{
+  border-color:rgba(212,165,72,0.5);background:rgba(212,165,72,0.06);
+  cursor:pointer;opacity:1;animation:prPulse 1.2s ease-in-out infinite;
+}
+@keyframes prPulse{0%,100%{box-shadow:0 0 0 rgba(212,165,72,0)}50%{box-shadow:0 0 8px rgba(212,165,72,0.4)}}
+.pr-icon{font-size:18px;line-height:1}
+.pr-name{font-size:6px;color:var(--muted);font-weight:700;letter-spacing:0.5px;text-align:center}
+
+/* ── PLAYER CARD ZONE ── */
+.player-zone{
+  flex:1;padding:6px 10px 6px;display:flex;flex-direction:column;gap:5px;overflow:hidden;
+}
+.pz-label{font-size:8px;font-weight:700;letter-spacing:3px;color:var(--muted);margin-bottom:2px}
+
+/* 6-card grid — 2 rows of 3 */
+.bcard-grid{
+  display:flex;flex-direction:row;gap:8px;
+  overflow-x:auto;overflow-y:hidden;
+  padding:4px 4px 8px;
+  -webkit-overflow-scrolling:touch;
+  scroll-snap-type:x mandatory;
+  scrollbar-width:none;
+}
+.bcard-grid::-webkit-scrollbar{display:none}
+.bcard{
+  border-radius:10px;border:1.5px solid rgba(212,165,72,0.18);
+  background:var(--card-bg);cursor:pointer;position:relative;overflow:hidden;
+  transition:border-color 0.15s,transform 0.15s,box-shadow 0.15s,opacity 0.25s;
+  padding:10px 8px 8px;
+  width:90px;min-width:90px;min-height:140px;
+  display:flex;flex-direction:column;align-items:center;gap:2px;
+  flex-shrink:0;scroll-snap-align:start;
+}
+.bcard.selected{
+  border-color:var(--gold)!important;
+  box-shadow:0 0 14px rgba(212,165,72,0.5);
+  transform:translateY(-2px) scale(1.02);
+  background:rgba(212,165,72,0.07);
+}
+.bcard.played{
+  opacity:0.45;cursor:default;
+  border-color:rgba(255,255,255,0.08);
+}
+.bcard.captain-swap{border-color:var(--gold);animation:swapPulse 0.8s ease-in-out infinite}
+@keyframes swapPulse{0%,100%{box-shadow:0 0 0 rgba(212,165,72,0)}50%{box-shadow:0 0 12px rgba(212,165,72,0.5)}}
+.bc-rating{
+  font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--gold);
+  line-height:1;
+}
+.bc-ovr{
+  font-family:'Bebas Neue',sans-serif;font-size:20px;line-height:1;
+  letter-spacing:1px;
+}
+.bc-ovr-label{font-size:6px;letter-spacing:1px;font-weight:700;opacity:0.6;line-height:1}
+.bcard.tier-gold{border-color:rgba(212,165,72,0.5);background:linear-gradient(160deg,#0d1e35,#0a1628)}
+.bcard.tier-silver{border-color:rgba(192,192,192,0.35);background:linear-gradient(160deg,#111c2e,#0a1628)}
+.bcard.tier-bronze{border-color:rgba(160,120,60,0.3);background:linear-gradient(160deg,#0f1a2c,#0a1628)}
+.bcard.tier-gold .bc-ovr{color:#f0c060}
+.bcard.tier-silver .bc-ovr{color:#c8d0dc}
+.bcard.tier-bronze .bc-ovr{color:#a07840}
+.bc-stats{display:flex;flex-direction:column;gap:2px;margin-top:4px;width:100%}
+.bc-stat{display:flex;align-items:center;gap:2px}
+.bc-stat-key{font-size:6px;color:var(--muted);font-weight:700;letter-spacing:0.3px;min-width:18px}
+.bc-stat-bar{flex:1;height:3px;background:rgba(255,255,255,0.08);border-radius:2px;overflow:hidden}
+.bc-stat-bar-fill{height:100%;border-radius:2px;background:var(--gold);transition:width 0.3s}
+.bcard.tier-silver .bc-stat-bar-fill{background:#a0b0c8}
+.bcard.tier-bronze .bc-stat-bar-fill{background:#907038}
+.bc-stat-val{font-size:6px;color:var(--muted);min-width:12px;text-align:right}
+/* HUD selected card sub-stats (larger bars) */
+.hsc-substats{margin-top:5px;display:flex;flex-direction:column;gap:3px}
+.hsc-sstat{display:flex;align-items:center;gap:4px}
+.hsc-sstat-key{font-size:8px;font-weight:700;color:var(--muted);min-width:24px;letter-spacing:0.5px}
+.hsc-sstat-bar{flex:1;height:4px;background:rgba(255,255,255,0.08);border-radius:2px;overflow:hidden}
+.hsc-sstat-fill{height:100%;background:var(--gold);border-radius:2px}
+.hsc-sstat-val{font-size:8px;color:var(--gold);min-width:20px;text-align:right;font-weight:700}
+.bc-name{font-size:8.5px;font-weight:700;color:var(--white);line-height:1.2;text-align:center;margin-top:2px}
+.bc-nick{font-size:7px;color:var(--muted);font-style:italic;line-height:1}
+.bc-special{
+  font-size:7px;color:var(--navy);background:var(--gold);
+  padding:1px 3px;border-radius:2px;font-weight:700;
+  display:inline-block;margin-top:2px;
+}
+.bc-result{
+  position:absolute;top:4px;right:5px;
+  font-size:13px;line-height:1;
+}
+.bc-played-badge{
+  position:absolute;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;opacity:0.35;pointer-events:none;
+}
+
+/* 6 mini face-down bowler/batting cards */
+.mini-back-row{display:flex;gap:4px;margin-top:2px}
+.mini-back-card{
+  flex:1;height:36px;border-radius:5px;
+  border:1px dashed rgba(255,255,255,0.1);
+  background:rgba(255,255,255,0.02);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;
+  position:relative;overflow:hidden;
+}
+.mini-back-card.played-mini{border-color:rgba(255,255,255,0.06);opacity:0.4}
+.mini-back-icon{font-size:12px;opacity:0.3}
+
+/* legacy compat */
+.player-cards-row{display:flex;gap:7px}
+.hcard{border-radius:9px;border:1.5px solid rgba(212,165,72,0.2);background:var(--card-bg);cursor:pointer;transition:border-color 0.15s,transform 0.15s,box-shadow 0.15s;overflow:hidden;position:relative;flex-shrink:0}
+.hcard.player-hcard{width:82px;min-height:115px}
+.hcard.ai-hcard-back{width:72px;height:90px;cursor:default;border-color:rgba(255,255,255,0.08)}
+.hcard.selected{border-color:var(--gold)!important;box-shadow:0 0 14px rgba(212,165,72,0.45);transform:translateY(-5px)}
+.hcard-rating{font-family:'Bebas Neue',sans-serif;font-size:26px;color:var(--gold);padding:6px 7px 0;line-height:1}
+.hcard-name{font-size:9px;font-weight:700;color:var(--white);padding:2px 7px;line-height:1.2}
+.hcard-nick{font-size:8px;color:var(--muted);line-height:1;margin-top:1px;font-style:italic}
+.hcard-special{font-size:8px;color:var(--navy);background:var(--gold);padding:2px 5px;margin:4px 7px;border-radius:2px;display:inline-block;font-weight:700}
+.hcard-hidden{display:flex;height:100%;align-items:center;justify-content:center;font-size:22px;opacity:0.15}
+.zone-label{font-size:10px;color:var(--muted);font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px}
+.ai-cards-row{display:flex;gap:7px;align-items:flex-end}
+.choice-row{display:flex;gap:7px}
+.cbtn{flex:1;padding:10px 4px;border:1.5px solid rgba(255,255,255,0.12);background:transparent;color:rgba(240,244,255,0.7);font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;cursor:pointer;border-radius:6px;transition:all 0.15s;letter-spacing:0.5px}
+.cbtn:disabled{opacity:0.2;cursor:default}
+.cbtn.selected{border-color:var(--gold);background:rgba(212,165,72,0.12);color:var(--gold)}
+.action-row{display:flex;gap:7px;align-items:stretch}
+.pbtn{padding:8px 11px;border:1.5px solid rgba(212,165,72,0.35);background:rgba(212,165,72,0.06);color:var(--gold);font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:700;cursor:pointer;border-radius:6px;transition:all 0.15s;letter-spacing:0.5px;white-space:nowrap;flex-shrink:0}
+.pbtn.used{opacity:0.2;cursor:default;border-style:dashed}
+.pbtn.declared{border-color:var(--gold2);background:rgba(212,165,72,0.25);color:var(--navy)}
+.swap-hint{font-size:12px;color:var(--gold);font-weight:600;text-align:center;background:rgba(212,165,72,0.08);border:1px solid rgba(212,165,72,0.25);border-radius:5px;padding:6px}
+.pitch-divider{height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:0.25;margin:0;flex-shrink:0}
+.dice-overlay{
+  position:absolute;top:0;left:0;right:0;bottom:0;
+  background:rgba(6,11,24,0.94);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:18px;z-index:50;padding:20px;
+}
+.do-label{font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--muted);letter-spacing:4px}
+.do-reveal-row{
+  display:flex;gap:12px;width:100%;justify-content:center;
+}
+.do-rcard{
+  flex:1;max-width:140px;border-radius:9px;
+  border:1.5px solid;background:var(--card-bg);
+  padding:10px 8px;text-align:center;
+}
+.do-rcard.batter{border-color:var(--green)}
+.do-rcard.bowler{border-color:var(--red)}
+.do-role{font-size:9px;font-weight:700;letter-spacing:2px;color:var(--muted);margin-bottom:3px}
+.do-cname{font-size:11px;font-weight:700;color:var(--white);line-height:1.2}
+.do-rating{font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--gold)}
+.do-choice{
+  font-size:11px;font-weight:700;color:var(--gold2);margin-top:3px;
+  background:rgba(212,165,72,0.1);border-radius:3px;padding:2px 4px;
+}
+.dice-pair{display:flex;gap:24px;align-items:center}
+.die-wrap{display:flex;flex-direction:column;align-items:center;gap:6px}
+.die-label{font-size:10px;color:var(--muted);font-weight:700;letter-spacing:2px}
+.die{
+  width:72px;height:72px;border-radius:10px;
+  background:var(--navy2);border:2px solid var(--gold);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Bebas Neue',sans-serif;font-size:44px;color:var(--white);
+  box-shadow:0 0 18px rgba(212,165,72,0.2);
+  transition:border-color 0.2s,box-shadow 0.2s;
+}
+.die.rolling{animation:diceShake 0.1s linear infinite}
+@keyframes diceShake{
+  0%{transform:rotate(-3deg)}25%{transform:rotate(3deg)}50%{transform:translateY(-2px)}75%{transform:rotate(-2deg)}100%{transform:rotate(0deg)}
+}
+.die.settled{border-color:var(--gold2);box-shadow:0 0 25px rgba(212,165,72,0.55);animation:diceSettle 0.35s cubic-bezier(0.34,1.56,0.64,1)}
+@keyframes diceSettle{0%{transform:scale(1.25)}100%{transform:scale(1)}}
+.die.drs-flash{border-color:var(--red);box-shadow:0 0 20px rgba(230,57,70,0.6)}
+.vs-badge{
+  width:36px;height:36px;border-radius:50%;
+  background:var(--navy3);border:1px solid rgba(255,255,255,0.1);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Bebas Neue',sans-serif;font-size:14px;color:var(--muted);
+}
+.drs-notice{
+  font-size:12px;color:var(--red);font-weight:700;letter-spacing:2px;
+  background:rgba(230,57,70,0.1);border:1px solid rgba(230,57,70,0.3);
+  border-radius:4px;padding:5px 12px;
+  animation:drsPulse 0.5s ease-in-out infinite;
+}
+@keyframes drsPulse{0%,100%{opacity:0.7}50%{opacity:1}}
+
+/* ======= RESULT OVERLAY ======= */
+.result-overlay{
+  position:absolute;top:0;left:0;right:0;bottom:0;
+  background:rgba(6,11,24,0.95);backdrop-filter:blur(6px);
+  display:flex;flex-direction:column;align-items:center;
+  justify-content:flex-start;overflow-y:auto;
+  gap:12px;z-index:100;cursor:pointer;padding:16px 16px 48px;
+}
+.res-outcome{
+  font-family:'Bebas Neue',sans-serif;font-size:60px;line-height:1;
+  text-align:center;margin-top:8px;
+  animation:resPop 0.4s cubic-bezier(0.34,1.56,0.64,1);
+}
+@keyframes resPop{0%{transform:scale(0.4);opacity:0}100%{transform:scale(1);opacity:1}}
+.res-outcome.SIX{color:var(--gold2);text-shadow:0 0 50px rgba(240,192,96,0.7)}
+.res-outcome.FOUR{color:var(--green);text-shadow:0 0 35px rgba(74,222,128,0.5)}
+.res-outcome.TWO,.res-outcome.ONE{color:var(--white)}
+.res-outcome.DOT,.res-outcome.PRESSURE{color:var(--muted)}
+.res-outcome.WICKET{color:var(--red);text-shadow:0 0 50px rgba(230,57,70,0.7)}
+/* narrative */
+.res-narrative{
+  font-size:13px;color:var(--muted);text-align:center;line-height:1.7;max-width:310px;
+}
+.res-narrative .rn-batter{color:var(--green);font-weight:700}
+.res-narrative .rn-bowler{color:var(--red);font-weight:700}
+.res-narrative .rn-shot{color:var(--gold);font-weight:700}
+.res-narrative .rn-delivery{color:var(--gold2);font-weight:700}
+/* dice row */
+.res-dice-row{display:flex;align-items:center;gap:12px;width:100%;justify-content:center}
+.res-die-box{
+  flex:1;max-width:120px;border-radius:10px;border:1.5px solid;
+  padding:10px 8px;background:var(--card-bg);text-align:center;
+}
+.res-die-box.batter{border-color:var(--green)}
+.res-die-box.bowler{border-color:var(--red)}
+.rdb-label{font-size:8px;font-weight:700;letter-spacing:2px;color:var(--muted);margin-bottom:4px}
+.rdb-val{font-family:'Bebas Neue',sans-serif;font-size:36px;color:var(--white);line-height:1}
+.rdb-mod{font-size:11px;font-weight:700;color:var(--gold);margin-top:2px}
+.res-vs{font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--muted)}
+/* breakdown panel */
+.res-breakdown{
+  width:100%;max-width:340px;background:rgba(255,255,255,0.04);
+  border:1px solid rgba(255,255,255,0.08);border-radius:12px;
+  padding:14px;
+}
+.rb-title{
+  font-size:9px;font-weight:700;letter-spacing:3px;color:var(--muted);
+  text-align:center;margin-bottom:10px;
+}
+.rb-row{display:flex;gap:10px;align-items:flex-start;justify-content:center}
+.rb-side{flex:1;max-width:130px}
+.rb-label{font-size:8px;font-weight:700;letter-spacing:2px;color:var(--muted);margin-bottom:6px}
+.rb-side.batter .rb-label{color:var(--green)}
+.rb-side.bowler .rb-label{color:var(--red)}
+.rb-line{font-size:11px;color:var(--white);opacity:0.7;line-height:1.8}
+.rb-total{
+  font-family:'Bebas Neue',sans-serif;font-size:22px;
+  border-top:1px solid rgba(255,255,255,0.15);margin-top:4px;padding-top:2px;
+}
+.rb-side.batter .rb-total{color:var(--green)}
+.rb-side.bowler .rb-total{color:var(--red)}
+.rb-minus{font-family:'Bebas Neue',sans-serif;font-size:26px;color:var(--muted);padding-top:20px}
+.rb-diff{
+  font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;
+  color:var(--gold);text-align:center;margin-top:10px;
+}
+.rb-threshold{
+  font-size:12px;font-weight:700;color:var(--white);
+  text-align:center;margin-top:4px;opacity:0.85;
+}
+.res-special{
+  font-size:11px;color:var(--gold);background:rgba(212,165,72,0.1);
+  border:1px solid rgba(212,165,72,0.3);border-radius:4px;
+  padding:4px 8px;margin-top:6px;text-align:center;font-weight:700;
+}
+.res-balance{
+  font-size:10px;font-weight:700;color:#fbbf24;background:rgba(251,191,36,0.07);
+  border:1px solid rgba(251,191,36,0.2);border-radius:4px;
+  padding:3px 8px;margin-top:4px;text-align:center;
+}
+.res-commentary{
+  font-size:13px;color:var(--white);text-align:center;font-weight:500;
+  line-height:1.5;max-width:300px;font-style:italic;opacity:0.8;
+}
+.res-skip{
+  font-size:10px;color:var(--muted);opacity:0.5;
+  position:fixed;bottom:14px;left:0;right:0;text-align:center;
+  letter-spacing:2px;font-weight:700;
+}
+
+/* ======= TEEN PATTI BETTING OVERLAY ======= */
+.bet-overlay{
+  position:absolute;top:0;left:0;right:0;bottom:0;
+  background:linear-gradient(160deg,#040b18 0%,#071020 50%,#060e1c 100%);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:11px;z-index:50;padding:14px 16px;
+}
+.bet-eyebrow{
+  font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:6px;color:var(--gold);
+  opacity:0.8;
+}
+.bet-chip-bar{
+  display:flex;align-items:center;justify-content:space-between;
+  width:100%;max-width:310px;
+  background:rgba(212,165,72,0.05);border:1px solid rgba(212,165,72,0.2);
+  border-radius:12px;padding:10px 18px;
+  animation:prvCardIn 0.35s 0.3s both;
+}
+.bet-stack{display:flex;flex-direction:column;align-items:center;gap:2px}
+.bet-stack-label{font-size:8px;color:var(--muted);font-weight:700;letter-spacing:2px}
+.bet-stack-val{font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--white);line-height:1}
+.bet-stack-val.low{color:var(--red)}
+.bet-pot-wrap{display:flex;flex-direction:column;align-items:center;gap:1px}
+.bet-pot-label{font-size:8px;color:var(--gold);font-weight:700;letter-spacing:2px}
+.bet-pot-val{
+  font-family:'Bebas Neue',sans-serif;font-size:38px;color:var(--gold);line-height:1;
+  text-shadow:0 0 20px rgba(212,165,72,0.5);
+}
+.bet-actions{
+  display:flex;gap:8px;width:100%;max-width:310px;
+  animation:prvCardIn 0.35s 0.4s both;
+}
+.bet-btn{
+  flex:1;padding:13px 4px;border-radius:8px;
+  font-family:'Bebas Neue',sans-serif;font-size:19px;letter-spacing:1px;
+  border:1.5px solid;cursor:pointer;transition:transform 0.1s,opacity 0.1s;
+}
+.bet-btn:active{transform:scale(0.95)}
+.bet-btn:disabled{opacity:0.2;cursor:not-allowed}
+.bet-btn.fold{
+  border-color:rgba(230,57,70,0.45);background:rgba(230,57,70,0.07);color:var(--red);
+}
+.bet-btn.play{
+  background:linear-gradient(135deg,#e0b050,#c08828);
+  border-color:transparent;color:var(--navy);flex:1.4;
+}
+.bet-btn.raise{
+  border-color:rgba(74,222,128,0.45);background:rgba(74,222,128,0.07);color:var(--green);
+}
+.bet-sub{
+  font-size:9px;color:var(--muted);text-align:center;letter-spacing:0.5px;
+  max-width:260px;line-height:1.5;
+}
+.bet-ai-response{
+  font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;
+  text-align:center;padding:9px 20px;border-radius:8px;width:100%;max-width:310px;
+}
+.bet-ai-response.thinking{
+  color:var(--muted);background:rgba(255,255,255,0.03);
+  border:1px solid rgba(255,255,255,0.07);
+  animation:blink 0.9s ease-in-out infinite;
+}
+.bet-ai-response.call-resp{
+  color:var(--green);background:rgba(74,222,128,0.1);
+  border:1px solid rgba(74,222,128,0.3);
+}
+.bet-ai-response.fold-resp{
+  color:var(--red);background:rgba(230,57,70,0.1);
+  border:1px solid rgba(230,57,70,0.3);
+}
+/* Chip count in scoreboard */
+.sb-chip-wrap{
+  display:flex;flex-direction:column;align-items:flex-end;gap:2px;min-width:62px;
+}
+.sb-chip-row{font-size:9px;font-weight:700;letter-spacing:0.5px;white-space:nowrap}
+.sb-chip-row.you{color:var(--green)}
+.sb-chip-row.opp{color:rgba(230,57,70,0.8)}
+.sb-chip-lead{
+  font-size:8px;font-weight:700;letter-spacing:1px;
+  padding:2px 5px;border-radius:3px;text-align:right;margin-top:1px;
+}
+.sb-chip-lead.ahead{background:rgba(74,222,128,0.1);color:var(--green)}
+.sb-chip-lead.behind{background:rgba(230,57,70,0.08);color:var(--red)}
+.sb-chip-lead.even{color:var(--muted)}
+/* Fold result */
+.fold-result-msg{
+  font-size:15px;color:rgba(240,244,255,0.8);text-align:center;
+  line-height:1.5;max-width:280px;font-weight:500;
+}
+/* Chip summary panels */
+.chip-summary{
+  width:100%;max-width:310px;border-radius:10px;
+  background:rgba(212,165,72,0.05);border:1px solid rgba(212,165,72,0.2);
+  padding:12px 16px;
+}
+.chip-summary-title{
+  font-size:9px;font-weight:700;letter-spacing:3px;color:var(--gold);
+  text-align:center;margin-bottom:8px;
+}
+.chip-summary-row{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.chip-summary-player{
+  font-family:'Bebas Neue',sans-serif;font-size:28px;
+  line-height:1;
+}
+.chip-summary-player.ahead{color:var(--green)}
+.chip-summary-player.behind{color:var(--red)}
+.chip-summary-player.even{color:var(--white)}
+.chip-winner-label{
+  font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:2px;
+  padding:3px 8px;border-radius:4px;text-align:center;
+}
+.chip-winner-label.you{background:rgba(74,222,128,0.15);color:var(--green)}
+.chip-winner-label.ai{background:rgba(230,57,70,0.12);color:var(--red)}
+.chip-winner-label.tied{background:rgba(255,255,255,0.05);color:var(--muted)}
+
+/* ======= INNINGS SWAP ======= */
+.swap-bg{
+  background:linear-gradient(160deg,#080f20,var(--navy));
+  justify-content:center;align-items:center;padding:32px 20px;gap:20px;
+}
+.swap-title{
+  font-family:'Bebas Neue',sans-serif;font-size:34px;color:var(--gold);
+  letter-spacing:4px;text-align:center;
+}
+.swap-score-wrap{text-align:center}
+.swap-big{font-family:'Bebas Neue',sans-serif;font-size:60px;color:var(--white);line-height:1}
+.swap-sub{font-size:12px;color:var(--muted);letter-spacing:2px;font-weight:600;margin-top:2px}
+.target-box{
+  background:rgba(212,165,72,0.08);border:1px solid rgba(212,165,72,0.3);
+  border-radius:8px;padding:12px 24px;text-align:center;
+}
+.target-label{font-size:11px;color:var(--muted);font-weight:700;letter-spacing:2px;margin-bottom:2px}
+.target-val{font-family:'Bebas Neue',sans-serif;font-size:34px;color:var(--gold)}
+.swap-msg{font-size:15px;color:rgba(240,244,255,0.7);text-align:center;line-height:1.5;max-width:280px}
+
+/* ======= GAME END ======= */
+.end-bg{
+  background:linear-gradient(160deg,#080f20,#0a1628);
+  justify-content:center;align-items:center;padding:32px 20px;gap:18px;
+  position:relative;overflow:hidden;
+}
+.end-eyebrow{font-size:12px;color:var(--muted);letter-spacing:5px;font-weight:700}
+.end-winner{
+  font-family:'Bebas Neue',sans-serif;font-size:52px;line-height:1;
+  text-align:center;
+  animation:winnerPop 0.5s cubic-bezier(0.34,1.56,0.64,1) 0.1s both;
+}
+@keyframes winnerPop{0%{transform:scale(0.6);opacity:0}100%{transform:scale(1);opacity:1}}
+.end-winner.player{color:var(--gold);text-shadow:0 0 50px rgba(212,165,72,0.5)}
+.end-winner.ai{color:var(--red);text-shadow:0 0 40px rgba(230,57,70,0.4)}
+.end-winner.tie{color:var(--muted)}
+.end-scoreboard{display:flex;gap:16px;justify-content:center}
+.end-block{
+  background:var(--card-bg);border:1px solid rgba(212,165,72,0.15);
+  border-radius:10px;padding:14px 20px;text-align:center;
+}
+.end-block-label{font-size:10px;color:var(--muted);font-weight:700;letter-spacing:2px;margin-bottom:3px}
+.end-block-score{font-family:'Bebas Neue',sans-serif;font-size:46px;color:var(--white);line-height:1}
+.end-block-detail{font-size:11px;color:var(--muted);margin-top:2px}
+.end-margin{font-size:14px;color:rgba(240,244,255,0.6);text-align:center;max-width:260px;line-height:1.5}
+.end-play-again{
+  width:100%;max-width:260px;padding:13px;
+  background:linear-gradient(135deg,#e0b050,#c08828);
+  color:var(--navy);font-family:'Bebas Neue',sans-serif;font-size:22px;
+  letter-spacing:2px;border:none;cursor:pointer;border-radius:6px;
+  box-shadow:0 4px 20px rgba(212,165,72,0.3);
+}
+/* Confetti */
+.confetti-wrap{position:absolute;top:0;left:0;right:0;height:100%;pointer-events:none;overflow:hidden}
+.cpiece{
+  position:absolute;top:-10px;width:7px;height:7px;border-radius:2px;
+  animation:cfall linear forwards;
+}
+@keyframes cfall{to{transform:translateY(110vh) rotate(720deg);opacity:0}}
+/* Career & Leaderboard */
+.career-strip{display:flex;gap:4px;width:100%;max-width:320px;background:rgba(255,255,255,0.04);border-radius:8px;padding:10px 8px}
+.career-stat{flex:1;text-align:center}
+.cs-val{font-family:'Bebas Neue',sans-serif;font-size:20px;line-height:1;color:var(--white)}
+.cs-label{font-size:7px;color:var(--muted);font-weight:700;letter-spacing:1px;margin-top:2px}
+.lb-row{display:grid;grid-template-columns:64px 78px 1fr 50px 50px;gap:4px;align-items:center;padding:7px 10px;background:rgba(255,255,255,0.03);border-radius:6px;font-size:10px}
+.lb-result{font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:0.5px}
+.lb-scores{color:var(--white);font-weight:700}
+.lb-pitch{color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lb-coins{font-size:13px;text-align:right;font-family:'Bebas Neue',sans-serif}
+.lb-date{color:var(--muted);font-size:8px;text-align:right;white-space:nowrap}
+
+/* ======= XI SELECTION SCREEN ======= */
+.xi-screen{
+  background:var(--navy);
+  display:flex;flex-direction:column;
+  overflow:hidden;
+}
+.xi-header{
+  background:linear-gradient(180deg,#060d1e,#0a1628);
+  border-bottom:1px solid rgba(212,165,72,0.2);
+  padding:10px 12px 0;flex-shrink:0;
+}
+.xi-header-top{
+  display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;
+}
+.xi-title{
+  font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--gold);letter-spacing:3px;
+}
+.xi-tally{
+  display:flex;gap:10px;align-items:center;
+}
+.xi-count{
+  font-size:11px;font-weight:700;letter-spacing:1px;
+  padding:3px 8px;border-radius:4px;border:1px solid;
+}
+.xi-count.bat{border-color:rgba(74,222,128,0.4);color:var(--green);background:rgba(74,222,128,0.06)}
+.xi-count.bat.full{background:rgba(74,222,128,0.18);border-color:var(--green)}
+.xi-count.bowl{border-color:rgba(96,165,250,0.4);color:#60a5fa;background:rgba(96,165,250,0.06)}
+.xi-count.bowl.full{background:rgba(96,165,250,0.18);border-color:#60a5fa}
+.xi-tab-row{display:flex;gap:0;border-bottom:none;margin-top:6px}
+.xi-tab{
+  flex:1;padding:8px 4px;text-align:center;
+  font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;
+  color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;
+  transition:color 0.15s,border-color 0.15s;
+}
+.xi-tab.active.bat{color:var(--green);border-color:var(--green)}
+.xi-tab.active.bowl{color:#60a5fa;border-color:#60a5fa}
+.xi-filter-row{
+  display:flex;gap:5px;padding:7px 12px;flex-shrink:0;
+  background:rgba(0,0,0,0.15);border-bottom:1px solid rgba(255,255,255,0.05);
+}
+.xi-filter-btn{
+  padding:4px 10px;border-radius:4px;font-size:11px;font-weight:700;letter-spacing:1px;
+  border:1px solid rgba(255,255,255,0.1);background:transparent;color:var(--muted);
+  cursor:pointer;transition:all 0.12s;
+}
+.xi-filter-btn.active{border-color:var(--gold);color:var(--gold);background:rgba(212,165,72,0.08)}
+.xi-pitch-tip{
+  flex:1;text-align:right;font-size:9px;color:var(--gold);
+  font-weight:700;letter-spacing:0.5px;line-height:1.3;align-self:center;
+}
+.xi-pool{
+  flex:1;overflow-y:auto;padding:8px 10px 90px;
+  display:grid;grid-template-columns:repeat(3,1fr);gap:6px;
+  align-content:start;
+}
+.xi-card{
+  border-radius:9px;border:1.5px solid rgba(212,165,72,0.15);
+  background:var(--card-bg);cursor:pointer;position:relative;
+  padding:7px 7px 5px;min-height:80px;
+  transition:border-color 0.12s,transform 0.12s,box-shadow 0.12s,opacity 0.15s;
+  display:flex;flex-direction:column;gap:2px;
+}
+.xi-card:active{transform:scale(0.96)}
+.xi-card.selected{
+  border-color:var(--green)!important;
+  box-shadow:0 0 12px rgba(74,222,128,0.35);
+  background:rgba(74,222,128,0.05);
+  transform:scale(1.02);
+}
+.xi-card.bowl-selected{
+  border-color:#60a5fa!important;
+  box-shadow:0 0 12px rgba(96,165,250,0.35);
+  background:rgba(96,165,250,0.05);
+}
+.xi-card.pitch-buffed{
+  border-color:rgba(212,165,72,0.5);
+}
+.xi-card.pitch-buffed::after{
+  content:'🔥';position:absolute;top:3px;right:4px;font-size:9px;
+}
+.xi-card.disabled{
+  opacity:0.25;cursor:not-allowed;
+}
+.xi-card-rating{
+  font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--gold);line-height:1;
+}
+.xi-card-name{font-size:8px;font-weight:700;color:var(--white);line-height:1.2}
+.xi-card-nick{font-size:7px;color:var(--muted);font-style:italic;line-height:1}
+.xi-card-special{
+  font-size:6.5px;color:var(--navy);background:var(--gold);
+  padding:1px 3px;border-radius:2px;font-weight:700;
+  display:inline-block;margin-top:1px;width:fit-content;
+}
+.xi-card-type-badge{
+  position:absolute;bottom:3px;right:4px;font-size:7px;font-weight:700;letter-spacing:0.5px;
+}
+.xi-card-type-badge.seam{color:rgba(230,57,70,0.7)}
+.xi-card-type-badge.spin{color:rgba(212,165,72,0.7)}
+.xi-card-type-badge.big{color:rgba(74,222,128,0.6)}
+.xi-selected-overlay{
+  position:absolute;inset:0;border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;pointer-events:none;
+}
+/* Footer confirm bar */
+.xi-footer{
+  position:absolute;bottom:0;left:0;right:0;
+  background:linear-gradient(0deg,var(--navy) 60%,transparent);
+  padding:14px 12px 18px;
+}
+.xi-confirm-btn{
+  width:100%;padding:13px;background:linear-gradient(135deg,#e0b050,#c08828);
+  color:var(--navy);font-family:'Bebas Neue',sans-serif;font-size:22px;
+  letter-spacing:2px;border:none;cursor:pointer;border-radius:8px;
+  box-shadow:0 4px 20px rgba(212,165,72,0.35);
+  transition:opacity 0.2s;
+}
+.xi-confirm-btn:disabled{opacity:0.2;cursor:default}
+/* Pitch banner inside XI screen */
+.xi-pitch-bar{
+  display:flex;align-items:center;gap:6px;padding:5px 12px;
+  background:rgba(212,165,72,0.05);border-bottom:1px solid rgba(212,165,72,0.12);
+  flex-shrink:0;
+}
+.xi-pitch-bar-icon{font-size:14px}
+.xi-pitch-bar-text{font-size:10px;color:var(--muted);font-weight:600;letter-spacing:0.5px;flex:1}
+.xi-pitch-bar-buff{
+  font-size:9px;color:var(--gold);font-weight:700;letter-spacing:0.5px;
+  background:rgba(212,165,72,0.1);border:1px solid rgba(212,165,72,0.25);
+  padding:2px 6px;border-radius:3px;
+}
+
+
+/* ── Over Stake Screen ── */
+.stake-bg{
+  background:linear-gradient(160deg,#040a1a,#070f1e);
+  justify-content:center;align-items:center;gap:18px;padding:28px 20px;
+}
+.stake-title{font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--gold);letter-spacing:4px;text-align:center}
+.stake-pot-circle{
+  width:130px;height:130px;border-radius:50%;
+  border:3px solid rgba(212,165,72,0.6);
+  background:radial-gradient(circle,rgba(212,165,72,0.1) 0%,transparent 70%);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
+  box-shadow:0 0 40px rgba(212,165,72,0.2);
+  animation:logoGlow 2.5s ease-in-out infinite;
+}
+.stake-pot-val{font-family:'Bebas Neue',sans-serif;font-size:44px;color:var(--gold);line-height:1}
+.stake-pot-label{font-size:9px;color:var(--gold);font-weight:700;letter-spacing:3px;opacity:0.7}
+.stake-breakdown{display:flex;gap:16px;align-items:center}
+.stake-side{text-align:center}
+.stake-side-label{font-size:9px;font-weight:700;letter-spacing:2px;color:var(--muted);margin-bottom:3px}
+.stake-side-coins{font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--white)}
+.stake-divider{font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--muted)}
+.stake-desc{font-size:14px;color:rgba(240,244,255,0.6);text-align:center;max-width:280px;line-height:1.6;font-weight:500}
+.stake-bluff{
+  font-size:11px;color:var(--gold);opacity:0.75;text-align:center;max-width:270px;line-height:1.5;
+  border:1px dashed rgba(212,165,72,0.25);border-radius:8px;padding:10px 14px;
+}
+/* Bet overlay extras */
+.bet-raise-counter{
+  font-size:12px;font-weight:700;text-align:center;min-height:18px;color:var(--muted);letter-spacing:0.5px;
+}
+.bet-overpot{
+  font-size:10px;font-weight:700;letter-spacing:2px;color:rgba(212,165,72,0.7);text-align:center;
+  border:1px solid rgba(212,165,72,0.2);border-radius:4px;padding:4px 10px;background:rgba(212,165,72,0.04);
+}
+.bet-btn.skip{border-color:rgba(255,255,255,0.15);background:rgba(255,255,255,0.03);color:var(--muted)}
+
+/* ── PRE-REVEAL OVERLAY (before dice roll) ── */
+.prereveal-overlay{
+  position:absolute;top:0;left:0;right:0;bottom:0;
+  background:linear-gradient(160deg,#060d1e 0%,#0a1628 100%);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:14px;z-index:50;padding:16px;
+}
+.prv-ball-label{
+  font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:5px;color:var(--muted);
+}
+.prv-reveal-row{
+  display:flex;gap:10px;width:100%;justify-content:center;align-items:stretch;
+}
+.prv-card{
+  flex:1;max-width:150px;border-radius:12px;border:2px solid;
+  background:var(--card-bg);padding:12px 10px;text-align:center;
+  animation:prvCardIn 0.4s cubic-bezier(0.34,1.4,0.64,1) both;
+}
+.prv-card.batter{border-color:var(--green)}
+.prv-card.bowler{border-color:var(--red)}
+@keyframes prvCardIn{0%{transform:scale(0.7) translateY(12px);opacity:0}100%{transform:none;opacity:1}}
+.prv-card.bowler{animation-delay:0.1s}
+.prv-role{font-size:8px;font-weight:700;letter-spacing:3px;color:var(--muted);margin-bottom:4px}
+.prv-rating{font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--gold);line-height:1}
+.prv-pitch-bump{font-size:14px;color:#86efac;vertical-align:middle}
+.prv-ovr{font-family:'Bebas Neue',sans-serif;font-size:36px;line-height:1;letter-spacing:1px}
+.prv-ovr-label{font-size:7px;letter-spacing:2px;color:var(--muted);font-weight:700;margin-bottom:3px}
+.prv-substats{display:flex;flex-direction:column;gap:2px;margin:4px 0}
+.prv-sstat{display:flex;align-items:center;gap:3px}
+.prv-sstat-key{font-size:7px;font-weight:700;color:var(--muted);min-width:20px;letter-spacing:0.3px}
+.prv-sstat-bar{flex:1;height:3px;background:rgba(255,255,255,0.08);border-radius:2px;overflow:hidden}
+.prv-sstat-fill{height:100%;border-radius:2px}
+.prv-sstat-val{font-size:7px;color:var(--muted);min-width:14px;text-align:right}
+.prv-name{font-size:11px;font-weight:700;color:var(--white);line-height:1.3;margin:3px 0}
+.prv-nick{font-size:9px;color:var(--muted);font-style:italic}
+.prv-choice{
+  margin-top:6px;padding:3px 8px;border-radius:4px;font-size:12px;font-weight:700;
+  display:inline-block;
+}
+.prv-card.batter .prv-choice{background:rgba(74,222,128,0.15);color:var(--green)}
+.prv-card.bowler .prv-choice{background:rgba(230,57,70,0.15);color:var(--red)}
+.prv-vs{
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--muted);
+}
+.prv-matchup-banner{
+  width:100%;max-width:310px;border-radius:10px;padding:10px 14px;text-align:center;
+  background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);
+  animation:prvCardIn 0.4s 0.2s both;
+}
+.prv-matchup-label{font-size:9px;color:var(--muted);font-weight:700;letter-spacing:2px;margin-bottom:4px}
+.prv-matchup-val{
+  font-family:'Bebas Neue',sans-serif;font-size:34px;line-height:1;
+}
+.prv-matchup-val.pos{color:var(--green)}
+.prv-matchup-val.neg{color:var(--red)}
+.prv-matchup-val.neu{color:var(--muted)}
+.prv-matchup-desc{font-size:10px;color:var(--muted);margin-top:2px}
+.prv-power-row{
+  display:flex;gap:8px;justify-content:center;flex-wrap:wrap;
+  animation:prvCardIn 0.3s 0.3s both;
+}
+.prv-power-badge{
+  font-size:11px;font-weight:700;padding:4px 10px;border-radius:6px;
+  border:1px solid rgba(212,165,72,0.4);background:rgba(212,165,72,0.1);color:var(--gold);
+}
+.prv-roll-btn{
+  margin-top:4px;padding:14px 40px;
+  background:linear-gradient(135deg,#e0b050,#c08828);
+  color:var(--navy);font-family:'Bebas Neue',sans-serif;font-size:26px;
+  letter-spacing:3px;border:none;cursor:pointer;border-radius:10px;
+  box-shadow:0 4px 24px rgba(212,165,72,0.4);
+  animation:rollBtnPulse 1.2s ease-in-out infinite, prvCardIn 0.5s 0.35s both;
+  transition:transform 0.1s;
+}
+.prv-roll-btn:active{transform:scale(0.96)}
+@keyframes rollBtnPulse{0%,100%{box-shadow:0 4px 24px rgba(212,165,72,0.4)}50%{box-shadow:0 4px 36px rgba(212,165,72,0.7)}}
+
+/* ── Matrix hint strip in mid-HUD ── */
+.matrix-hint{
+  display:flex;gap:4px;margin-top:4px;
+}
+.mh-cell{
+  flex:1;border-radius:5px;padding:4px 3px;text-align:center;
+  background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);
+}
+.mh-label{font-size:8px;color:var(--muted);font-weight:600;letter-spacing:1px}
+.mh-val{font-family:'Bebas Neue',sans-serif;font-size:15px;line-height:1}
+.mh-val.pos{color:var(--green)}
+.mh-val.neg{color:var(--red)}
+.mh-val.neu{color:var(--muted)}
+
+/* ── Played card - center result display ── */
+.bcard.played{
+  opacity:1;cursor:default;
+  border-color:rgba(255,255,255,0.1);
+  background:rgba(255,255,255,0.02);
+}
+.bc-played-result-overlay{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:2px;padding:4px;
+}
+.bc-played-emoji{font-size:20px;line-height:1}
+.bc-played-label{
+  font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:1px;line-height:1;
+}
+.bc-played-label.SIX{color:var(--gold2)}
+.bc-played-label.FOUR{color:var(--green)}
+.bc-played-label.TWO,.bc-played-label.ONE{color:rgba(240,244,255,0.7)}
+.bc-played-label.DOT{color:rgba(255,255,255,0.3)}
+.bc-played-label.PRESSURE{color:var(--red)}
+.bc-played-label.WICKET{color:var(--red)}
+.bc-played-name{
+  position:absolute;bottom:3px;left:0;right:0;
+  font-size:6.5px;color:var(--muted);font-weight:700;text-align:center;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 3px;
+}
+
+/* ── Result screen — redesigned card-first layout ── */
+.res-card-row{
+  display:flex;gap:8px;width:100%;max-width:360px;align-items:stretch;
+}
+.res-player-card{
+  flex:1;border-radius:12px;border:2px solid;
+  background:var(--card-bg);padding:10px 9px 8px;
+  display:flex;flex-direction:column;gap:3px;
+}
+.res-player-card.batter{border-color:rgba(74,222,128,0.5)}
+.res-player-card.bowler{border-color:rgba(230,57,70,0.5)}
+.res-pc-role{font-size:8px;font-weight:700;letter-spacing:3px;color:var(--muted);margin-bottom:2px}
+.res-pc-role.bat{color:rgba(74,222,128,0.8)}
+.res-pc-role.bowl{color:rgba(230,57,70,0.8)}
+.res-pc-name{font-size:11px;font-weight:700;color:var(--white);line-height:1.2}
+.res-pc-rating{font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--gold);line-height:1}
+.res-pc-special{
+  font-size:7px;color:var(--navy);background:var(--gold);
+  padding:1px 4px;border-radius:2px;font-weight:700;
+  display:inline-block;width:fit-content;
+}
+.res-pc-action{
+  margin-top:4px;padding:3px 6px;border-radius:4px;font-size:10px;font-weight:700;
+  display:inline-block;
+}
+.res-player-card.batter .res-pc-action{background:rgba(74,222,128,0.15);color:var(--green)}
+.res-player-card.bowler .res-pc-action{background:rgba(230,57,70,0.15);color:var(--red)}
+.res-vs-col{
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--muted);
+  flex-shrink:0;
+}
+/* Dice visual */
+.res-dice-visual{
+  display:flex;align-items:center;gap:14px;margin:2px 0;
+}
+.res-die-visual{
+  width:48px;height:48px;border-radius:10px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  border:2px solid;gap:0;
+}
+.res-die-visual.bat{border-color:rgba(74,222,128,0.6);background:rgba(74,222,128,0.06)}
+.res-die-visual.bowl{border-color:rgba(230,57,70,0.6);background:rgba(230,57,70,0.06)}
+.res-die-num{font-family:'Bebas Neue',sans-serif;font-size:26px;line-height:1;color:var(--white)}
+.res-die-mod{font-size:9px;font-weight:700;color:var(--gold)}
+.res-arrow{font-size:20px;color:var(--muted);line-height:1}
+.res-die-vs{font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--muted)}
+/* Outcome block */
+.res-outcome-block{
+  width:100%;max-width:340px;text-align:center;
+}
+.res-calc-line{
+  font-size:13px;font-weight:700;color:rgba(240,244,255,0.7);margin-top:4px;
+}
+.res-thresh-line{
+  font-size:11px;color:var(--muted);margin-top:2px;
+}
+
+/* ── Result screen power section ── */
+.res-power-used{
+  width:100%;max-width:340px;
+  display:flex;gap:8px;justify-content:center;flex-wrap:wrap;
+}
+.res-power-badge{
+  padding:5px 12px;border-radius:6px;font-size:11px;font-weight:700;
+  border:1px solid rgba(212,165,72,0.4);background:rgba(212,165,72,0.1);color:var(--gold);
+}
+
+/* ── Ball tracker in result overlay ── */
+.ball-tracker{display:flex;gap:8px;justify-content:center;margin-bottom:4px}
+.bt-dot{font-size:18px;line-height:1}
+.bt-dot.empty{color:rgba(255,255,255,0.15);font-size:14px}
+.bt-dot.filled{filter:drop-shadow(0 0 4px rgba(255,255,255,0.3))}
+
+/* ======= BUNDLE SELECT SCREEN ======= */
+.bundle-screen{
+  background:var(--navy);display:flex;flex-direction:column;overflow:hidden;
+}
+.bundle-header{
+  background:linear-gradient(180deg,#060d1e,#0a1628);
+  border-bottom:1px solid rgba(212,165,72,0.2);
+  padding:12px 14px 8px;flex-shrink:0;
+}
+.bundle-header-top{
+  display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;
+}
+.bundle-title{
+  font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--gold);letter-spacing:3px;
+}
+.bundle-pitch-tag{
+  display:flex;align-items:center;gap:5px;
+  background:rgba(212,165,72,0.08);border:1px solid rgba(212,165,72,0.25);
+  border-radius:5px;padding:4px 9px;
+}
+.bundle-pitch-tag-icon{font-size:13px}
+.bundle-pitch-tag-name{font-size:9px;color:var(--gold);font-weight:700;letter-spacing:0.5px}
+.bundle-subtitle{font-size:11px;color:var(--muted);font-weight:600}
+/* Horizontal scroll row */
+.bundle-scroll-wrap{
+  flex:1;overflow:hidden;display:flex;flex-direction:column;
+}
+.bundle-swipe-hint{
+  position:absolute;right:0;top:50%;transform:translateY(-50%);
+  display:flex;align-items:center;gap:6px;
+  background:linear-gradient(to right,transparent,rgba(6,13,30,0.85));
+  padding:10px 12px 10px 28px;border-radius:8px 0 0 8px;
+  pointer-events:none;opacity:0;transition:opacity 0.4s;
+  z-index:10;
+}
+.bsh-ghost{font-size:22px;display:inline-block}
+.bsh-txt{font-size:9px;color:var(--muted);letter-spacing:1.5px;font-weight:700}
+.bsh-arrow{font-size:18px;color:var(--gold)}
+@keyframes swipeGhost{0%{transform:translateX(0) rotate(0deg)}40%{transform:translateX(18px) rotate(-15deg)}70%{transform:translateX(6px)}100%{transform:translateX(0)}}
+.bundle-row-h{
+  display:flex;flex-direction:row;gap:10px;
+  overflow-x:auto;overflow-y:hidden;
+  padding:8px 14px 10px;
+  scroll-snap-type:x mandatory;
+  -webkit-overflow-scrolling:touch;
+  flex:1;align-items:flex-start;
+}
+.bundle-row-h::-webkit-scrollbar{display:none}
+/* Individual bundle card */
+.bc-h{
+  min-width:158px;width:158px;flex-shrink:0;
+  scroll-snap-align:start;
+  border-radius:14px;border:2px solid rgba(255,255,255,0.1);
+  background:var(--card-bg);cursor:pointer;overflow:hidden;
+  transition:border-color 0.18s,transform 0.12s,box-shadow 0.15s;
+  display:flex;flex-direction:column;
+}
+.bc-h:active{transform:scale(0.96)}
+.bc-h.selected{
+  border-color:var(--gold);
+  box-shadow:0 0 20px rgba(212,165,72,0.35);
+}
+.bc-h.pitch-rec{border-color:rgba(74,222,128,0.5)}
+.bc-h.pitch-rec.selected{border-color:var(--green);box-shadow:0 0 20px rgba(74,222,128,0.35)}
+/* Visual image area */
+.bc-h-img{
+  height:110px;position:relative;overflow:hidden;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
+  flex-shrink:0;
+}
+.bc-h-img-pace{background:linear-gradient(145deg,#1a0a00,#3d1a00)}
+.bc-h-img-spin{background:linear-gradient(145deg,#00081a,#001a3d)}
+.bc-h-img-power{background:linear-gradient(145deg,#1a001a,#2d002d)}
+.bc-h-img-balanced{background:linear-gradient(145deg,#001a0a,#003d1a)}
+.bc-h-img-young{background:linear-gradient(145deg,#0a0a00,#1a1a00)}
+.bc-h-big-icon{font-size:40px;line-height:1;filter:drop-shadow(0 0 12px rgba(255,255,255,0.3))}
+.bc-h-pitch-fit{
+  position:absolute;top:7px;right:7px;
+  font-size:8px;font-weight:700;letter-spacing:0.5px;
+  padding:2px 5px;border-radius:3px;
+  background:rgba(74,222,128,0.9);color:#000;
+}
+.bc-h-sel-check{
+  position:absolute;top:7px;left:7px;font-size:16px;
+  opacity:0;transition:opacity 0.15s;
+}
+.bc-h.selected .bc-h-sel-check{opacity:1}
+.bc-h-tag-row{
+  display:flex;gap:4px;flex-wrap:wrap;justify-content:center;padding:0 6px;
+}
+.bc-h-tag{
+  font-size:7px;font-weight:700;letter-spacing:0.5px;
+  padding:2px 5px;border-radius:10px;
+  background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.5);
+}
+/* Card content */
+.bc-h-body{
+  padding:8px 9px 10px;display:flex;flex-direction:column;gap:5px;flex:1;
+}
+.bc-h-name{
+  font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--gold);
+  letter-spacing:1.5px;line-height:1;
+}
+.bc-h-tagline{font-size:8px;color:var(--muted);font-weight:600;line-height:1.3;margin-bottom:2px}
+.bc-h-divider{height:1px;background:rgba(255,255,255,0.07);margin:1px 0}
+.bc-h-section-label{font-size:7px;font-weight:700;letter-spacing:2px;margin-bottom:1px}
+.bc-h-section-label.bat{color:rgba(74,222,128,0.7)}
+.bc-h-section-label.bowl{color:rgba(96,165,250,0.7)}
+.bc-h-pname{
+  font-size:9.5px;color:rgba(240,244,255,0.8);font-weight:600;
+  line-height:1.5;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.bc-h-pname.top{color:var(--gold)}
+/* Footer */
+.bundle-footer{
+  padding:10px 12px 16px;flex-shrink:0;
+  background:linear-gradient(0deg,var(--navy) 70%,transparent);
+}
+.bundle-confirm-btn{
+  width:100%;padding:13px;background:linear-gradient(135deg,#e0b050,#c08828);
+  color:var(--navy);font-family:'Bebas Neue',sans-serif;font-size:22px;
+  letter-spacing:2px;border:none;cursor:pointer;border-radius:8px;
+  box-shadow:0 4px 20px rgba(212,165,72,0.35);transition:opacity 0.2s;
+}
+.bundle-confirm-btn:disabled{opacity:0.2;cursor:default}
+
+/* ======= MULTIPLAYER LOBBY ======= */
+.lobby-screen{
+  background:linear-gradient(160deg,#060d1e,#0a1628);
+  justify-content:center;align-items:center;gap:20px;padding:32px 20px;
+}
+.lobby-title{
+  font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--gold);
+  letter-spacing:4px;text-align:center;
+}
+.lobby-sub{font-size:13px;color:var(--muted);text-align:center;max-width:280px;line-height:1.5}
+.lobby-btn-row{display:flex;gap:10px;width:100%;max-width:300px;justify-content:center}
+.lobby-btn-row .lobby-btn{flex:1}
+.lobby-btn{
+  flex:none;padding:14px 24px;border-radius:8px;
+  font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:1px;
+  border:1.5px solid;cursor:pointer;transition:transform 0.1s,opacity 0.1s;
+  height:auto;align-self:center;
+}
+.lobby-btn:active{transform:scale(0.95)}
+.lobby-btn.create{
+  background:linear-gradient(135deg,#e0b050,#c08828);
+  border-color:transparent;color:var(--navy);
+}
+.lobby-btn.join{
+  border-color:rgba(96,165,250,0.5);background:rgba(96,165,250,0.07);color:#60a5fa;
+}
+.lobby-code-display{
+  font-family:'Bebas Neue',sans-serif;font-size:52px;color:var(--gold);
+  letter-spacing:12px;text-shadow:0 0 30px rgba(212,165,72,0.4);
+  text-align:center;
+}
+.lobby-code-label{font-size:10px;color:var(--muted);letter-spacing:4px;text-align:center}
+.lobby-waiting{font-size:13px;color:var(--muted);text-align:center;animation:blink 1.2s ease-in-out infinite}
+.lobby-input{
+  width:100%;max-width:200px;padding:14px;
+  background:rgba(255,255,255,0.05);border:1.5px solid rgba(212,165,72,0.3);
+  color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:8px;
+  text-align:center;border-radius:8px;outline:none;
+  text-transform:uppercase;
+}
+.lobby-input:focus{border-color:var(--gold)}
+.lobby-back{
+  font-size:11px;color:var(--muted);letter-spacing:2px;font-weight:700;
+  cursor:pointer;padding:8px;
+}
+.lobby-status{font-size:13px;text-align:center;font-weight:700;padding:8px 16px;border-radius:6px}
+.lobby-status.ok{color:var(--green);background:rgba(74,222,128,0.1);border:1px solid rgba(74,222,128,0.3)}
+.lobby-status.err{color:var(--red);background:rgba(230,57,70,0.1);border:1px solid rgba(230,57,70,0.3)}
+
+/* ======= MP STAKES SCREEN ======= */
+.mpstakes-screen{
+  background:linear-gradient(160deg,#060d1e,#0a1628);
+  justify-content:center;align-items:center;gap:18px;padding:32px 20px;
+}
+.mpstakes-title{
+  font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--gold);
+  letter-spacing:4px;text-align:center;
+}
+.mpstakes-sub{font-size:13px;color:var(--muted);text-align:center;max-width:260px;line-height:1.5}
+.mpstakes-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%;max-width:260px}
+.mpstakes-opt{
+  padding:16px 8px;border-radius:8px;text-align:center;cursor:pointer;
+  border:2px solid rgba(212,165,72,0.2);background:rgba(212,165,72,0.05);
+  font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--gold);
+  letter-spacing:2px;transition:all 0.12s;
+}
+.mpstakes-opt:active,.mpstakes-opt.selected{
+  border-color:var(--gold);background:rgba(212,165,72,0.15);
+  box-shadow:0 0 16px rgba(212,165,72,0.3);
+}
+.mpstakes-opt.disabled-opt{opacity:0.35;cursor:default}
+.mpstakes-balance{font-size:13px;color:var(--muted);font-weight:700;text-align:center}
+.mpstakes-confirm{
+  width:100%;max-width:240px;padding:14px;border-radius:8px;border:none;cursor:pointer;
+  font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px;
+  background:linear-gradient(135deg,#e0b050,#c08828);color:var(--navy);
+}
+.mpstakes-confirm:disabled{opacity:0.3;cursor:default}
+.mpstakes-waiting{font-size:13px;color:var(--muted);text-align:center;animation:blink 1.2s ease-in-out infinite}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+'use strict';
+
+// ================================================================
+// CARD DATA
+// ================================================================
+// Real player names used for prototype/concept clarity only.
+// For public release: replace with archetype names OR acquire licensing.
+const BATTER_CARDS = [
+  // Rating 6 — Generational (2)
+  {id:'b01',type:'batter',name:'MS Dhoni',nick:'Captain Cool',rating:5,special:'finisher',desc:'Finishes matches. Always.',bigHitter:true},
+  {id:'b02',type:'batter',name:'Virat Kohli',nick:'King Kohli',rating:5,special:'anchor',desc:'Re-roll any dice of 1.',bigHitter:false},
+  // Rating 5 — Elite (3)
+  {id:'b03',type:'batter',name:'Rohit Sharma',nick:'Hitman',rating:4,special:'bigHitter',desc:'+2 when dice rolls 6.',bigHitter:true},
+  {id:'b04',type:'batter',name:'Chris Gayle',nick:'Universe Boss',rating:4,special:'rangeHitter',desc:'Sixes score 7 runs.',bigHitter:true},
+  {id:'b05',type:'batter',name:'AB de Villiers',nick:'Mr 360',rating:4,special:'wicketShield',desc:'Wickets become Dot Ball instead.',bigHitter:true},
+  // Rating 4 — International (5)
+  {id:'b06',type:'batter',name:'Sachin Tendulkar',nick:'Master Blaster',rating:3,special:'tieWinner',desc:'Ties give 2 runs instead of 1.',bigHitter:false},
+  {id:'b07',type:'batter',name:'Andre Russell',nick:'Dre Russ',rating:3,special:'powerSurge',desc:'+1 on first 3 balls of innings.',bigHitter:true},
+  {id:'b08',type:'batter',name:'Virender Sehwag',nick:'Viru',rating:3,special:'fastStarter',desc:'+2 on first 3 balls of over.',bigHitter:true},
+  {id:'b09',type:'batter',name:'Yuvraj Singh',nick:'Yuvi',rating:3,special:'counterPunch',desc:'+1 on ball after a wicket falls.',bigHitter:true},
+  {id:'b10',type:'batter',name:'Kevin Pietersen',nick:'KP',rating:3,special:'hookShot',desc:'+2 on Bouncer/Short Ball + Pull combo.',bigHitter:false},
+  // Rating 3 — Solid Pro (7)
+  {id:'b11',type:'batter',name:'Ajinkya Rahane',nick:'Jinks',rating:2,special:null,desc:'Calm head in a crisis.',bigHitter:false},
+  {id:'b12',type:'batter',name:'Rishabh Pant',nick:'Pantastic',rating:2,special:null,desc:'Awkward angles, big results.',bigHitter:true},
+  {id:'b13',type:'batter',name:'Hardik Pandya',nick:'Kung Fu Panda',rating:2,special:null,desc:'Versatile all-rounder.',bigHitter:true},
+  {id:'b14',type:'batter',name:'Shreyas Iyer',nick:'Sarpanch',rating:2,special:null,desc:'Crowd favourite under pressure.',bigHitter:false},
+  {id:'b15',type:'batter',name:'Glenn Maxwell',nick:'Big Show',rating:2,special:null,desc:'High risk, high reward.',bigHitter:true},
+  {id:'b16',type:'batter',name:'Jos Buttler',nick:'The Buttler',rating:2,special:'freeReroll',desc:'One free reroll per match.',bigHitter:false},
+  {id:'b17',type:'batter',name:'Brendon McCullum',nick:'Baz',rating:2,special:'resilient',desc:'+1 after a dot/pressure/wicket.',bigHitter:true},
+  // Rating 2 — Workhorse (8)
+  {id:'b18',type:'batter',name:'KL Rahul',nick:'KL',rating:1,special:'steadyEddie',desc:'Dice roll of 1 counts as 2.',bigHitter:false},
+  {id:'b19',type:'batter',name:'Shubman Gill',nick:'Prince',rating:1,special:'antiPace',desc:'+2 vs Pace (seam) bowlers.',bigHitter:false},
+  {id:'b20',type:'batter',name:'David Warner',nick:'The Bull',rating:1,special:'antiSpin',desc:'+2 vs Spin bowlers.',bigHitter:false},
+  {id:'b21',type:'batter',name:'Yashasvi Jaiswal',nick:'Yash',rating:1,special:null,desc:'Young and fearless.',bigHitter:false},
+  {id:'b22',type:'batter',name:'Faf du Plessis',nick:'Faf',rating:1,special:null,desc:'Experienced. Reliable.',bigHitter:false},
+  {id:'b23',type:'batter',name:'Tilak Varma',nick:'Tilak',rating:1,special:'powerSurge',desc:'+1 on first 3 balls of innings.',bigHitter:false},
+  {id:'b24',type:'batter',name:'Sanju Samson',nick:'Sanju',rating:1,special:'fastStarter',desc:'+2 on first 3 balls of over.',bigHitter:true},
+  {id:'b25',type:'batter',name:'Heinrich Klaasen',nick:'Klaas',rating:1,special:null,desc:'Late bloomer — gets better.',bigHitter:true},
+  // Rating 1 — Specialist / Tail-Ender (5)
+  {id:'b26',type:'batter',name:'Jasprit Bumrah',nick:'Boom Boom',rating:1,special:'tailEnder',desc:'+3 on dice 6; auto-dot on dice 1.',bigHitter:false},
+  {id:'b27',type:'batter',name:'Yuzvendra Chahal',nick:'Yuzi',rating:1,special:'nightwatchman',desc:"Can't be dismissed on first ball played.",bigHitter:false},
+  {id:'b28',type:'batter',name:'Devdutt Padikkal',nick:'Underrated',rating:1,special:'underrated',desc:'+2 vs bowlers rated 3+ (★3 or higher).',bigHitter:false},
+  {id:'b29',type:'batter',name:'Riyan Parag',nick:'Twelfth Man',rating:1,special:null,desc:'Surprise factor.',bigHitter:false},
+  {id:'b30',type:'batter',name:'Sai Sudharsan',nick:'Debutant',rating:1,special:'extraDie',desc:'Roll extra die; use the higher.',bigHitter:false},
+];
+
+const BOWLER_CARDS = [
+  // Rating 6 — Generational (2)
+  {id:'w01',type:'bowler',name:'Jasprit Bumrah',nick:'Boom Boom',rating:5,special:'deathBowler',desc:'+2 in final 3 balls of over.',spinner:false,seamer:true},
+  {id:'w02',type:'bowler',name:'Sunil Narine',nick:'The Mystery',rating:5,special:'unreadable',desc:'+1 to bowler — truly unreadable.',spinner:true,seamer:false},
+  // Rating 5 — Elite (3)
+  {id:'w03',type:'bowler',name:'Dale Steyn',nick:'Steyn Gun',rating:4,special:'paceDemon',desc:'On dice 5–6, batter loses 1 extra.',spinner:false,seamer:true},
+  {id:'w04',type:'bowler',name:'Ravichandran Ashwin',nick:'Ash',rating:4,special:null,desc:'Turn and guile. Hard to attack.',spinner:true,seamer:false},
+  {id:'w05',type:'bowler',name:'Wasim Akram',nick:'Sultan',rating:4,special:'strikeFirst',desc:'+2 on first 3 balls of over.',spinner:false,seamer:true},
+  // Rating 4 — International (5)
+  {id:'w06',type:'bowler',name:'Bhuvneshwar Kumar',nick:'Bhuvi',rating:3,special:'strikeFirst',desc:'+2 on first 3 balls of over.',spinner:false,seamer:true},
+  {id:'w07',type:'bowler',name:'Lasith Malinga',nick:'Slinga',rating:3,special:'deathBowler',desc:'+2 in final 3 balls of over.',spinner:false,seamer:true},
+  {id:'w08',type:'bowler',name:'Yuzvendra Chahal',nick:'Yuzi',rating:3,special:'googly',desc:'Ties vs low-rated batters = Wicket.',spinner:true,seamer:false},
+  {id:'w09',type:'bowler',name:'Harbhajan Singh',nick:'Turbanator',rating:3,special:null,desc:'Carrom ball. Unpredictable.',spinner:true,seamer:false},
+  {id:'w10',type:'bowler',name:'Trent Boult',nick:'Bouty',rating:3,special:'netBowler',desc:'+2 vs batters rated 3+ (★3 or higher).',spinner:false,seamer:true},
+  // Rating 3 — Solid Pro (7)
+  {id:'w11',type:'bowler',name:'Mohammed Siraj',nick:'Miyan Magic',rating:2,special:'strikeFirst',desc:'+2 on first 3 balls of over.',spinner:false,seamer:true},
+  {id:'w12',type:'bowler',name:'Glenn McGrath',nick:'Pigeon',rating:2,special:null,desc:'Line and length forever.',spinner:false,seamer:true},
+  {id:'w13',type:'bowler',name:'Ravindra Jadeja',nick:'Sir Jadeja',rating:2,special:null,desc:'Versatile. Useful with the ball.',spinner:true,seamer:false},
+  {id:'w14',type:'bowler',name:'Kuldeep Yadav',nick:'Kully',rating:2,special:null,desc:'Chinaman. Difficult to read.',spinner:true,seamer:false},
+  {id:'w15',type:'bowler',name:'Pat Cummins',nick:'Cummo',rating:2,special:null,desc:'Workhorse with a lethal bouncer.',spinner:false,seamer:true},
+  {id:'w16',type:'bowler',name:'Varun Chakaravarthy',nick:'Mystery V',rating:2,special:null,desc:'Unknown variations every ball.',spinner:true,seamer:false},
+  {id:'w17',type:'bowler',name:'Mustafizur Rahman',nick:'The Fizz',rating:2,special:null,desc:'Slower ball gets everyone.',spinner:false,seamer:true},
+  // Rating 2 — Workhorse (8)
+  {id:'w18',type:'bowler',name:'Umesh Yadav',nick:'Umesh',rating:1,special:'steadyBowler',desc:'Dice 1 treated as 2 for bowler.',spinner:false,seamer:true},
+  {id:'w19',type:'bowler',name:'Stuart Broad',nick:'Broady',rating:1,special:'netBowler',desc:'+2 vs batters rated 3+ (★3 or higher).',spinner:false,seamer:true},
+  {id:'w20',type:'bowler',name:'Andrew Flintoff',nick:'Freddie',rating:1,special:'luckyBreak',desc:'On dice 6, auto-wicket.',spinner:false,seamer:true},
+  {id:'w21',type:'bowler',name:'Khaleel Ahmed',nick:'Khaleel',rating:1,special:null,desc:'Left-arm angle. Tricky.',spinner:false,seamer:true},
+  {id:'w22',type:'bowler',name:'Dwayne Bravo',nick:'DJ Bravo',rating:1,special:null,desc:'Cutter specialist.',spinner:false,seamer:false},
+  {id:'w23',type:'bowler',name:'T Natarajan',nick:'Yorker King',rating:1,special:'yorkerSpecialist',desc:'+1 on Yorker delivery.',spinner:false,seamer:true},
+  {id:'w24',type:'bowler',name:'Piyush Chawla',nick:'Piyush',rating:1,special:null,desc:'Reliable spinner. Accurate.',spinner:true,seamer:false},
+  {id:'w25',type:'bowler',name:'Arshdeep Singh',nick:'Arshu',rating:1,special:null,desc:'Left-arm seam. Deceptive.',spinner:false,seamer:true},
+  // Rating 1 — Specialist (5)
+  {id:'w26',type:'bowler',name:'Tushar Deshpande',nick:'Surprise',rating:1,special:null,desc:'Pace and surprise factor.',spinner:false,seamer:true},
+  {id:'w27',type:'bowler',name:'Mukesh Kumar',nick:'Underdog',rating:1,special:'underdog',desc:'+3 vs Rating 6 batters.',spinner:false,seamer:true},
+  {id:'w28',type:'bowler',name:'Akash Madhwal',nick:'Wildcard',rating:1,special:'extraDie',desc:'Roll extra die; use the higher.',spinner:false,seamer:true},
+  {id:'w29',type:'bowler',name:'Adam Zampa',nick:'Zampa',rating:1,special:null,desc:'Leg spin. Crafty on debut.',spinner:true,seamer:false},
+  {id:'w30',type:'bowler',name:'Mayank Yadav',nick:'Express',rating:1,special:'phoenix',desc:'+2 on ball after a SIX was hit.',spinner:false,seamer:true},
+];
+
+// ================================================================
+// BUNDLES — 5 pre-built squads, player picks one after seeing pitch
+// Each bundle has exactly 6 batter IDs + 6 bowler IDs
+// ================================================================
+const BUNDLES = [
+  {
+    id:'pace_assault',
+    name:'PACE ASSAULT',
+    icon:'🔥',
+    tagline:'4 express pacers · batters who love the short ball',
+    pitchFit:['headingley','sharjah'],
+    batIds:['b03','b08','b09','b10','b19','b21'],   // Rohit,Sehwag,Yuvraj,KP,Shubman,Jaiswal
+    bowlIds:['w01','w03','w05','w15','w17','w25'],   // Bumrah,Steyn,Wasim,Cummins,Mustafizur,Arshdeep
+  },
+  {
+    id:'spin_clinic',
+    name:'SPIN CLINIC',
+    icon:'🌀',
+    tagline:'4 mystery spinners · batters who read turn',
+    pitchFit:['chepauk'],
+    batIds:['b05','b06','b07','b20','b22','b23'],    // ABD,Sachin,Russell,Warner,Faf,Tilak
+    bowlIds:['w02','w04','w08','w13','w14','w16'],   // Narine,Ashwin,Chahal,Jadeja,Kuldeep,Varun
+  },
+  {
+    id:'power_xi',
+    name:'POWER XI',
+    icon:'💥',
+    tagline:'All-attack batting · reliable workhorse bowlers',
+    pitchFit:['wankhede','sharjah'],
+    batIds:['b01','b04','b11','b12','b15','b24'],    // Dhoni,Gayle,Rahane,Pant,Maxwell,Sanju
+    bowlIds:['w06','w07','w09','w21','w22','w23'],   // Bhuvi,Malinga,Harbhajan,Khaleel,Bravo,Natarajan
+  },
+  {
+    id:'balanced',
+    name:'BALANCED MASTERS',
+    icon:'🏆',
+    tagline:'Technical anchors · all-pitch bowling',
+    pitchFit:['wankhede','chepauk','headingley','sharjah'],
+    batIds:['b02','b13','b14','b16','b17','b18'],    // Kohli,Pandya,Shreyas,Buttler,McCullum,KL Rahul
+    bowlIds:['w10','w11','w12','w18','w19','w20'],   // Boult,Siraj,McGrath,Umesh,Broad,Flintoff
+  },
+  {
+    id:'young_guns',
+    name:'YOUNG GUNS',
+    icon:'⚡',
+    tagline:'Lower-rated but loaded with specials · volatile & fun',
+    pitchFit:[],
+    batIds:['b25','b26','b27','b28','b29','b30'],    // Klaasen,Bumrah-bat,Chahal-bat,Padikkal,Parag,Sai
+    bowlIds:['w24','w26','w27','w28','w29','w30'],   // Chawla,Deshpande,Mukesh,Akash,Zampa,Mayank
+  },
+];
+
+
+// ================================================================
+// GAME CONSTANTS
+// ================================================================
+
+// Separate matrices for pace vs spin. Positive = batter advantage.
+const PACE_MATRIX = {
+  Swing:     {GroundShot:-1,Drive:+2, Pull:-1,ReverseScoop:-2,StepDown: 0,Slog:+1},
+  Yorker:    {GroundShot:-1,Drive:-2, Pull:-2,ReverseScoop:+3,StepDown:-1,Slog:-3},
+  Bouncer:   {GroundShot: 0,Drive:-2, Pull:+3,ReverseScoop:-2,StepDown:-1,Slog:+2},
+  Cutter:    {GroundShot:-1,Drive:-1, Pull:-1,ReverseScoop:-1,StepDown: 0,Slog:-2},
+  ShortBall: {GroundShot:-1,Drive:-2, Pull:+2,ReverseScoop:-2,StepDown:-1,Slog:+2},
+  FullToss:  {GroundShot: 0,Drive:+2, Pull:+1,ReverseScoop: 0,StepDown:+2,Slog:+3},
+};
+const SPIN_MATRIX = {
+  OffBreak:  {GroundShot:-1,Drive:+1, Pull:-1,ReverseScoop:-1,StepDown:+1,Slog: 0},
+  LegBreak:  {GroundShot:-1,Drive:-1, Pull: 0,ReverseScoop:-1,StepDown: 0,Slog:+1},
+  Googly:    {GroundShot:-2,Drive:-2, Pull:-1,ReverseScoop:-1,StepDown:-2,Slog:-1},
+  Doosra:    {GroundShot:-2,Drive:-1, Pull:-1,ReverseScoop:-2,StepDown:-1,Slog:-2},
+  TossedUp:  {GroundShot: 0,Drive:+1, Pull:-1,ReverseScoop:-1,StepDown:+3,Slog:+2},
+  Slider:    {GroundShot:-1,Drive: 0, Pull: 0,ReverseScoop:-1,StepDown: 0,Slog:-1},
+};
+const PACE_DELIVERIES = ['Swing','Yorker','Bouncer','Cutter','ShortBall','FullToss'];
+const SPIN_DELIVERIES = ['OffBreak','LegBreak','Googly','Doosra','TossedUp','Slider'];
+const _DISP={GroundShot:'Ground',ReverseScoop:'Rev.Scoop',StepDown:'Step Down',
+  ShortBall:'Short Ball',FullToss:'Full Toss',OffBreak:'Off Break',LegBreak:'Leg Break',TossedUp:'Tossed Up'};
+function dispName(k){return _DISP[k]||k;}
+
+const PITCHES = [
+  {
+    id:'wankhede', name:'Wankhede Flat Road', icon:'🏟️',
+    desc:'Mumbai paradise. Ball races to the rope.',
+    matrixLabel:'ALL cells +1 | Batter ★3+ gets +1',
+    bendMatrix(m) {
+      const n={};
+      for(const d in m){n[d]={};for(const s in m[d])n[d][s]=m[d][s]+1;}
+      return n;
+    },
+    buffCard(c) {
+      if(c.type==='batter'&&c.rating>=3)return{...c,rating:Math.min(5,c.rating+1)};
+      return c;
+    },
+  },
+  {
+    id:'chepauk', name:'Chepauk Turning Track', icon:'🌀',
+    desc:"Chennai dustbowl. Slog at your peril.",
+    matrixLabel:'Slog −2 | Spinner bowlers +1 (capped ★5)',
+    bendMatrix(m) {
+      const n=JSON.parse(JSON.stringify(m));
+      for(const d in n)if(n[d].Slog!==undefined)n[d].Slog-=2;
+      return n;
+    },
+    buffCard(c) {
+      if(c.type==='bowler'&&c.spinner)return{...c,rating:Math.min(5,c.rating+1)};
+      return c;
+    },
+  },
+  {
+    id:'headingley', name:'Headingley Green Top', icon:'🌿',
+    desc:'Leeds overcast. Drive at your peril.',
+    matrixLabel:'Drive −1 | Seam bowlers +1 (capped ★5)',
+    bendMatrix(m) {
+      const n=JSON.parse(JSON.stringify(m));
+      for(const d in n)if(n[d].Drive!==undefined)n[d].Drive-=1;
+      return n;
+    },
+    buffCard(c) {
+      if(c.type==='bowler'&&c.seamer)return{...c,rating:Math.min(5,c.rating+1)};
+      return c;
+    },
+  },
+  {
+    id:'sharjah', name:'Sharjah Dewy Night', icon:'🌙',
+    desc:'Dew ruins the ball. Batters feast on yorkers.',
+    matrixLabel:'Yorker/Full Toss +2 | Big hitters +1',
+    bendMatrix(m) {
+      const n=JSON.parse(JSON.stringify(m));
+      if(n.Yorker)   for(const s in n.Yorker)   n.Yorker[s]  +=2;
+      if(n.FullToss) for(const s in n.FullToss) n.FullToss[s]+=2;
+      if(n.TossedUp) for(const s in n.TossedUp) n.TossedUp[s]+=2;
+      return n;
+    },
+    buffCard(c) {
+      if(c.type==='batter'&&c.bigHitter)return{...c,rating:Math.min(5,c.rating+1)};
+      return c;
+    },
+  },
+];
+
+const POWERS = [
+  {
+    id:'drs', name:'DRS', icon:'📡',
+    desc:'Force your opponent to re-roll their die this ball.',
+    flavor:'Challenge the call. Make them sweat.',
+  },
+  {
+    id:'captainsCall', name:"Captain's Call", icon:'🎯',
+    desc:'Swap one card in your hand for a fresh draw.',
+    flavor:'Fresh blood. New plan.',
+  },
+  {
+    id:'homeGround', name:'Home Ground', icon:'🏠',
+    desc:'Negate the pitch effect for this one ball only.',
+    flavor:'Level the playing field.',
+  },
+];
+
+const COMMENTARY = {
+  SIX:[
+    "That is GONE! Absolutely DEMOLISHED into the stands!",
+    "Clean hit — MAXIMUM! Nobody stopping that!",
+    "Right out of the middle! It's cleared the rope easily!",
+    "Six runs! Went like a tracer bullet into the crowd!",
+    "HUGE! That's landed somewhere in row Z!",
+    "Dispatched! Straight as a die and over the rope!",
+  ],
+  FOUR:[
+    "FOUR! Racing away to the boundary!",
+    "Found the gap perfectly — boundary!",
+    "Elegant drive, four runs to the total!",
+    "Punched off the back foot, FOUR!",
+    "Too full, too straight — driven for FOUR!",
+    "Cracked through the covers, no stopping it!",
+  ],
+  TWO:[
+    "Good running! They'll take two there.",
+    "Pushed into the gap, comfortable two runs.",
+    "Smart batting — picking up a couple.",
+    "Midwicket gap found, two more scored.",
+    "Off the toe-end, scrambling for two.",
+  ],
+  ONE:[
+    "Clipped away — a single to rotate strike.",
+    "Quick single! Excellent running.",
+    "Inside edge, scurries away for one.",
+    "Pushed to mid-on, a single taken.",
+    "Rotates the strike. Smart cricket.",
+  ],
+  DOT:[
+    "Beaten outside off! That nearly had him.",
+    "Blocked back down the pitch. Good discipline.",
+    "Defended. Tight bowling — no damage done.",
+    "Kept out. The bowler will take that.",
+    "Play and miss! Lucky the edge didn't carry.",
+  ],
+  PRESSURE:[
+    "Ooooh! Beat the bat COMPLETELY. The pressure is mounting!",
+    "Play and miss! The bat is nowhere near it!",
+    "Rapped on the pads! Big shout — not given, but that hurts!",
+    "Cramped for room! The bowler is firmly on top here!",
+    "That swung late! A nightmare delivery — batter under siege!",
+  ],
+  WICKET:[
+    "BOWLED HIM! Off stump cartwheel — the crowd erupts!",
+    "CAUGHT! Gone! Soft dismissal, big wicket!",
+    "OUT! Beaten for sheer pace — the stumps are shattered!",
+    "WICKET! That partnership broken at a crucial time!",
+    "LBW! Plumb in front — nothing he could do!",
+    "GONE! Edged and pouched behind! What a delivery!",
+  ],
+};
+
+const SHOTS = ['GroundShot','Drive','Pull','ReverseScoop','StepDown','Slog'];
+
+const SPECIAL_LABELS = {
+  anchor: 'ANCHOR',
+  hookShot: 'HOOK SHOT',
+  yorkerSpecialist: 'YORKER SPEC.',
+  deathBowler: 'DEATH BOWLER',
+  finisher: 'FINISHER',
+  bigHitter: 'BIG HITTER',
+  rangeHitter: 'RANGE HITTER',
+  wicketShield: 'WICKET SHIELD',
+  tieWinner: 'TIE WINNER',
+  powerSurge: 'POWER SURGE',
+  fastStarter: 'FAST STARTER',
+  counterPunch: 'COUNTER PUNCH',
+  freeReroll: 'FREE REROLL',
+  resilient: 'RESILIENT',
+  steadyEddie: 'STEADY EDDIE',
+  antiPace: 'ANTI-PACE',
+  antiSpin: 'ANTI-SPIN',
+  tailEnder: 'TAIL ENDER',
+  nightwatchman: 'NIGHTWATCHMAN',
+  underrated: 'UNDERRATED',
+  extraDie: 'EXTRA DIE',
+  unreadable: 'UNREADABLE',
+  paceDemon: 'PACE DEMON',
+  strikeFirst: 'STRIKE FIRST',
+  googly: 'GOOGLY',
+  netBowler: 'NET BOWLER',
+  steadyBowler: 'STEADY BOWLER',
+  luckyBreak: 'LUCKY BREAK',
+  underdog: 'UNDERDOG',
+  phoenix: 'PHOENIX',
+};
+
+// ================================================================
+// UTILITY
+// ================================================================
+function shuffle(arr) {
+  const a=[...arr];
+  for(let i=a.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+
+function pick(arr) { return arr[Math.floor(Math.random()*arr.length)]; }
+
+function rollDie() { return Math.floor(Math.random()*6)+1; }
+
+function applyDiceMod(roll) {
+  // Symmetric: 1-2→-1, 3-4→0, 5-6→+1 (each exactly 1/3 probability)
+  if(roll<=2)return -1;
+  if(roll<=4)return 0;
+  return 1;
+}
+
+function cloneCard(c) { return {...c, _anchorFired:false}; }
+
+// ── OPTION B SUB-STATS (display only — does not affect formula) ──────────────
+// Generates 4 deterministic sub-stats per card based on rating + special + type.
+// Batter stats: PWR (power), TIM (timing), TEC (technique), SPL (special)
+// Bowler stats: SPD (speed/flight), LNE (line/accuracy), VAR (variation), SPL
+function getCardStats(card) {
+  // Base from star rating: ★1→54 ★2→63 ★3→72 ★4→82 ★5→93
+  const base = [0,54,63,72,82,93][card.rating] || 60;
+  // Deterministic pseudo-random from card id (FNV-1a style)
+  let h = 2166136261;
+  for(let i=0;i<card.id.length;i++){ h ^= card.id.charCodeAt(i); h = (h*16777619)>>>0; }
+  const rng = (n, range) => (((h ^ (h>>>n*5)) * (n*2654435769))>>>0) % range;
+  const clamp = n => Math.max(30, Math.min(99, Math.round(n)));
+
+  // Special bonuses to specific stat slots
+  const B = {a:0,b:0,c:0,d:0};
+  if(card.type === 'batter') {
+    // a=PWR  b=TIM  c=TEC  d=SPL
+    if(card.bigHitter)                                        { B.a+=8; }
+    if(card.special==='bigHitter'||card.special==='rangeHitter') { B.a+=10; B.d+=6; }
+    if(card.special==='anchor'||card.special==='wicketShield')   { B.b+=10; B.c+=6; }
+    if(card.special==='steadyEddie')                             { B.b+=8; }
+    if(card.special==='fastStarter'||card.special==='powerSurge'){ B.a+=7; B.d+=5; }
+    if(card.special==='counterPunch'||card.special==='resilient'){ B.c+=8; B.d+=5; }
+    if(card.special==='antiPace'||card.special==='antiSpin')     { B.c+=10; B.d+=8; }
+    if(card.special==='underrated')                              { B.d+=14; }
+    if(card.special==='finisher')                                { B.a+=6; B.d+=10; }
+    if(card.special==='hookShot')                                { B.c+=10; }
+    if(card.special==='tieWinner')                               { B.b+=8; B.d+=8; }
+    if(card.special==='tailEnder')                               { B.a+=12; B.b-=8; B.d+=10; }
+  } else {
+    // a=SPD  b=LNE  c=VAR  d=SPL
+    if(card.seamer)                                              { B.a+=5; }
+    if(card.spinner)                                             { B.c+=5; }
+    if(card.special==='deathBowler')                             { B.b+=10; B.d+=8; }
+    if(card.special==='strikeFirst')                             { B.a+=8; B.d+=6; }
+    if(card.special==='paceDemon')                               { B.a+=12; B.d+=8; }
+    if(card.special==='unreadable')                              { B.c+=12; B.d+=10; }
+    if(card.special==='googly'||card.special==='yorkerSpecialist'){ B.c+=10; B.d+=8; }
+    if(card.special==='netBowler')                               { B.b+=10; }
+    if(card.special==='luckyBreak'||card.special==='phoenix')    { B.d+=12; }
+    if(card.special==='steadyBowler')                            { B.b+=10; }
+    if(card.special==='underdog')                                { B.d+=14; }
+  }
+
+  return {
+    a: clamp(base - 8 + rng(1,16) + B.a),
+    b: clamp(base - 7 + rng(2,14) + B.b),
+    c: clamp(base - 7 + rng(3,14) + B.c),
+    d: clamp(base - 9 + rng(4,18) + B.d),
+    ovr: clamp(Math.round((base + B.a*0.25 + B.b*0.1 + B.c*0.1 + B.d*0.1) * 0.95)),
+    tier: card.rating>=5?'gold':card.rating>=4?'gold':card.rating>=3?'silver':'bronze',
+  };
+}
+function getAvailableDeliveries(bowlerCard,inn) {
+  const base=(bowlerCard&&bowlerCard.spinner)?SPIN_DELIVERIES:PACE_DELIVERIES;
+  return base.filter(d=>{
+    if(d==='Bouncer')   return inn.bouncerChips>0;
+    if(d==='Yorker')    return (inn.deliveriesUsed['Yorker']   ||0)<2;
+    if(d==='Googly')    return (inn.deliveriesUsed['Googly']   ||0)<2;
+    if(d==='Doosra')    return (inn.deliveriesUsed['Doosra']   ||0)<2;
+    if(d==='ShortBall') return (inn.deliveriesUsed['ShortBall']||0)<3;
+    return true;
+  });
+}
+function getAvailableShots(inn) {
+  return SHOTS.filter(s=>{
+    if(s==='Slog')         return (inn.shotsUsed['Slog']        ||0)<2;
+    if(s==='ReverseScoop') return (inn.shotsUsed['ReverseScoop']||0)<2;
+    return true;
+  });
+}
+
+function getOvStr(balls) {
+  const ov=Math.floor(balls/6);
+  const b=balls%6;
+  return `${ov}.${b}`;
+}
+
+// ================================================================
+// PURE GAME LOGIC
+// ================================================================
+
+function getMatchupMod(delivery, shot, pitch, homeGround, bowlerCard) {
+  const bm=(bowlerCard&&bowlerCard.spinner)?SPIN_MATRIX:PACE_MATRIX;
+  const base=JSON.parse(JSON.stringify(bm));
+  const m=homeGround?base:pitch.bendMatrix(base);
+  return (m[delivery]&&m[delivery][shot]!==undefined)?m[delivery][shot]:0;
+}
+
+// AMBIGUITY: applyPitchToCard applies pitch buffCard unless homeGround is active.
+function applyPitchToCard(card, pitch, homeGround) {
+  if(homeGround) return card;
+  return pitch.buffCard(card);
+}
+
+// resolveBall — pure function, all inputs explicit
+function resolveBall({ batterCard, shot, bowlerCard, delivery, batterDice, bowlerDice,
+                       pitch, homeGround, overBall, prevOutcome, batterBallsPlayed,
+                       prevShot, prevDelivery }) {
+  // Modified ratings via pitch
+  let bRating = applyPitchToCard({...batterCard}, pitch, homeGround).rating;
+  let wRating = applyPitchToCard({...bowlerCard}, pitch, homeGround).rating;
+
+  // Dice: steadyEddie/steadyBowler convert a 1 roll to 2
+  let effectiveBDice = batterDice;
+  let effectiveWDice = bowlerDice;
+  if(batterCard.special==='steadyEddie' && batterDice===1) effectiveBDice=2;
+  if(bowlerCard.special==='steadyBowler' && bowlerDice===1) effectiveWDice=2;
+
+  // tailEnder: +3 on dice 6, but auto-dot on dice 1
+  if(batterCard.special==='tailEnder' && batterDice===1) {
+    return { outcome:'DOT', runs:0, isWicket:false, anchorSaved:false,
+      batterTotal:0, bowlerTotal:0, difference:0, matchupMod:0,
+      bDiceMod:0, wDiceMod:0, batterDice, bowlerDice, batterCard, bowlerCard,
+      shot, delivery, batSpecial:0, bowlSpecial:0, bRating, wRating,
+      commentary: pick(COMMENTARY.DOT), specialNote:'tail-ender flinched on 1!' };
+  }
+
+  // Matchup modifier (base)
+  let effectiveDelivery = delivery;
+  let matchupMod = getMatchupMod(delivery, shot, pitch, homeGround, bowlerCard);
+
+  // ── BALANCE MECHANICS ────────────────────────────────────────────────────────
+  let balanceNote = '';
+
+  // 1. YORKER MISFIRE: bowler dice 1 → execution fails, slips to FullToss trajectory
+  //    Real cricket: a missed Yorker often ends up a full-toss gift
+  if(delivery==='Yorker' && bowlerDice===1) {
+    effectiveDelivery = 'FullToss';
+    matchupMod = getMatchupMod('FullToss', shot, pitch, homeGround, bowlerCard);
+    balanceNote = '⚡ Yorker slipped — Full Toss!';
+  }
+
+  // 2. PATTERN READ: same shot as last ball → bowler "clocked" the tendency, -1
+  //    Doesn't apply on ball 1 (no prevShot), or for defensive shots (GroundShot/Drive = smart repeat)
+  let patternPenalty = 0;
+  const aggressiveShots = ['Slog','StepDown','ReverseScoop','Pull'];
+  if(prevShot && prevShot === shot && aggressiveShots.includes(shot)) {
+    patternPenalty = -1;
+    if(!balanceNote) balanceNote = '📖 Pattern read! −1';
+  }
+
+  // 3. FULLTOSS PUNISHMENT: If bowler deliberately bowls FullToss vs attacking shot,
+  //    bowler pays an extra -1 (reflecting real risk of gift delivery)
+  //    This is already handled by the matrix (+3 for Slog vs FullToss), but
+  //    we add a further disincentive: FullToss vs any attacking shot gives bowler -1 extra
+  //    so bowler is penalised doubly for choosing it — matching real cricket
+  let ftPunish = 0;
+  const attackingShots = ['Slog','StepDown','Pull','Drive'];
+  if(delivery==='FullToss' && attackingShots.includes(shot) && effectiveDelivery!=='FullToss') {
+    // Only for INTENTIONAL FullToss (not misfires — effectiveDelivery check skips misfires)
+    ftPunish = 1; // batter gets +1 extra — the bowler "gifted" it
+    if(!balanceNote) balanceNote = '🎁 Full Toss punished! +1';
+  }
+  // ─────────────────────────────────────────────────────────────────────────────
+
+  const bDiceMod = applyDiceMod(effectiveBDice);
+  const wDiceMod = applyDiceMod(effectiveWDice);
+
+  let batSpecial=0, bowlSpecial=0, specialNote='';
+
+  // ── BATTER SPECIALS ──
+  if(batterCard.special==='hookShot' && (delivery==='Bouncer'||delivery==='ShortBall') && shot==='Pull') { batSpecial+=2; specialNote='Hook Shot! +2'; }
+  if(batterCard.special==='bigHitter' && batterDice===6)                          { batSpecial+=2; specialNote='Big Hit! +2'; }
+  if(batterCard.special==='fastStarter' && overBall<=3)                           { batSpecial+=2; specialNote='Fast Start!'; }
+  if(batterCard.special==='powerSurge' && batterBallsPlayed<3)                   { batSpecial+=1; specialNote='Power Surge!'; }
+  if(batterCard.special==='finisher' && overBall>=5)                              { batSpecial+=1; specialNote='Finisher!'; }
+  if(batterCard.special==='tailEnder' && batterDice===6)                          { batSpecial+=3; specialNote='+3 on 6!'; }
+  if(batterCard.special==='counterPunch' && prevOutcome==='WICKET')               { batSpecial+=1; specialNote='Counter Punch!'; }
+  if(batterCard.special==='resilient' && (prevOutcome==='DOT'||prevOutcome==='PRESSURE'||prevOutcome==='WICKET')) { batSpecial+=1; specialNote='Resilient!'; }
+  if(batterCard.special==='antiPace' && bowlerCard.seamer)                        { batSpecial+=2; specialNote='Anti-Pace!'; }
+  if(batterCard.special==='antiSpin' && bowlerCard.spinner)                       { batSpecial+=2; specialNote='Anti-Spin!'; }
+  if(batterCard.special==='underrated' && bowlerCard.rating>=3)                   { batSpecial+=2; specialNote='Underrated!'; }
+
+  // ── BOWLER SPECIALS ──
+  if(bowlerCard.special==='yorkerSpecialist' && delivery==='Yorker' && effectiveDelivery==='Yorker') { bowlSpecial+=1; }
+  if(bowlerCard.special==='deathBowler' && overBall>=4)                           { bowlSpecial+=2; if(!specialNote)specialNote='Death Bowler!'; }
+  if(bowlerCard.special==='strikeFirst' && overBall<=3)                           { bowlSpecial+=2; if(!specialNote)specialNote='Strike First!'; }
+  if(bowlerCard.special==='unreadable')                                            { bowlSpecial+=1; if(!specialNote)specialNote='Unreadable!'; }
+  if(bowlerCard.special==='paceDemon' && (bowlerDice===5||bowlerDice===6))        { bowlSpecial+=1; if(!specialNote)specialNote='Pace Demon!'; }
+  if(bowlerCard.special==='netBowler' && batterCard.rating>=3)                    { bowlSpecial+=2; if(!specialNote)specialNote='Net Bowler!'; }
+  if(bowlerCard.special==='underdog' && batterCard.rating>=5)                     { bowlSpecial+=3; if(!specialNote)specialNote='Underdog!'; }
+  if(bowlerCard.special==='phoenix' && prevOutcome==='SIX')                       { bowlSpecial+=2; if(!specialNote)specialNote='Phoenix!'; }
+
+  const batterTotal = bRating + matchupMod + batSpecial + bDiceMod + patternPenalty + ftPunish;
+  const bowlerTotal = wRating + bowlSpecial + wDiceMod;
+  const difference = batterTotal - bowlerTotal;
+
+  let outcome, runs=0, isWicket=false;
+  if(difference>=4){outcome='SIX';runs=6;}
+  else if(difference>=2){outcome='FOUR';runs=4;}
+  else if(difference>=1){outcome='TWO';runs=2;}
+  else if(difference===0){outcome='ONE';runs=1;}
+  else if(difference>=-2){outcome='DOT';runs=0;}
+  else if(difference>=-3){outcome='PRESSURE';runs=0;}
+  else{outcome='WICKET';runs=0;isWicket=true;}
+
+  // tieWinner: diff=0 → TWO instead of ONE
+  if(batterCard.special==='tieWinner' && difference===0) { outcome='TWO'; runs=2; if(!specialNote)specialNote='Tie Winner!'; }
+
+  // googly: ties vs low-rated batters → wicket
+  if(bowlerCard.special==='googly' && difference===0 && batterCard.rating<=2) { outcome='WICKET'; runs=0; isWicket=true; if(!specialNote)specialNote='Googly!'; }
+
+  // luckyBreak: on bowlerDice=6 → auto-wicket (only if not already worse for bowler)
+  if(bowlerCard.special==='luckyBreak' && bowlerDice===6 && !isWicket) { outcome='WICKET'; runs=0; isWicket=true; if(!specialNote)specialNote='Lucky Break!'; }
+
+  // rangeHitter: SIX → 7 runs
+  if(batterCard.special==='rangeHitter' && outcome==='SIX') { runs=7; if(!specialNote)specialNote='7 Run Six!'; }
+
+  // Anchor: absorbs first wicket for this card → DOT instead
+  let anchorSaved=false;
+  if(isWicket && (batterCard.special==='anchor'||batterCard.special==='wicketShield') && !batterCard._anchorFired){
+    outcome='DOT'; isWicket=false; anchorSaved=true; specialNote='Anchor saved!';
+  }
+
+  // nightwatchman: cannot be dismissed on first ball ever played by this card
+  if(isWicket && batterCard.special==='nightwatchman' && batterBallsPlayed===0) {
+    outcome='DOT'; isWicket=false; anchorSaved=true; specialNote='Nightwatchman holds!';
+  }
+
+  const commentary = pick(COMMENTARY[outcome]);
+
+  return {
+    outcome, runs, isWicket, anchorSaved,
+    batterTotal, bowlerTotal, difference,
+    matchupMod, bDiceMod, wDiceMod, batterDice, bowlerDice,
+    batterCard, bowlerCard, shot, delivery, effectiveDelivery, commentary,
+    batSpecial, bowlSpecial, bRating, wRating, specialNote,
+    balanceNote, patternPenalty, ftPunish,
+  };
+}
+
+// ================================================================
+// GAME STATE
+// ================================================================
+let G = null;
+
+function newState() {
+  return {
+    phase: 'home',
+    pitch: null,
+
+    // Decks & hands (populated on deal)
+    pBatDeck:[], pBatHand:[],
+    pBowlDeck:[], pBowlHand:[],
+    aiBatDeck:[], aiBatHand:[],
+    aiBowlDeck:[], aiBowlHand:[],
+
+    // Powers
+    playerPower: null,
+    playerPowerUsed: false,
+    aiPower: null,
+    aiPowerUsed: false,
+
+    // Innings
+    currentInnings: 1,
+    inn1: { runs:0, wickets:0, balls:0, bouncerChips:2,
+            deliveriesUsed:{}, shotsUsed:{},
+            ballLog:[], batterBallsPlayed:0 },
+    inn2: { runs:0, wickets:0, balls:0, bouncerChips:2,
+            deliveriesUsed:{}, shotsUsed:{},
+            ballLog:[], batterBallsPlayed:0 },
+
+    // Current ball selections
+    playerCard: null,
+    playerChoice: null,
+    playerPowerDeclared: false,
+    captainCallActive: false,
+    aiCard: null,
+    aiChoice: null,
+    aiPowerDeclared: false,
+
+    // Dice & result
+    batterDice: null,
+    bowlerDice: null,
+    lastResult: null,
+
+    // Coins + betting
+    coins: { player: 1000, ai: 1000 },
+    overPot: 0,        // combined over stake pot
+    overStakeAmt: 50,  // per player per innings
+    ballSidePot: 0,    // active per-ball side pot
+    coinLog: [],       // audit trail
+
+    // UI helpers
+    selectedPowerIdx: null,
+    selectedBundle: null,   // id of chosen bundle
+    // multiplayer
+    mpMode: false,
+    mpRoomCode: null,
+    mpIsHost: false,
+    mpLobbyMode: null,    // 'create' | 'join'
+    mpJoinInput: '',
+    mpStatus: '',
+  };
+}
+
+function initGame() {
+  G = newState();
+  G.pitch = pick(PITCHES);
+  G.aiPower = pick(POWERS);
+
+  // Shuffle all decks
+  // Player decks are built during bundle selection (bundleConfirm)
+  // AI decks are built by aiPickBundle() during bundleConfirm
+  // Pre-init empty so state is clean
+  G.pBatDeck = []; G.pBowlDeck = [];
+  G.aiBatDeck = []; G.aiBowlDeck = [];
+
+  G.phase = 'pitchReveal';
+  render();
+
+  // Trigger flip after DOM painted
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    const fi = document.querySelector('.flip-inner');
+    if(fi) fi.classList.add('flipped');
+    setTimeout(() => {
+      const h = document.querySelector('.pitch-tap-hint');
+      if(h) h.classList.add('show');
+    }, 800);
+  }));
+}
+
+function dealHands() {
+  G.pBatHand  = G.pBatDeck.splice(0,6);
+  G.aiBowlHand= G.aiBowlDeck.splice(0,6);
+  G.pBowlHand = G.pBowlDeck.splice(0,6);
+  G.aiBatHand = G.aiBatDeck.splice(0,6);
+}
+
+function getCurrentHands() {
+  if(G.currentInnings===1) return { ph:G.pBatHand, ah:G.aiBowlHand };
+  return { ph:G.pBowlHand, ah:G.aiBatHand };
+}
+
+function getCurrentInn() {
+  return G.currentInnings===1 ? G.inn1 : G.inn2;
+}
+
+function refill(hand, deck) {
+  while(hand.length<3 && deck.length>0) hand.push(deck.shift());
+}
+
+function refillAfterBall() { /* no-op — all 6 cards dealt upfront and marked played */ }
+
+function removeCardFromHand(hand, cardId) {
+  // Mark as played rather than removing, so all 6 remain visible
+  const c = hand.find(c=>c.id===cardId);
+  if(c) c._played = true;
+}
+
+function isInnOver(inn) {
+  if(inn.balls>=6||inn.wickets>=3) return true;
+  if(G&&G.currentInnings===2&&G.inn1&&inn.runs>=G.inn1.runs+1) return true;
+  return false;
+}
+
+// ================================================================
+// AI LOGIC (Medium difficulty)
+// ================================================================
+// AMBIGUITY: Medium AI picks strategically 60% of the time, randomly 40%.
+// AMBIGUITY: AI always picks highest-rated available card 80% of the time.
+
+function aiMakeDecision() {
+  const isAIBatting=G.currentInnings===2;
+  const hand=isAIBatting?G.aiBatHand:G.aiBowlHand;
+  const inn=getCurrentInn();
+  const strategic=Math.random()<0.6;
+  // Card: 80% highest rated from unplayed
+  const unplayed=hand.filter(c=>!c._played);
+  let card;
+  if(unplayed.length===0){card=pick(hand);}
+  else if(Math.random()<0.8){card=unplayed.reduce((b,c)=>c.rating>b.rating?c:b,unplayed[0]);}
+  else{card=pick(unplayed);}
+  let choice;
+  if(isAIBatting) {
+    // Evaluate against player's bowler type (use player's selected card if available)
+    const pBowler=G.playerCard||{spinner:false};
+    const bm=pBowler.spinner?SPIN_MATRIX:PACE_MATRIX;
+    const base=JSON.parse(JSON.stringify(bm));
+    const m=G.pitch.bendMatrix(base);
+    const deliveries=pBowler.spinner?SPIN_DELIVERIES:PACE_DELIVERIES;
+    const avail=getAvailableShots(inn);
+    if(strategic){
+      let best=null,bestVal=-Infinity;
+      for(const s of avail){
+        const avg=deliveries.reduce((sum,d)=>sum+(m[d]?.[s]||0),0)/deliveries.length;
+        if(avg>bestVal){bestVal=avg;best=s;}
+      }
+      const target=G.inn1.runs+1,needed=target-inn.runs,rem=6-inn.balls;
+      if(needed>rem*3&&Math.random()<0.5&&avail.includes('Slog')) best='Slog';
+      choice=best||pick(avail);
+    } else {choice=pick(avail);}
+  } else {
+    const avail=getAvailableDeliveries(card,inn);
+    const bm=card.spinner?SPIN_MATRIX:PACE_MATRIX;
+    const base=JSON.parse(JSON.stringify(bm));
+    const m=G.pitch.bendMatrix(base);
+    const shots=getAvailableShots(inn);
+    if(strategic){
+      let best=null,bestVal=Infinity;
+      for(const d of avail){
+        const avg=shots.reduce((sum,s)=>sum+(m[d]?.[s]||0),0)/shots.length;
+        if(avg<bestVal){bestVal=avg;best=d;}
+      }
+      choice=best||pick(avail);
+    } else {choice=pick(avail);}
+  }
+  let aiPowerDeclared=false;
+  if(!G.aiPowerUsed&&G.aiPower&&G.aiPower.id!=='captainsCall'&&Math.random()<0.15) aiPowerDeclared=true;
+  return {card,choice,aiPowerDeclared};
+}
+
+// ================================================================
+// EVENT HANDLERS (attached to window for onclick)
+// ================================================================
+window.startGame = function() {
+  initGame();
+};
+
+window.advancePitch = function() {
+  G.selectedBundle = null;
+  G.phase = 'bundleSelect';
+  render();
+};
+
+window.selectBundle = function(bundleId) {
+  G.selectedBundle = bundleId;
+  render();
+};
+
+window.bundleConfirm = function() {
+  if(!G.selectedBundle) return;
+  const bundle = BUNDLES.find(b => b.id === G.selectedBundle);
+  if(!bundle) return;
+
+  // Build player decks from bundle
+  G.pBatDeck  = bundle.batIds.map(id  => cloneCard(BATTER_CARDS.find(c => c.id === id)));
+  G.pBowlDeck = bundle.bowlIds.map(id => cloneCard(BOWLER_CARDS.find(c => c.id === id)));
+
+  // AI picks the bundle best suited to the pitch (or counters player's choice)
+  aiPickBundle();
+
+  // Deal and transition
+  G.phase = 'deal';
+  render();
+  setTimeout(() => {
+    dealHands();
+    const cards = [...document.querySelectorAll('.deal-mini')];
+    cards.forEach((c, i) => setTimeout(() => c.classList.add('dealt'), i * 120));
+    setTimeout(() => { G.phase = 'powerPick'; render(); }, cards.length * 120 + 800);
+  }, 100);
+};
+
+function aiPickBundle() {
+  // AI picks the bundle that fits the pitch best; avoid player's bundle
+  const pitchId = G.pitch.id;
+  const candidates = BUNDLES.filter(b => b.id !== G.selectedBundle);
+  // Score by pitch fit
+  let best = candidates.find(b => b.pitchFit.includes(pitchId));
+  if(!best) best = candidates[Math.floor(Math.random() * candidates.length)];
+  G.aiBatDeck  = best.batIds.map(id  => cloneCard(BATTER_CARDS.find(c => c.id === id)));
+  G.aiBowlDeck = best.bowlIds.map(id => cloneCard(BOWLER_CARDS.find(c => c.id === id)));
+}
+
+
+window.selectPower = function(idx) {
+  G.selectedPowerIdx = idx;
+  render();
+};
+
+window.selectAndConfirmPower = function(idx) {
+  G.selectedPowerIdx = idx;
+  G.playerPower = POWERS[idx];
+  render();
+};
+
+window.confirmPower = function() {
+  if(G.selectedPowerIdx===null) return;
+  G.playerPower = POWERS[G.selectedPowerIdx];
+  G.phase = 'overStake';
+  render();
+};
+window.confirmOverStake = function() {
+  const amt = Math.min(G.overStakeAmt, G.coins.player, G.coins.ai);
+  G.coins.player -= amt;
+  G.coins.ai     -= amt;
+  G.overPot       = amt * 2;
+  G.phase = 'play';
+  render();
+};
+
+window.selectCard = function(idx) {
+  if(G.captainCallActive) return;
+  const isPlayerBatting = G.currentInnings === 1;
+  const activeCards = isPlayerBatting ? G.pBatHand : G.pBowlHand;
+  if(idx>=activeCards.length) return;
+  const c = activeCards[idx];
+  if(c._played) return; // can't reselect played cards
+  G.playerCard = c;
+  render();
+};
+
+window.selectChoice = function(choice) {
+  const isPlayerBatting=G.currentInnings===1;
+  const inn=getCurrentInn();
+  if(isPlayerBatting){
+    if(choice==='Slog'         &&(inn.shotsUsed['Slog']        ||0)>=2) return;
+    if(choice==='ReverseScoop' &&(inn.shotsUsed['ReverseScoop']||0)>=2) return;
+  } else {
+    if(choice==='Bouncer'  &&inn.bouncerChips<=0) return;
+    if(choice==='Yorker'   &&(inn.deliveriesUsed['Yorker']   ||0)>=2) return;
+    if(choice==='Googly'   &&(inn.deliveriesUsed['Googly']   ||0)>=2) return;
+    if(choice==='Doosra'   &&(inn.deliveriesUsed['Doosra']   ||0)>=2) return;
+    if(choice==='ShortBall'&&(inn.deliveriesUsed['ShortBall']||0)>=3) return;
+  }
+  G.playerChoice=choice;
+  render();
+};
+
+window.declarePower = function() {
+  if(G.playerPowerUsed || !G.playerPower) return;
+  if(G.playerPower.id==='captainsCall') {
+    G.captainCallActive = !G.captainCallActive;
+    render();
+  } else {
+    G.playerPowerDeclared = !G.playerPowerDeclared;
+    render();
+  }
+};
+
+window.captainSwap = function(idx) {
+  if(!G.captainCallActive) return;
+  const {ph} = getCurrentHands();
+  const deck = G.currentInnings===1 ? G.pBatDeck : G.pBowlDeck;
+  if(deck.length===0) return;
+  ph.splice(idx,1);
+  ph.splice(idx,0,deck.shift());
+  G.captainCallActive = false;
+  G.playerPowerUsed = true;
+  if(G.playerCard && !ph.includes(G.playerCard)) G.playerCard=null;
+  render();
+};
+
+window.confirmPick = function() {
+  if(!G.playerCard || !G.playerChoice) return;
+
+  // AI makes decision
+  const aiDec = aiMakeDecision();
+  G.aiCard = aiDec.card;
+  G.aiChoice = aiDec.choice;
+  G.aiPowerDeclared = aiDec.aiPowerDeclared;
+
+  // Handle HomeGround power
+  const homeGround = (G.playerPower?.id==='homeGround' && G.playerPowerDeclared);
+  if(homeGround) G.playerPowerUsed = true;
+
+  _pendingHomeGround = homeGround;
+
+  // Route through Teen Patti betting overlay (replaces old showPreReveal)
+  showBettingOverlay();
+};
+
+// ──────────────────────────────────────────────
+// COIN BETTING — per-ball side bets
+// ──────────────────────────────────────────────
+let _pendingHomeGround = false;
+let _pendingBet = null;
+let _pendingRaise = 0;
+
+function showBettingOverlay() {
+  const homeGround=_pendingHomeGround;
+  const isPlayerBatting=G.currentInnings===1;
+  const batterCard=isPlayerBatting?G.playerCard:G.aiCard;
+  const bowlerCard=isPlayerBatting?G.aiCard:G.playerCard;
+  const shot      =isPlayerBatting?G.playerChoice:G.aiChoice;
+  const delivery  =isPlayerBatting?G.aiChoice:G.playerChoice;
+  const inn=getCurrentInn();
+  _pendingRaise=0;
+  const matchMod=getMatchupMod(delivery,shot,G.pitch,homeGround,bowlerCard);
+  const modStr=matchMod>0?`+${matchMod}`:String(matchMod);
+  const modCls=matchMod>0?'pos':matchMod<0?'neg':'neu';
+  const modDesc=matchMod>0?'Batter edge':matchMod<0?'Bowler edge':'Neutral';
+  const ballNum=inn.balls+1;
+  // BUG 2 FIX: show pitch-buffed ratings, not raw base ratings
+  const buffedBat  = applyPitchToCard({...batterCard},  G.pitch, homeGround);
+  const buffedBowl = applyPitchToCard({...bowlerCard}, G.pitch, homeGround);
+  const batRatingStr  = buffedBat.rating  !== batterCard.rating  ? `★${buffedBat.rating}<span class="prv-pitch-bump"> (+1⛰)</span>` : `★${batterCard.rating}`;
+  const bowlRatingStr = buffedBowl.rating !== bowlerCard.rating ? `★${buffedBowl.rating}<span class="prv-pitch-bump"> (+1⛰)</span>` : `★${bowlerCard.rating}`;
+  const powers=[];
+  if(G.playerPowerDeclared&&G.playerPower&&G.playerPower.id!=='captainsCall')
+    powers.push(`YOU: ${G.playerPower.icon} ${G.playerPower.name}`);
+  if(G.aiPowerDeclared&&G.aiPower&&G.aiPower.id!=='captainsCall')
+    powers.push(`AI: ${G.aiPower.icon} ${G.aiPower.name}`);
+  if(homeGround) powers.push('🏠 HOME GROUND');
+  const powerRowHTML=powers.length
+    ?`<div class="prv-power-row">${powers.map(p=>`<div class="prv-power-badge">${p}</div>`).join('')}</div>`:'';
+  const pCoins=G.coins.player;
+  // Build card face HTML for the betting overlay
+  function prvCardFace(card, buffedCard, choice, role) {
+    const st = getCardStats(buffedCard);
+    const isBatter = card.type === 'batter';
+    const keys = isBatter ? ['PWR','TIM','TEC','SPL'] : ['SPD','LNE','VAR','SPL'];
+    const vals = [st.a, st.b, st.c, st.d];
+    const tierColor = st.tier==='gold'?'#f0c060':st.tier==='silver'?'#c8d0dc':'#a07840';
+    const pitchBump = buffedCard.rating !== card.rating ? ' <span class="prv-pitch-bump">⛰</span>' : '';
+    return `
+      <div class="prv-role">${role}</div>
+      <div class="prv-ovr" style="color:${tierColor}">${st.ovr}${pitchBump}</div>
+      <div class="prv-ovr-label">OVR</div>
+      <div class="prv-name">${card.name}</div>
+      <div class="prv-nick">${card.nick||''}</div>
+      <div class="prv-substats">
+        ${keys.map((k,j)=>`<div class="prv-sstat">
+          <span class="prv-sstat-key">${k}</span>
+          <div class="prv-sstat-bar"><div class="prv-sstat-fill" style="width:${vals[j]}%;background:${tierColor}"></div></div>
+          <span class="prv-sstat-val">${vals[j]}</span>
+        </div>`).join('')}
+      </div>
+      <div class="prv-choice">${dispName(choice)}</div>`;
+  }
+  const html=`
+    <div class="bet-eyebrow">BALL ${ballNum} OF 6</div>
+    <div class="bet-overpot">OVER POT 🪙${G.overPot} RIDING THIS INNINGS</div>
+    <div class="prv-reveal-row" style="animation:prvCardIn 0.3s 0.05s both">
+      <div class="prv-card batter">${prvCardFace(batterCard,buffedBat,shot,'BATTER')}</div>
+      <div class="prv-vs">VS</div>
+      <div class="prv-card bowler">${prvCardFace(bowlerCard,buffedBowl,delivery,'BOWLER')}</div>
+    </div>
+    <div class="prv-matchup-banner" style="animation:prvCardIn 0.3s 0.12s both">
+      <div class="prv-matchup-label">MATCHUP MODIFIER</div>
+      <div class="prv-matchup-val ${modCls}">${modStr}</div>
+      <div class="prv-matchup-desc">${modDesc}</div>
+    </div>
+    ${powerRowHTML}
+    <div class="bet-chip-bar" style="animation:prvCardIn 0.3s 0.2s both">
+      <div class="bet-stack">
+        <div class="bet-stack-label">YOUR COINS</div>
+        <div class="bet-stack-val${pCoins<=50?' low':''}" id="bet-p-coins">🪙${pCoins}</div>
+      </div>
+      <div class="bet-pot-wrap">
+        <div class="bet-pot-label">SIDE BET</div>
+        <div class="bet-pot-val" id="bet-side-val" style="font-size:26px">0</div>
+      </div>
+      <div class="bet-stack">
+        <div class="bet-stack-label">AI COINS</div>
+        <div class="bet-stack-val${G.coins.ai<=50?' low':''}">🪙${G.coins.ai}</div>
+      </div>
+    </div>
+    <div class="bet-raise-counter" id="bet-raise-counter">No side bet — just play</div>
+    <div class="bet-actions" id="bet-actions" style="animation:prvCardIn 0.3s 0.25s both">
+      <button class="bet-btn skip" onclick="playerBet('skip')">SKIP BET</button>
+      <button class="bet-btn raise" id="bet-raise-btn" onclick="playerBet('raise')" ${pCoins>=10?'':'disabled'}>RAISE +10</button>
+      <button class="bet-btn play" onclick="playerBet('play')">PLAY →</button>
+    </div>
+    <div class="bet-sub">Raise to bluff — if AI folds you pocket the side pot without risk. Even a lost cricket match can still be a coin win.</div>
+  `;
+  const app=document.getElementById('app');
+  const ov=document.createElement('div');
+  ov.id='bet-overlay';ov.className='bet-overlay';ov.innerHTML=html;
+  app.appendChild(ov);
+}
+
+window.playerBet = function(action) {
+  if(action==='raise') {
+    _pendingRaise+=10;
+    const se=document.getElementById('bet-side-val'); if(se)se.textContent=_pendingRaise;
+    const ce=document.getElementById('bet-raise-counter');
+    if(ce){ce.style.color='var(--green)';ce.textContent=`Your raise: 🪙${_pendingRaise} — AI must call or fold`;}
+    const rb=document.getElementById('bet-raise-btn');
+    if(rb&&G.coins.player<_pendingRaise+10) rb.disabled=true;
+    return;
+  }
+  const actEl=document.getElementById('bet-actions');
+  if(actEl) actEl.querySelectorAll('button').forEach(b=>b.disabled=true);
+  if(action==='skip'||_pendingRaise===0){_pendingBet=null;_closeBetAndResolve();return;}
+  const raiseAmt=Math.min(_pendingRaise,G.coins.player);
+  G.coins.player-=raiseAmt;
+  _pendingBet={sideAmt:raiseAmt};
+  const ce=document.getElementById('bet-raise-counter');
+  if(ce){ce.className='bet-ai-response thinking';ce.textContent='🤖 AI is deciding…';}
+  setTimeout(()=>_aiRespondToRaise(raiseAmt),900);
+};
+
+function _aiRespondToRaise(raiseAmt) {
+  const isPlayerBatting=G.currentInnings===1;
+  const batterCard=isPlayerBatting?G.playerCard:G.aiCard;
+  const bowlerCard=isPlayerBatting?G.aiCard:G.playerCard;
+  const shot=isPlayerBatting?G.playerChoice:G.aiChoice;
+  const delivery=isPlayerBatting?G.aiChoice:G.playerChoice;
+  const matchMod=getMatchupMod(delivery,shot,G.pitch,_pendingHomeGround,bowlerCard);
+  const expectedDiff=batterCard.rating+matchMod-bowlerCard.rating;
+  const isAIBatting=!isPlayerBatting;
+  let callProb=isAIBatting
+    ?(expectedDiff>=2?0.78:expectedDiff>=0?0.52:0.22)
+    :(expectedDiff<=-2?0.78:expectedDiff<=0?0.52:0.22);
+  if(G.coins.ai<raiseAmt) callProb=0;
+  const willCall=Math.random()<callProb;
+  const ce=document.getElementById('bet-raise-counter');
+  if(!willCall) {
+    G.coins.player+=raiseAmt;
+    G.coinLog.push({type:'bluff-success',ball:getCurrentInn().balls+1,inn:G.currentInnings,winner:'player',amount:0});
+    if(ce){ce.className='bet-ai-response fold-resp';ce.textContent='🤖 AI FOLDS — your coins refunded. Side bet off.';}
+    _pendingBet=null;
+    setTimeout(_closeBetAndResolve,950);
+  } else {
+    const aiC=Math.min(raiseAmt,G.coins.ai);
+    G.coins.ai-=aiC;
+    G.ballSidePot=raiseAmt+aiC;
+    _pendingBet={sideAmt:raiseAmt,aiAmt:aiC,total:G.ballSidePot};
+    const se=document.getElementById('bet-side-val'); if(se)se.textContent=G.ballSidePot;
+    if(ce){ce.className='bet-ai-response call-resp';ce.textContent=`🤖 AI CALLS — side pot 🪙${G.ballSidePot}!`;}
+    setTimeout(_closeBetAndResolve,950);
+  }
+}
+
+function _closeBetAndResolve() {
+  const ov=document.getElementById('bet-overlay');
+  if(ov)ov.remove();
+  runDiceAnimation(_pendingHomeGround);
+}
+
+function payoutBallSidePot(outcome) {
+  if(!_pendingBet||!_pendingBet.total){_pendingBet=null;return;}
+  const isPlayerBatting=G.currentInnings===1;
+  const batterWins=['SIX','FOUR','TWO','ONE'].includes(outcome);
+  const playerWins=isPlayerBatting?batterWins:!batterWins;
+  const pot=_pendingBet.total;
+  if(playerWins){G.coins.player+=pot;}else{G.coins.ai+=pot;}
+  G.coinLog.push({type:'side-ball',ball:getCurrentInn().balls,inn:G.currentInnings,outcome,winner:playerWins?'player':'ai',amount:pot});
+  G.ballSidePot=0;_pendingBet=null;
+}
+
+function settleOverPot() {
+  if(!G.overPot) return;
+  let playerWins;
+  if(G.currentInnings===1){playerWins=true;}
+  else{playerWins=G.inn2.runs<G.inn1.runs+1;}
+  if(playerWins){G.coins.player+=G.overPot;}else{G.coins.ai+=G.overPot;}
+  G.coinLog.push({type:'over-settle',inn:G.currentInnings,winner:playerWins?'player':'ai',amount:G.overPot});
+  G.overPot=0;
+}
+
+
+function runDiceAnimation(homeGround) {
+  const isPlayerBatting = G.currentInnings===1;
+  const batterCard = isPlayerBatting ? G.playerCard : G.aiCard;
+  const bowlerCard = isPlayerBatting ? G.aiCard : G.playerCard;
+  const shot       = isPlayerBatting ? G.playerChoice : G.aiChoice;
+  const delivery   = isPlayerBatting ? G.aiChoice : G.playerChoice;
+
+  const app = document.getElementById('app');
+  const overlay = document.createElement('div');
+  overlay.id = 'dice-overlay';
+  overlay.className = 'dice-overlay';
+  overlay.innerHTML = buildDiceOverlayHTML(batterCard, bowlerCard, shot, delivery, homeGround);
+  app.appendChild(overlay);
+
+  let bDice=0, wDice=0;
+  const bEl = document.getElementById('die-batter');
+  const wEl = document.getElementById('die-bowler');
+
+  const rollInterval = setInterval(()=>{
+    bEl.textContent = rollDie();
+    wEl.textContent = rollDie();
+  }, 80);
+
+  setTimeout(()=>{
+    clearInterval(rollInterval);
+    bDice = rollDie();
+    wDice = rollDie();
+    bEl.textContent = bDice;
+    wEl.textContent = wDice;
+    bEl.classList.add('settled');
+    wEl.classList.add('settled');
+
+    const playerDRS = G.playerPower?.id==='drs' && G.playerPowerDeclared && !G.playerPowerUsed;
+    const aiDRS = G.aiPower?.id==='drs' && G.aiPowerDeclared && !G.aiPowerUsed;
+    const rerollBatter = (isPlayerBatting && aiDRS) || (!isPlayerBatting && playerDRS);
+    const rerollBowler = (isPlayerBatting && playerDRS) || (!isPlayerBatting && aiDRS);
+    const doDRS = rerollBatter || rerollBowler;
+
+    if(doDRS) {
+      if(playerDRS) G.playerPowerUsed=true;
+      if(aiDRS) G.aiPowerUsed=true;
+      setTimeout(()=>{
+        const drsNotice = document.getElementById('drs-notice');
+        if(drsNotice) drsNotice.style.display='block';
+        const rerollEl = rerollBatter ? bEl : wEl;
+        rerollEl.classList.remove('settled');
+        rerollEl.classList.add('drs-flash','rolling');
+        const drsInterval = setInterval(()=>{ rerollEl.textContent=rollDie(); },80);
+        setTimeout(()=>{
+          clearInterval(drsInterval);
+          const newVal = rollDie();
+          rerollEl.textContent = newVal;
+          rerollEl.classList.remove('rolling','drs-flash');
+          rerollEl.classList.add('settled');
+          if(rerollBatter) bDice=newVal; else wDice=newVal;
+          finalizeBall(bDice, wDice, batterCard, bowlerCard, shot, delivery, homeGround);
+        }, 600);
+      }, 500);
+    } else {
+      setTimeout(()=>{
+        finalizeBall(bDice, wDice, batterCard, bowlerCard, shot, delivery, homeGround);
+      }, 400);
+    }
+  }, 1000);
+}
+
+function buildDiceOverlayHTML(batterCard, bowlerCard, shot, delivery, homeGround) {
+  const playerDRS = G.playerPower?.id==='drs' && G.playerPowerDeclared;
+  const aiDRS = G.aiPower?.id==='drs' && G.aiPowerDeclared;
+  const hasDRS = playerDRS || aiDRS;
+
+  return `
+    <div class="do-label">DICE ROLLING…</div>
+    <div class="do-reveal-row">
+      <div class="do-rcard batter">
+        <div class="do-role">BATTER</div>
+        <div class="do-cname">${batterCard.name}</div>
+        <div class="do-rating" style="color:${getCardStats(batterCard).tier==='gold'?'#f0c060':'#c8d0dc'}">${getCardStats(batterCard).ovr}<span style="font-size:10px;font-weight:700;margin-left:2px">OVR</span></div>
+        <div class="do-choice">${shot}</div>
+      </div>
+      <div class="do-rcard bowler">
+        <div class="do-role">BOWLER</div>
+        <div class="do-cname">${bowlerCard.name}</div>
+        <div class="do-rating" style="color:${getCardStats(bowlerCard).tier==='gold'?'#f0c060':'#c8d0dc'}">${getCardStats(bowlerCard).ovr}<span style="font-size:10px;font-weight:700;margin-left:2px">OVR</span></div>
+        <div class="do-choice">${delivery}</div>
+      </div>
+    </div>
+    <div class="dice-pair">
+      <div class="die-wrap">
+        <div class="die-label">BATTER DIE</div>
+        <div class="die rolling" id="die-batter">1</div>
+      </div>
+      <div class="vs-badge">VS</div>
+      <div class="die-wrap">
+        <div class="die-label">BOWLER DIE</div>
+        <div class="die rolling" id="die-bowler">1</div>
+      </div>
+    </div>
+    ${hasDRS?`<div class="drs-notice" id="drs-notice" style="display:none">⚖️ DRS REVIEW — REROLLING!</div>`:''}
+  `;
+}
+
+const homeGroundRef = { val: false };
+
+function finalizeBall(bDice, wDice, batterCard, bowlerCard, shot, delivery, homeGround) {
+  const inn = getCurrentInn();
+  const overBall = (inn.balls % 6) + 1;
+  const prevOutcome = inn.ballLog.length > 0 ? inn.ballLog[inn.ballLog.length-1].outcome : null;
+  const prevShot    = inn.ballLog.length > 0 ? inn.ballLog[inn.ballLog.length-1].shot : null;
+  const prevDelivery= inn.ballLog.length > 0 ? inn.ballLog[inn.ballLog.length-1].delivery : null;
+  const batterBallsPlayed = inn.batterBallsPlayed || 0;
+  const isPlayerBatting = G.currentInnings===1;
+
+  // Handle extraDie: roll extra, use higher (for batter or bowler)
+  if(batterCard.special==='extraDie') {
+    const extra = rollDie();
+    if(extra > bDice) bDice = extra;
+  }
+  if(bowlerCard.special==='extraDie') {
+    const extra = rollDie();
+    if(extra > wDice) wDice = extra;
+  }
+
+  const result = resolveBall({
+    batterCard, shot, bowlerCard, delivery,
+    batterDice: bDice, bowlerDice: wDice,
+    pitch: G.pitch, homeGround,
+    overBall, prevOutcome, batterBallsPlayed,
+    prevShot, prevDelivery,
+  });
+
+  // Capture powers used this ball (before state reset)
+  result.playerPowerThisBall = (G.playerPowerDeclared && G.playerPower && G.playerPower.id!=='captainsCall')
+    ? G.playerPower : null;
+  result.aiPowerThisBall = (G.aiPowerDeclared && G.aiPower && G.aiPower.id!=='captainsCall')
+    ? G.aiPower : null;
+
+  // Mark anchor / nightwatchman if it fired
+  if(result.anchorSaved) batterCard._anchorFired = true;
+
+  // Track delivery/shot usage
+  inn.deliveriesUsed[delivery] = (inn.deliveriesUsed[delivery]||0)+1;
+  inn.shotsUsed[shot] = (inn.shotsUsed[shot]||0)+1;
+
+  // Update bouncer chips
+  if(delivery==='Bouncer') inn.bouncerChips = Math.max(0, inn.bouncerChips-1);
+
+  // Update innings stats
+  inn.runs += result.runs;
+  if(result.isWicket) inn.wickets++;
+  inn.balls++;
+  inn.batterBallsPlayed = (inn.batterBallsPlayed||0) + 1;
+
+  // Log this ball — include shot/delivery for pattern read system
+  inn.ballLog.push({ ball: inn.balls, outcome: result.outcome, runs: result.runs,
+                     shot: result.shot, delivery: result.delivery });
+
+  // Remove played cards from hands (marks _played=true, stores outcome)
+  const pCard = G.playerCard, aCard = G.aiCard;
+  removeCardFromHand(isPlayerBatting ? G.pBatHand : G.pBowlHand, pCard.id);
+  removeCardFromHand(isPlayerBatting ? G.aiBowlHand : G.aiBatHand, aCard.id);
+  // Store outcome on the played card for visual feedback
+  const pHandRef = (isPlayerBatting ? G.pBatHand : G.pBowlHand).find(c=>c.id===pCard.id);
+  if(pHandRef) pHandRef._playedOutcome = result.outcome;
+
+  // Reset per-ball selections
+  G.playerCard = null;
+  G.playerChoice = null;
+  G.playerPowerDeclared = false;
+  G.captainCallActive = false;
+  G.aiCard = null;
+  G.aiChoice = null;
+  G.aiPowerDeclared = false;
+  G.lastResult = result;
+  G.batterDice = bDice;
+  G.bowlerDice = wDice;
+
+  // Show result overlay
+  const diceOv = document.getElementById('dice-overlay');
+  if(diceOv) diceOv.remove();
+
+  // Settle per-ball side pot
+  payoutBallSidePot(result.outcome);
+
+  showResultOverlay(result);
+}
+
+function showResultOverlay(result) {
+  const app = document.getElementById('app');
+  const ov = document.createElement('div');
+  ov.id = 'result-overlay';
+  ov.className = 'result-overlay';
+  ov.onclick = dismissResult;
+  ov.innerHTML = buildResultHTML(result);
+  app.appendChild(ov);
+  // No auto-dismiss — player must tap to continue
+}
+
+function buildBallTracker(inn) {
+  const icons = { SIX:'🟡', FOUR:'🟢', TWO:'⚪', ONE:'⚪', DOT:'⚫', PRESSURE:'🔴', WICKET:'💀' };
+  const dots = [];
+  for(let i=0;i<6;i++) {
+    const logged = inn.ballLog[i];
+    if(logged) {
+      dots.push(`<div class="bt-dot filled" title="${logged.outcome}">${icons[logged.outcome]||'⚪'}</div>`);
+    } else {
+      dots.push(`<div class="bt-dot empty">○</div>`);
+    }
+  }
+  return `<div class="ball-tracker">${dots.join('')}</div>`;
+}
+
+function buildResultHTML(result) {
+  const outLabels = {
+    SIX:'SIX!', FOUR:'FOUR!', TWO:'2 RUNS', ONE:'1 RUN',
+    DOT:'DOT BALL', PRESSURE:'PRESSURE!', WICKET:'WICKET!'
+  };
+
+  const isPlayerBatting = G.currentInnings === 1;
+  const inn = getCurrentInn();
+  const batterOwner = isPlayerBatting ? 'YOU' : 'AI';
+  const bowlerOwner = isPlayerBatting ? 'AI' : 'YOU';
+
+  const bDiceMod = result.bDiceMod;
+  const wDiceMod = result.wDiceMod;
+  const bDiceStr = bDiceMod > 0 ? '+1' : bDiceMod < 0 ? '−1' : '±0';
+  const wDiceStr = wDiceMod > 0 ? '+1' : wDiceMod < 0 ? '−1' : '±0';
+  const matchModStr = result.matchupMod >= 0 ? `+${result.matchupMod}` : String(result.matchupMod);
+  const diffSign = result.difference >= 0 ? '+' : '';
+
+  let thresholdDesc;
+  const d = result.difference;
+  if(d>=4)       thresholdDesc = `${diffSign}${d} ≥ +4 → SIX 🏏`;
+  else if(d>=2)  thresholdDesc = `${diffSign}${d} ≥ +2 → FOUR 🔥`;
+  else if(d>=1)  thresholdDesc = `${diffSign}${d} ≥ +1 → 2 Runs`;
+  else if(d===0) thresholdDesc = `0 = 0 → 1 Run`;
+  else if(d>=-2) thresholdDesc = `${d} ≥ −2 → Dot Ball`;
+  else if(d>=-3) thresholdDesc = `${d} ≥ −3 → Pressure`;
+  else           thresholdDesc = `${d} < −3 → Wicket 💀`;
+
+  const specialNote = (result.anchorSaved || result.specialNote)
+    ? `<div class="res-special">${result.anchorSaved?'⚓':'⚡'} ${result.specialNote||'Saved!'}</div>`
+    : '';
+
+  // Balance mechanic note (pattern read, yorker misfire, etc.)
+  const balanceNoteHTML = result.balanceNote
+    ? `<div class="res-balance">${result.balanceNote}</div>`
+    : '';
+
+  // Power badges
+  const powerBadges = [];
+  if(result.playerPowerThisBall) powerBadges.push(`YOU: ${result.playerPowerThisBall.icon} ${result.playerPowerThisBall.name}`);
+  if(result.aiPowerThisBall)     powerBadges.push(`AI: ${result.aiPowerThisBall.icon} ${result.aiPowerThisBall.name}`);
+  const powerHTML = powerBadges.length
+    ? `<div class="res-power-used">${powerBadges.map(b=>`<div class="res-power-badge">⚡ ${b}</div>`).join('')}</div>`
+    : '';
+
+  // Coin feedback
+  const lastCoin = G.coinLog.length ? G.coinLog[G.coinLog.length-1] : null;
+  let chipFeedbackHTML = '';
+  if(lastCoin && lastCoin.type==='side-ball' && lastCoin.amount>0) {
+    const won = lastCoin.winner==='player';
+    chipFeedbackHTML = `<div style="font-size:10px;font-weight:700;padding:3px 10px;border-radius:5px;
+      background:${won?'rgba(74,222,128,0.1)':'rgba(230,57,70,0.08)'};
+      border:1px solid ${won?'rgba(74,222,128,0.3)':'rgba(230,57,70,0.25)'};
+      color:${won?'var(--green)':'var(--red)'};text-align:center">
+      ${won?'🪙 Side pot WON':'🪙 Side pot LOST'} (${lastCoin.amount}) — You: 🪙${G.coins.player} AI: 🪙${G.coins.ai}
+    </div>`;
+  }
+
+  // Star display helper
+  const ovrStr = (card, ratingUsed) => {
+    const st = getCardStats(card);
+    const col = st.tier==='gold'?'#f0c060':st.tier==='silver'?'#c8d0dc':'#a07840';
+    const bump = ratingUsed !== card.rating ? ` <span style="font-size:9px;color:#86efac">⛰+1</span>` : '';
+    return `<span style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:${col}">${st.ovr}</span><span style="font-size:8px;color:var(--muted);font-weight:700;margin-left:2px">OVR</span>${bump}`;
+  };
+
+  // Bat special label
+  const batSpecialLabel = result.batSpecial > 0 && result.batterCard.special
+    ? SPECIAL_LABELS[result.batterCard.special] || result.batterCard.special
+    : null;
+  const bowlSpecialLabel = result.bowlSpecial > 0 && result.bowlerCard.special
+    ? SPECIAL_LABELS[result.bowlerCard.special] || result.bowlerCard.special
+    : null;
+
+  // Build detailed breakdown lines
+  const effectiveDel = result.effectiveDelivery || result.delivery;
+  const batOvr = getCardStats(result.batterCard).ovr;
+  const bowlOvr = getCardStats(result.bowlerCard).ovr;
+  const matchupLine = `${matchModStr} matchup (${dispName(effectiveDel)} vs ${dispName(result.shot)})`;
+
+  const batBreakLines = [
+    `★${result.bRating} card · ${batOvr} OVR = <b style="color:var(--green)">${result.bRating} pts</b>`,
+    matchupLine,
+    ...(result.batSpecial ? [`+${result.batSpecial} ${batSpecialLabel||'special'}`] : []),
+    ...(result.patternPenalty ? [`${result.patternPenalty} pattern read`] : []),
+    ...(result.ftPunish ? [`+${result.ftPunish} full toss bonus`] : []),
+    `${bDiceStr} dice roll (${result.batterDice})`,
+  ];
+  const bowlBreakLines = [
+    `★${result.wRating} card · ${bowlOvr} OVR = <b style="color:var(--red)">${result.wRating} pts</b>`,
+    ...(result.bowlSpecial ? [`+${result.bowlSpecial} ${bowlSpecialLabel||'special'}`] : []),
+    `${wDiceStr} dice roll (${result.bowlerDice})`,
+  ];
+
+  const tracker = buildBallTracker(inn);
+
+  return `
+    ${tracker}
+    ${powerHTML}
+
+    <!-- TWO CARD THUMBNAILS -->
+    <div class="res-card-row">
+      <div class="res-player-card batter">
+        <div class="res-pc-role bat">🏏 ${batterOwner} — BATTER</div>
+        <div class="res-pc-name">${result.batterCard.name}</div>
+        <div class="res-pc-rating">${ovrStr(result.batterCard, result.bRating)}</div>
+        ${batSpecialLabel ? `<div class="res-pc-special">${batSpecialLabel} +${result.batSpecial}</div>` : ''}
+        <div class="res-pc-action">${dispName(result.shot)}</div>
+      </div>
+      <div class="res-vs-col">VS</div>
+      <div class="res-player-card bowler">
+        <div class="res-pc-role bowl">🎳 ${bowlerOwner} — BOWLER</div>
+        <div class="res-pc-name">${result.bowlerCard.name}</div>
+        <div class="res-pc-rating">${ovrStr(result.bowlerCard, result.wRating)}</div>
+        ${bowlSpecialLabel ? `<div class="res-pc-special">${bowlSpecialLabel} +${result.bowlSpecial}</div>` : ''}
+        <div class="res-pc-action">${dispName(result.effectiveDelivery||result.delivery)}${result.effectiveDelivery&&result.effectiveDelivery!==result.delivery?` <span style="font-size:9px;color:var(--red)">(slipped)</span>`:''}</div>
+      </div>
+    </div>
+
+    <!-- BIG OUTCOME -->
+    <div class="res-outcome ${result.outcome}">${outLabels[result.outcome]}</div>
+
+    <!-- BALL CALCULATION BREAKDOWN -->
+    <div class="res-breakdown">
+      <div class="rb-title">BALL CALCULATION</div>
+      <div style="font-size:8px;color:var(--muted);text-align:center;margin-bottom:6px;opacity:0.7">★ rating = pts in formula · OVR is visual only</div>
+      <div class="rb-row">
+        <div class="rb-side batter">
+          <div class="rb-label">BATTER TOTAL</div>
+          ${batBreakLines.map(l=>`<div class="rb-line">${l}</div>`).join('')}
+          <div class="rb-total">= ${result.batterTotal}</div>
+        </div>
+        <div class="rb-minus">−</div>
+        <div class="rb-side bowler">
+          <div class="rb-label">BOWLER TOTAL</div>
+          ${bowlBreakLines.map(l=>`<div class="rb-line">${l}</div>`).join('')}
+          <div class="rb-total">= ${result.bowlerTotal}</div>
+        </div>
+      </div>
+      <div class="rb-diff">${result.batterTotal} − ${result.bowlerTotal} = ${diffSign}${result.difference}</div>
+      <div class="rb-threshold">${thresholdDesc}</div>
+    </div>
+
+    ${specialNote}
+    ${balanceNoteHTML}
+
+    ${chipFeedbackHTML}
+    <div class="res-commentary">"${result.commentary}"</div>
+    <div class="res-skip">TAP ANYWHERE TO CONTINUE →</div>
+  `;
+}
+
+
+window.dismissResult = function() {
+  const ov = document.getElementById('result-overlay');
+  if(!ov) return;
+  ov.remove();
+
+  // Refill hands
+  refillAfterBall();
+
+  // Check innings end
+  const inn = getCurrentInn();
+  if(isInnOver(inn)) {
+    settleOverPot(); // award over pot to cricket winner
+    if(G.currentInnings===1) {
+      G.phase = 'inningsSwap';
+      render();
+    } else {
+      G.phase = 'gameEnd';
+      render();
+    }
+  } else {
+    render();
+  }
+};
+
+window.startInnings2 = function() {
+  G.currentInnings = 2;
+  G.playerCard = null; G.playerChoice = null;
+  G.aiCard = null; G.aiChoice = null;
+  // Coin pot already set for Inn1 — re-apply same stakes for Inn2 automatically
+  const amt = Math.min(G.overStakeAmt, G.coins.player, G.coins.ai);
+  G.coins.player -= amt;
+  G.coins.ai     -= amt;
+  G.overPot       = amt * 2;
+  G.phase = 'play'; // skip overStake screen entirely for innings 2
+  render();
+};
+
+window.playAgain = function() {
+  G = newState();
+  render();
+};
+
+window.showLeaderboard = function() {
+  G.phase = 'leaderboard';
+  render();
+};
+
+function renderLeaderboard() {
+  const hist = JSON.parse(localStorage.getItem('oo_history')||'[]');
+  const stats = JSON.parse(localStorage.getItem('oo_stats')||'{"wins":0,"losses":0,"ties":0,"coins":0,"played":0}');
+  const winPct = stats.played > 0 ? Math.round(stats.wins/stats.played*100) : 0;
+
+  const icons = {player:'🏆',ai:'💀',tie:'🤝'};
+  const labels = {player:'WIN',ai:'LOSS',tie:'TIE'};
+  const colors = {player:'#4ade80',ai:'#e63946',tie:'#fbbf24'};
+
+  const rows = hist.length ? hist.slice(0,20).map(m => {
+    const d = new Date(m.date);
+    const dateStr = `${d.getDate()}/${d.getMonth()+1} ${d.getHours()}:${String(d.getMinutes()).padStart(2,'0')}`;
+    const coinStr = m.coins >= 0 ? `+${m.coins}` : String(m.coins);
+    const coinCol = m.coins > 0 ? '#4ade80' : m.coins < 0 ? '#e63946' : '#7a8fa8';
+    return `<div class="lb-row">
+      <div class="lb-result" style="color:${colors[m.result]||'#fff'}">${icons[m.result]||'?'} ${labels[m.result]||'?'}</div>
+      <div class="lb-scores">${m.inn1} vs ${m.inn2}</div>
+      <div class="lb-pitch">${m.pitchIcon||''} ${m.pitch||'?'}</div>
+      <div class="lb-coins" style="color:${coinCol};font-family:'Bebas Neue',sans-serif">${coinStr} SP</div>
+      <div class="lb-date">${dateStr}</div>
+    </div>`;
+  }).join('') : `<div style="text-align:center;color:var(--muted);padding:24px;font-size:13px">No matches played yet.<br>Get out there!</div>`;
+
+  return `
+  <div class="screen" style="background:var(--navy);flex-direction:column;align-items:center;overflow-y:auto;padding:16px 14px;gap:12px">
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--gold);letter-spacing:4px">CAREER STATS</div>
+    <div class="career-strip" style="max-width:320px;width:100%">
+      <div class="career-stat"><div class="cs-val">${stats.played}</div><div class="cs-label">PLAYED</div></div>
+      <div class="career-stat"><div class="cs-val" style="color:#4ade80">${stats.wins}</div><div class="cs-label">WINS</div></div>
+      <div class="career-stat"><div class="cs-val" style="color:#e63946">${stats.losses||0}</div><div class="cs-label">LOSSES</div></div>
+      <div class="career-stat"><div class="cs-val" style="color:var(--gold)">${winPct}%</div><div class="cs-label">WIN%</div></div>
+      <div class="career-stat"><div class="cs-val" style="color:${stats.coins>=0?'#4ade80':'#e63946'}">${stats.coins>=0?'+':''}${stats.coins}</div><div class="cs-label">NET SP</div></div>
+    </div>
+    <div style="font-size:10px;color:var(--muted);opacity:0.5;text-align:center">SP = Skill Points. Earned by outplaying opponents through better decisions, not luck.</div>
+    <div style="font-size:11px;color:var(--muted);letter-spacing:2px;font-weight:700;align-self:flex-start">MATCH HISTORY</div>
+    <div style="width:100%;display:flex;flex-direction:column;gap:6px">
+      ${rows}
+    </div>
+    <button class="end-play-again" onclick="G.phase='home';render()" style="max-width:200px;width:100%;margin-top:8px">← HOME</button>
+  </div>`;
+}
+
+// ================================================================
+// RENDER FUNCTIONS
+// ================================================================
+function render() {
+  const app = document.getElementById('app');
+  switch(G ? G.phase : 'home') {
+    case 'home':         app.innerHTML = renderHome(); break;
+    case 'pitchReveal':  app.innerHTML = renderPitch(); break;
+    case 'bundleSelect': app.innerHTML = renderBundleSelect(); break;
+    case 'overStake':    app.innerHTML = renderOverStake(); break;
+    case 'deal':         app.innerHTML = renderDeal(); break;
+    case 'powerPick':    app.innerHTML = renderPowerPick(); break;
+    case 'play':         app.innerHTML = renderPlay(); break;
+    case 'inningsSwap':  app.innerHTML = renderInningsSwap(); break;
+    case 'gameEnd':      app.innerHTML = renderGameEnd(); break;
+    case 'leaderboard':  app.innerHTML = renderLeaderboard(); break;
+    case 'lobby':         app.innerHTML = renderLobby(); break;
+    case 'lobbyWaiting': app.innerHTML = renderLobbyWaiting(); break;
+    case 'mpStakes':     app.innerHTML = renderMpStakes(); break;
+    default:             app.innerHTML = renderHome();
+  }
+}
+
+function renderHome() {
+  return `
+  <div class="screen home-bg">
+    <span class="home-deco home-deco-l">🏏</span>
+    <span class="home-deco home-deco-r">🏏</span>
+    <div class="logo-wrap">
+      <div class="logo-main">OVER<br>&amp; OUT</div>
+      <div class="logo-sub">Cricket · Cards · Mind Games</div>
+    </div>
+    <div class="tagline">Read the pitch. Pick your play.<br>Outthink the AI.</div>
+    <div class="home-mode-row">
+      <div class="home-mode-card sp" onclick="startGame()">
+        <div class="home-mode-icon">🤖</div>
+        <div class="home-mode-title">SINGLE PLAYER</div>
+        <div class="home-mode-desc">vs AI opponent</div>
+        <div class="home-mode-btn">PLAY →</div>
+      </div>
+      <div class="home-mode-card mp" onclick="openLobby()">
+        <div class="home-mode-icon">👥</div>
+        <div class="home-mode-title">MULTIPLAYER</div>
+        <div class="home-mode-desc">Play a friend on another device</div>
+        <div class="home-mode-btn">CONNECT →</div>
+      </div>
+    </div>
+    <div class="version-tag" style="display:flex;gap:12px;align-items:center">
+      <span>V 5.0</span>
+      <span onclick="G={phase:'leaderboard'};render()" style="cursor:pointer;color:rgba(212,165,72,0.4);text-decoration:underline;text-underline-offset:2px">MY HISTORY</span>
+    </div>
+  </div>`;
+}
+
+function renderBundleSelect() {
+  const pitch = G.pitch;
+  let pitchTip = '';
+  if(pitch.id==='chepauk')         pitchTip = 'Spin thrives here';
+  else if(pitch.id==='headingley') pitchTip = 'Seam gets extra bite';
+  else if(pitch.id==='wankhede')   pitchTip = 'Big hitters in form';
+  else if(pitch.id==='sharjah')    pitchTip = 'Batters feast on full balls';
+  else                              pitchTip = 'Balanced conditions';
+
+  const sel = G.selectedBundle;
+
+  // Visual theme per bundle
+  const imgClass = {
+    pace_assault:'bc-h-img-pace',spin_clinic:'bc-h-img-spin',
+    power_xi:'bc-h-img-power',balanced:'bc-h-img-balanced',young_guns:'bc-h-img-young'
+  };
+  const tagLines = {
+    pace_assault:['FAST','AGGRESSIVE','SEAM'],
+    spin_clinic:['TURN','MYSTERY','FLIGHT'],
+    power_xi:['BIG HIT','EXPLOSIVE','T20'],
+    balanced:['SOLID','ALL-PITCH','CLASSIC'],
+    young_guns:['SPECIALS','VOLATILE','RISK'],
+  };
+
+  const cards = BUNDLES.map(b => {
+    const isSel = sel === b.id;
+    const isPitchFit = b.pitchFit.includes(pitch.id);
+
+    // All player names from bundle
+    const allBats = b.batIds.map(id => BATTER_CARDS.find(x=>x.id===id)).filter(Boolean);
+    const allBowls = b.bowlIds.map(id => BOWLER_CARDS.find(x=>x.id===id)).filter(Boolean);
+
+    const tags = (tagLines[b.id]||[]).map(t => `<div class="bc-h-tag">${t}</div>`).join('');
+    const batLines = allBats.map((p,i) => {
+      const ovr = getCardStats(p).ovr;
+      const col = getCardStats(p).tier==='gold'?'#f0c060':'var(--muted)';
+      return `<div class="bc-h-pname${p.rating>=4?' top':''}">
+        <span style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:${col}">${ovr}</span>
+        <span style="font-size:9px;color:var(--muted);margin-right:3px">OVR</span>
+        <span>${p.name.split(' ').pop()}</span>
+      </div>`;
+    }).join('');
+    const bowlLines = allBowls.map((p,i) => {
+      const ovr = getCardStats(p).ovr;
+      const col = getCardStats(p).tier==='gold'?'#f0c060':'var(--muted)';
+      return `<div class="bc-h-pname${p.rating>=4?' top':''}">
+        <span style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:${col}">${ovr}</span>
+        <span style="font-size:9px;color:var(--muted);margin-right:3px">OVR</span>
+        <span>${p.name.split(' ').pop()}</span>
+      </div>`;
+    }).join('');
+
+    return `
+    <div class="bc-h${isSel?' selected':''}${isPitchFit?' pitch-rec':''}"
+         onclick="selectBundle('${b.id}')">
+      <div class="bc-h-img ${imgClass[b.id]||''}">
+        <div class="bc-h-big-icon">${b.icon}</div>
+        <div class="bc-h-tag-row">${tags}</div>
+        ${isPitchFit?`<div class="bc-h-pitch-fit">PITCH FIT ✦</div>`:''}
+        <div class="bc-h-sel-check">✅</div>
+      </div>
+      <div class="bc-h-body">
+        <div class="bc-h-name">${b.name}</div>
+        <div class="bc-h-tagline">${b.tagline}</div>
+        <div class="bc-h-divider"></div>
+        <div class="bc-h-section-label bat">🏏 BATTERS</div>
+        ${batLines}
+        <div class="bc-h-divider"></div>
+        <div class="bc-h-section-label bowl">🎳 BOWLERS</div>
+        ${bowlLines}
+      </div>
+    </div>`;
+  }).join('');
+
+  const html = `
+  <div class="screen bundle-screen">
+    <div class="bundle-header">
+      <div class="bundle-header-top">
+        <div class="bundle-title">PICK YOUR SQUAD</div>
+        <div class="bundle-pitch-tag">
+          <div class="bundle-pitch-tag-icon">${pitch.icon}</div>
+          <div class="bundle-pitch-tag-name">${pitch.name}</div>
+        </div>
+      </div>
+      <div class="bundle-subtitle">${pitchTip} · ✦ = pitch advantage</div>
+    </div>
+    <div class="bundle-scroll-wrap" id="bundle-scroll-wrap">
+      <div class="bundle-row-h" id="bundle-row-h">${cards}</div>
+      <div class="bundle-swipe-hint" id="bsh">
+        <span class="bsh-ghost">👆</span>
+        <span class="bsh-txt">SWIPE TO SEE ALL SQUADS</span>
+        <span class="bsh-arrow">→</span>
+      </div>
+    </div>
+    <div class="bundle-footer">
+      <button class="bundle-confirm-btn" onclick="bundleConfirm()" ${sel?'':'disabled'}>
+        ${sel ? 'LOCK IN SQUAD →' : 'TAP A SQUAD TO SELECT'}
+      </button>
+    </div>
+  </div>`;
+  // Wire up swipe hint after DOM renders
+  requestAnimationFrame(() => {
+    const el = document.getElementById('bundle-scroll-wrap');
+    const hint = document.getElementById('bsh');
+    if(!el || !hint) return;
+    let faded = false;
+    el.addEventListener('scroll', () => {
+      if(!faded) { faded=true; hint.style.opacity='0'; hint.style.pointerEvents='none'; }
+    }, {once:true});
+    setTimeout(() => {
+      hint.style.opacity='1';
+      const ghost = hint.querySelector('.bsh-ghost');
+      if(ghost) ghost.style.animation='swipeGhost 1.4s ease-in-out 2';
+    }, 700);
+  });
+  return html;
+}
+
+
+function renderPitch() {
+  const p = G.pitch;
+  return `
+  <div class="screen pitch-bg" onclick="advancePitch()">
+    <div class="reveal-label">TODAY'S PITCH</div>
+    <div class="flip-wrap" onclick="advancePitch()">
+      <div class="flip-inner" id="flip-inner">
+        <div class="flip-face flip-back">
+          <div class="flip-back-pattern">
+            <span>🏏</span><span>🎯</span><span>🏏</span>
+            <span>🎯</span><span>⭐</span><span>🎯</span>
+            <span>🏏</span><span>🎯</span><span>🏏</span>
+          </div>
+        </div>
+        <div class="flip-face flip-front">
+          <div class="pitch-card-icon">${p.icon}</div>
+          <div class="pitch-card-name">${p.name}</div>
+          <div class="pitch-card-desc">${p.desc}</div>
+          <div class="pitch-card-buff">${p.matrixLabel}</div>
+        </div>
+      </div>
+    </div>
+    <div class="pitch-tap-hint" id="pth">Tap to continue →</div>
+  </div>`;
+}
+
+function renderDeal() {
+  const mkMini = (icon, label, cls='') =>
+    `<div class="deal-mini${cls?` ${cls}`:''}"><div class="deal-mini-icon">${icon}</div><div class="deal-mini-label">${label}</div></div>`;
+  const playerMinis = Array.from({length:6}, () => mkMini('🏏','BATTER')).join('');
+  const aiMinis     = Array.from({length:6}, () => mkMini('❓','???','ai-mini')).join('');
+  return `
+  <div class="screen deal-bg">
+    <div class="deal-title">DEALING CARDS</div>
+    <div class="deal-row-label">YOUR HAND</div>
+    <div class="deal-row" id="deal-player-row">${playerMinis}</div>
+    <div class="deal-row-label" style="margin-top:16px">AI HAND (HIDDEN)</div>
+    <div class="deal-row" id="deal-ai-row">${aiMinis}</div>
+    <div style="font-size:13px;color:var(--muted);margin-top:20px;text-align:center">Setting the field…</div>
+  </div>`;
+}
+
+function renderPowerPick() {
+  const opts = POWERS.map((p,i)=>{
+    const sel = G.selectedPowerIdx===i;
+    return `
+    <div class="pcard${sel?' selected':''}" onclick="selectPower(${i})">
+      <div class="pcard-top">
+        <div class="pcard-icon">${p.icon}</div>
+        <div class="pcard-name">${p.name}</div>
+      </div>
+      <div class="pcard-desc">${p.desc}</div>
+      <div class="pcard-flavor">${p.flavor}</div>
+    </div>`;
+  }).join('');
+
+  return `
+  <div class="screen power-bg">
+    <div class="power-header">
+      <div class="power-title">PICK YOUR POWER CARD</div>
+      <div class="power-sub">One secret weapon. Use it wisely — once only.</div>
+    </div>
+    <div class="power-list">${opts}</div>
+    <div class="power-footer">
+      <button class="btn-confirm" onclick="confirmPower()" ${G.selectedPowerIdx===null?'disabled':''}>
+        CONFIRM POWER
+      </button>
+    </div>
+  </div>`;
+}
+
+function buildMatrixHint(selected, isPlayerBatting, selectedCard) {
+  // BUG 3 FIX: when batting, derive spin/pace from the AI's actual available bowler
+  // G.aiCard is null at pick-time, so use best available AI bowler from hand as proxy
+  const aiBowlerProxy = isPlayerBatting
+    ? (G.aiBowlHand || []).find(c => !c._played) || {spinner:false}
+    : null;
+
+  const counters = isPlayerBatting
+    ? (aiBowlerProxy && aiBowlerProxy.spinner ? SPIN_DELIVERIES : PACE_DELIVERIES)
+    : SHOTS;
+
+  const cells = counters.map(c => {
+    const mod = isPlayerBatting
+      ? getMatchupMod(c, selected, G.pitch, false, aiBowlerProxy || {spinner:false})
+      : getMatchupMod(selected, c, G.pitch, false, selectedCard||{spinner:false});
+    const cls = mod>0?'pos':mod<0?'neg':'neu';
+    const label = mod>0?`+${mod}`:String(mod);
+    const abbr = c.length<=4?c:c.slice(0,4);
+    return `<div class="mh-cell">
+      <div class="mh-label">${abbr.toUpperCase()}</div>
+      <div class="mh-val ${cls}">${label}</div>
+    </div>`;
+  }).join('');
+  return `<div class="matrix-hint">${cells}</div>`;
+}
+
+function renderOverStake() {
+  const inn = G.currentInnings;
+  const amt = G.overStakeAmt;
+  const pc  = G.coins.player;
+  const ac  = G.coins.ai;
+  const total = amt*2;
+  const innLabel = inn===1?'INNINGS 1 — YOU BAT':'INNINGS 2 — YOU BOWL';
+  return `
+  <div class="screen stake-bg">
+    <div class="stake-title">STAKE THE INNINGS</div>
+    <div class="stake-pot-circle">
+      <div class="stake-pot-val">🪙${total}</div>
+      <div class="stake-pot-label">OVER POT</div>
+    </div>
+    <div class="stake-breakdown">
+      <div class="stake-side">
+        <div class="stake-side-label">YOU</div>
+        <div class="stake-side-coins">🪙${pc} → ${pc-amt}</div>
+      </div>
+      <div class="stake-divider">+</div>
+      <div class="stake-side">
+        <div class="stake-side-label">AI</div>
+        <div class="stake-side-coins">🪙${ac} → ${ac-amt}</div>
+      </div>
+    </div>
+    <div class="stake-desc">${innLabel}<br>Winner of this innings takes the 🪙${total} pot.</div>
+    <div class="stake-bluff">🎭 This is a bluffing game too. Even if cricket goes against you, smart per-ball raises can keep you in coins. You can win overall even if you lose the match.</div>
+    <button class="btn-confirm" onclick="confirmOverStake()" style="max-width:280px;width:100%">
+      STAKE 🪙${amt} AND PLAY →
+    </button>
+  </div>`;
+}
+
+function renderPlay() {
+  const inn = getCurrentInn();
+  const isPlayerBatting = G.currentInnings===1;
+
+  const sb = renderScoreboard(inn, isPlayerBatting);
+  const aiStrip = renderAIStrip(isPlayerBatting);
+  const midHud = renderMidHud(inn, isPlayerBatting);
+  const playerZone = renderPlayerZone(inn, isPlayerBatting);
+
+  return `
+  <div class="screen play-screen">
+    ${sb}
+    ${aiStrip}
+    ${midHud}
+    ${playerZone}
+  </div>`;
+}
+
+function renderScoreboard(inn, isPlayerBatting) {
+  const innLabel = isPlayerBatting ? 'INNINGS 1 — YOU BAT' : 'INNINGS 2 — YOU BOWL';
+  const overStr = getOvStr(inn.balls);
+  const target = isPlayerBatting ? '' :
+    `<div class="sb-target">TARGET <span>${G.inn1.runs+1}</span></div>`;
+  const pc=G.coins.player, ac=G.coins.ai, diff=pc-ac;
+  const coinTrend = diff>0?`<div class="sb-chip-lead ahead">+${diff} 🪙</div>`
+    :diff<0?`<div class="sb-chip-lead behind">${diff} 🪙</div>`
+    :`<div class="sb-chip-lead even">even</div>`;
+  return `
+  <div id="sb">
+    <div>
+      <div class="sb-score">${inn.runs}/${inn.wickets}</div>
+      ${target}
+    </div>
+    <div class="sb-center">
+      <div class="sb-over">OV ${overStr}</div>
+      <div class="sb-inn">${innLabel}</div>
+      <div class="sb-pitch">
+        <div class="sb-pitch-icon">${G.pitch.icon}</div>
+        <div class="sb-pitch-name">${G.pitch.name.split(' ').slice(0,2).join(' ')}</div>
+      </div>
+    </div>
+    <div class="sb-chip-wrap">
+      <div class="sb-chip-row you">YOU 🪙${pc}</div>
+      <div class="sb-chip-row opp">AI 🪙${ac}</div>
+      ${coinTrend}
+    </div>
+  </div>`;
+}
+
+function renderAIStrip(isPlayerBatting) {
+  const aiRole = isPlayerBatting ? 'BOWLER' : 'BATTER';
+  const aiHand = isPlayerBatting ? G.aiBowlHand : G.aiBatHand;
+  const inn = getCurrentInn();
+  const played = inn.balls;
+
+  const cards = aiHand.map((c,i)=>{
+    const isPlayed = c._played;
+    return `<div class="ai-mini-card ${isPlayed?'played-mini':''}">
+      <div class="ai-mini-icon">${isPlayed?'✓':'🂠'}</div>
+    </div>`;
+  }).join('');
+
+  // Bouncer chips on AI strip (when AI bowls in inn1)
+  let chipsHTML = '';
+  if(isPlayerBatting) {
+    const chips = G.inn1.bouncerChips;
+    chipsHTML = `<div class="ai-chip-row">
+      <span class="chip-label">AI BOUNCERS</span>
+      <div class="chip ${chips<2?'spent':''}">⚡</div>
+      <div class="chip ${chips<1?'spent':''}">⚡</div>
+    </div>`;
+  }
+
+  return `
+  <div class="ai-strip">
+    <div class="ai-strip-label">AI ${aiRole} — ${aiHand.filter(c=>!c._played).length} REMAINING</div>
+    <div class="ai-mini-row">${cards}</div>
+    ${chipsHTML}
+  </div>`;
+}
+
+function buildChoiceButtons(inn, isPlayerBatting, selectedCard, selectedChoice) {
+  const choices = isPlayerBatting
+    ? SHOTS
+    : (selectedCard ? getAvailableDeliveries(selectedCard, inn) : PACE_DELIVERIES);
+  const label = isPlayerBatting ? 'SHOT' : 'DELIVERY';
+  const isSpin = !isPlayerBatting && selectedCard && selectedCard.spinner;
+  const lastShot     = inn.ballLog.length>0 ? inn.ballLog[inn.ballLog.length-1].shot     : null;
+  const lastDelivery = inn.ballLog.length>0 ? inn.ballLog[inn.ballLog.length-1].delivery : null;
+  const aggressiveShots = ['Slog','StepDown','ReverseScoop','Pull'];
+
+  const btns = choices.map(ch=>{
+    const isSel=ch===selectedChoice;
+    let capped=false;
+    if(isPlayerBatting){
+      if(ch==='Slog'         &&(inn.shotsUsed['Slog']        ||0)>=2) capped=true;
+      if(ch==='ReverseScoop' &&(inn.shotsUsed['ReverseScoop']||0)>=2) capped=true;
+    } else {
+      if(ch==='Bouncer'  &&inn.bouncerChips<=0) capped=true;
+      if(ch==='Yorker'   &&(inn.deliveriesUsed['Yorker']   ||0)>=2) capped=true;
+      if(ch==='Googly'   &&(inn.deliveriesUsed['Googly']   ||0)>=2) capped=true;
+      if(ch==='Doosra'   &&(inn.deliveriesUsed['Doosra']   ||0)>=2) capped=true;
+      if(ch==='ShortBall'&&(inn.deliveriesUsed['ShortBall']||0)>=3) capped=true;
+    }
+    const usedCount=isPlayerBatting?(inn.shotsUsed[ch]||0):(inn.deliveriesUsed[ch]||0);
+    const hasCap=['Slog','ReverseScoop','Yorker','Bouncer','Googly','Doosra','ShortBall'].includes(ch);
+    const dots=hasCap?`<span class="sBtn-dots">${usedCount>=1?'●':'○'}${usedCount>=2?'●':'○'}</span>`:'';
+
+    // Risk/warning badges
+    let badge='';
+    if(isPlayerBatting){
+      if(ch===lastShot && aggressiveShots.includes(ch) && !capped)
+        badge=`<span class="sBadge read" title="Repeat aggressive shot — bowler expects it! −1">📖−1</span>`;
+    } else {
+      if(ch==='FullToss')
+        badge=`<span class="sBadge danger" title="Real bowlers don't bowl these. Big gift vs attacking shots.">⚠️</span>`;
+      else if(ch==='Yorker')
+        badge=`<span class="sBadge warn" title="Dice 1 = misfire becomes Full Toss. High risk/reward.">⚡</span>`;
+    }
+
+    return `<button class="sBtn${isSel?' active':''}${capped?' capped':''}${ch==='FullToss'?' ft-risk':''}" onclick="selectChoice('${ch}')" ${capped?'disabled':''}>
+      ${dispName(ch)}${dots}${badge}
+    </button>`;
+  }).join('');
+  const hint=selectedChoice?buildMatrixHint(selectedChoice,isPlayerBatting,selectedCard):'';
+  return `<div class="shot-label">${isSpin?'🌀 SPIN ':'⚡ '}${label}</div>${btns}
+    <div style="grid-column:1/-1">${hint}</div>`;
+}
+
+function renderMidHud(inn, isPlayerBatting) {
+  const choices = isPlayerBatting ? SHOTS : (G.playerCard ? getAvailableDeliveries(G.playerCard, inn) : PACE_DELIVERIES);
+  const choiceLabel = isPlayerBatting ? 'SHOT' : 'DELIVERY';
+  const selectedCard = G.playerCard;
+  const selectedChoice = G.playerChoice;
+  const canConfirm = selectedCard && selectedChoice && !G.captainCallActive && G.playerPower;
+
+  // Card preview or hint
+  let centerContent;
+  if(selectedCard) {
+    const specialTag = selectedCard.special
+      ? `<div class="hsc-special">${SPECIAL_LABELS[selectedCard.special]||selectedCard.special}</div>` : '';
+    centerContent = `
+    <div class="hud-selection">
+      <div class="hud-selected-card">
+        ${(() => {
+          const st = getCardStats(selectedCard);
+          const isBatter = selectedCard.type === 'batter';
+          const keys = isBatter ? ['PWR','TIM','TEC','SPL'] : ['SPD','LNE','VAR','SPL'];
+          const vals = [st.a, st.b, st.c, st.d];
+          const barsHTML = keys.map((k,j)=>`
+            <div class="hsc-sstat">
+              <span class="hsc-sstat-key">${k}</span>
+              <div class="hsc-sstat-bar"><div class="hsc-sstat-fill" style="width:${vals[j]}%"></div></div>
+              <span class="hsc-sstat-val">${vals[j]}</span>
+            </div>`).join('');
+          return `<div style="display:flex;align-items:flex-start;gap:5px;margin-bottom:3px">
+            <div><div style="font-size:7px;color:var(--muted);letter-spacing:1px">OVR</div>
+              <div class="hsc-rating" style="color:${st.tier==='gold'?'#f0c060':st.tier==='silver'?'#c8d0dc':'#a07840'}">${st.ovr}</div>
+            </div>
+            <div style="flex:1">
+              <div class="hsc-name">${selectedCard.name}</div>
+              <div class="hsc-nick">${selectedCard.nick||''}</div>
+            </div>
+          </div>
+          <div class="hsc-substats">${barsHTML}</div>`;
+        })()}
+        ${specialTag}
+      </div>
+      <div class="shot-col">
+        <div class="shot-label">${choiceLabel}</div>
+        ${buildChoiceButtons(inn, isPlayerBatting, selectedCard, selectedChoice)}
+      </div>
+      <div class="go-wrap">
+        <button class="go-btn" onclick="confirmPick()" ${canConfirm?'':'disabled'}>
+          ${isPlayerBatting?'BAT!':'BOWL!'}
+        </button>
+      </div>
+    </div>`;
+  } else {
+    const roleHint = isPlayerBatting ? '← SELECT A BATTER' : '← SELECT A BOWLER';
+    centerContent = `<div class="hud-hint">${roleHint}</div>`;
+  }
+
+  // Power rail
+  const powerRail = renderPowerRail();
+
+  return `
+  <div class="mid-hud">
+    <div class="hud-center">
+      <div class="hud-pitch-tag">
+        <span>${G.pitch.icon}</span>
+        <span>${G.pitch.name.split(' ').slice(0,2).join(' ')}</span>
+      </div>
+      ${centerContent}
+    </div>
+    ${powerRail}
+  </div>`;
+}
+
+function renderPowerRail() {
+  const p = G.playerPower;
+  const slotsHTML = POWERS.map(pw => {
+    const isSelected = p && p.id === pw.id;
+    // BUG 4 FIX: explicitly check G.playerPowerUsed (persists correctly across innings)
+    const isUsed = isSelected && !!G.playerPowerUsed;
+    const isDeclared = isSelected && G.playerPowerDeclared && !isUsed;
+    const isPickable = !p;
+
+    let cls = 'pr-slot';
+    let onclick = '';
+    if(!p) { cls += ' pick-me'; onclick = `onclick="selectAndConfirmPower(${POWERS.indexOf(pw)})"` }
+    else if(isUsed) { cls += ' used ghost'; }
+    else if(isDeclared) { cls += ' declared mine'; onclick = `onclick="declarePower()"`; }
+    else if(isSelected) { cls += ' mine'; onclick = `onclick="declarePower()"`; }
+    else { cls += ' ghost'; }
+
+    return `<div class="${cls}" ${onclick} title="${pw.name}: ${pw.desc}">
+      <div class="pr-icon">${pw.icon}</div>
+      <div class="pr-name">${pw.name.split(' ')[0]}</div>
+    </div>`;
+  }).join('');
+
+  return `
+  <div class="power-rail">
+    <div class="pr-label">PWR</div>
+    ${slotsHTML}
+  </div>`;
+}
+
+function renderPlayerZone(inn, isPlayerBatting) {
+  // Active cards (face-up 6-card grid)
+  const activeCards = isPlayerBatting ? G.pBatHand : G.pBowlHand;
+  const inactiveCards = isPlayerBatting ? G.pBowlHand : G.pBatHand;
+  const inactiveIcon = isPlayerBatting ? '🎳' : '🏏';
+  const activeLabel = isPlayerBatting ? 'YOUR BATTERS' : 'YOUR BOWLERS';
+  const inactiveLabel = isPlayerBatting ? 'BOWLING NEXT' : 'BATTING NEXT';
+  const selectedCardId = G.playerCard?.id;
+
+  const OUTCOME_ICONS  = { SIX:'🟡', FOUR:'🟢', TWO:'⚪', ONE:'⚪', DOT:'⚫', PRESSURE:'🔴', WICKET:'💀' };
+  const OUTCOME_LABELS = { SIX:'SIX', FOUR:'FOUR', TWO:'2', ONE:'1', DOT:'•', PRESSURE:'!!', WICKET:'W' };
+
+  const bCardGrid = activeCards.map((c,i) => {
+    const isSel = c.id === selectedCardId;
+    const isPlayed = c._played;
+    const isCaptain = G.captainCallActive;
+
+    if(isPlayed) {
+      const oc = c._playedOutcome || 'DOT';
+      return `<div class="bcard played">
+        <div class="bc-played-result-overlay">
+          <div class="bc-played-emoji">${OUTCOME_ICONS[oc]||'⚫'}</div>
+          <div class="bc-played-label ${oc}">${OUTCOME_LABELS[oc]||oc}</div>
+        </div>
+        <div class="bc-played-name">${c.name}</div>
+      </div>`;
+    }
+
+    const st = getCardStats(c);
+    const isBatter = c.type === 'batter';
+    const keys = isBatter ? ['PWR','TIM','TEC','SPL'] : ['SPD','LNE','VAR','SPL'];
+    const vals = [st.a, st.b, st.c, st.d];
+    const tierColor = st.tier==='gold'?'#f0c060':st.tier==='silver'?'#c8d0dc':'#a07840';
+    const statsHTML = `<div class="bc-stats">${keys.map((k,j)=>`
+      <div class="bc-stat">
+        <span class="bc-stat-key">${k}</span>
+        <div class="bc-stat-bar"><div class="bc-stat-bar-fill" style="width:${vals[j]}%;background:${tierColor}"></div></div>
+        <span class="bc-stat-val">${vals[j]}</span>
+      </div>`).join('')}</div>`;
+    const specialTag = c.special ? `<div class="bc-special">${SPECIAL_LABELS[c.special]||c.special}</div>` : '';
+    const cls = `bcard tier-${st.tier}${isSel?' selected':''}${isCaptain?' captain-swap':''}`;
+    const onclick = isCaptain ? `onclick="captainSwap(${i})"` : `onclick="selectCard(${i})"`;
+    return `<div class="${cls}" ${onclick}>
+      <div class="bc-ovr-label">OVR</div>
+      <div class="bc-ovr" style="color:${tierColor}">${st.ovr}</div>
+      <div class="bc-name">${c.name}</div>
+      ${specialTag}
+      ${statsHTML}
+      ${isSel ? `<div style="position:absolute;top:4px;right:4px;font-size:14px">✅</div>` : ''}
+    </div>`;
+  }).join('');
+
+  const miniBackRow = inactiveCards.map(c => `
+    <div class="mini-back-card${c._played?' played-mini':''}">
+      <div class="mini-back-icon">${inactiveIcon}</div>
+    </div>`).join('');
+
+  // Bouncer chips for player when bowling
+  let chipsHTML = '';
+  if(!isPlayerBatting) {
+    const chips = inn.bouncerChips;
+    chipsHTML = `<div class="ai-chip-row">
+      <span class="chip-label">BOUNCERS</span>
+      <div class="chip ${chips<2?'spent':''}">⚡</div>
+      <div class="chip ${chips<1?'spent':''}">⚡</div>
+    </div>`;
+  }
+
+  return `
+  <div class="player-zone">
+    <div class="pz-label">${activeLabel}</div>
+    <div class="bcard-grid">${bCardGrid}</div>
+    ${chipsHTML}
+    <div class="pz-label" style="margin-top:3px">${inactiveLabel}</div>
+    <div class="mini-back-row">${miniBackRow}</div>
+  </div>`;
+}
+
+function renderPlayerArea(ph, isPlayerBatting) {
+  /* legacy stub — renderPlayerZone is used instead */
+  return renderPlayerZone(getCurrentInn(), isPlayerBatting);
+}
+
+function renderInningsSwap() {
+  const inn1=G.inn1;
+  const target=inn1.runs+1;
+  const wkts=inn1.wickets;
+  const how=wkts>=3?'all out':`in ${getOvStr(inn1.balls)} overs`;
+  const pc=G.coins.player, ac=G.coins.ai, diff=pc-ac;
+  const coinHTML=diff>0
+    ?`<div style="color:var(--green);font-family:'Bebas Neue',sans-serif;font-size:16px;text-align:center">↑ YOU LEAD BY 🪙${diff}</div>`
+    :diff<0
+    ?`<div style="color:var(--red);font-family:'Bebas Neue',sans-serif;font-size:16px;text-align:center">↓ AI LEADS BY 🪙${-diff}</div>`
+    :`<div style="color:var(--muted);font-size:13px;text-align:center">🤝 DEAD EVEN</div>`;
+  return `
+  <div class="screen swap-bg">
+    <div class="swap-title">END OF INNINGS 1</div>
+    <div class="swap-score-wrap">
+      <div class="swap-big">${inn1.runs}/${wkts}</div>
+      <div class="swap-sub">YOU SCORED ${how}</div>
+    </div>
+    <div class="target-box">
+      <div class="target-label">AI MUST CHASE</div>
+      <div class="target-val">${target} RUNS</div>
+    </div>
+    <div class="bet-chip-bar" style="max-width:280px">
+      <div class="bet-stack"><div class="bet-stack-label">YOUR COINS</div><div class="bet-stack-val">🪙${pc}</div></div>
+      <div class="bet-pot-wrap"><div class="bet-pot-label" style="color:var(--muted)">STANDINGS</div>${coinHTML}</div>
+      <div class="bet-stack"><div class="bet-stack-label">AI COINS</div><div class="bet-stack-val">🪙${ac}</div></div>
+    </div>
+    <div class="swap-msg">Now you bowl. 6 balls. Take wickets, contain the chase — and keep raising on balls you fancy!</div>
+    <button class="btn-confirm" onclick="startInnings2()" style="max-width:280px;width:100%">
+      SET UP INNINGS 2 →
+    </button>
+  </div>`;
+}
+
+function saveMatchToHistory(winnerCls, coinDiff, pitch) {
+  try {
+    const hist = JSON.parse(localStorage.getItem('oo_history')||'[]');
+    hist.unshift({
+      date: Date.now(),
+      result: winnerCls,      // 'player'|'ai'|'tie'
+      coins: coinDiff,        // net coin swing for player
+      inn1: G.inn1.runs + '/' + G.inn1.wickets,
+      inn2: G.inn2.runs + '/' + G.inn2.wickets,
+      pitch: pitch.name,
+      pitchIcon: pitch.icon,
+      squad: G.selectedBundle || '?',
+    });
+    localStorage.setItem('oo_history', JSON.stringify(hist.slice(0,50)));
+    // Update lifetime stats
+    const stats = JSON.parse(localStorage.getItem('oo_stats')||'{"wins":0,"losses":0,"ties":0,"coins":0,"played":0}');
+    stats.played++;
+    if(winnerCls==='player') stats.wins++;
+    else if(winnerCls==='ai') stats.losses++;
+    else stats.ties++;
+    stats.coins = (stats.coins||0) + coinDiff;
+    localStorage.setItem('oo_stats', JSON.stringify(stats));
+  } catch(e) {}
+}
+
+function renderGameEnd() {
+  const inn1 = G.inn1;
+  const inn2 = G.inn2;
+  const target = inn1.runs + 1;
+
+  let winnerText, winnerCls, marginText;
+  if(inn2.runs >= target) {
+    winnerText = G.mpMode ? 'OPPONENT WINS' : 'AI WINS';
+    winnerCls = 'ai';
+    const margin = inn2.runs - inn1.runs;
+    const rem = 3 - inn2.wickets;
+    marginText = `Chased down ${target} — won by ${rem} wicket${rem!==1?'s':''} (${margin} runs clear)`;
+  } else if(inn2.runs === inn1.runs) {
+    winnerText = 'TIE!';
+    winnerCls = 'tie';
+    marginText = 'An incredible tie! Both teams level on runs.';
+  } else {
+    winnerText = G.mpMode ? 'HOST WINS!' : 'YOU WIN!';
+    winnerCls = 'player';
+    const margin = inn1.runs - inn2.runs;
+    marginText = `Defended ${inn1.runs} and won by ${margin} run${margin!==1?'s':''}!`;
+  }
+
+  // Save to match history
+  const coinDiff = G.coins.player - G.coins.ai;
+  saveMatchToHistory(winnerCls, coinDiff, G.pitch);
+
+  // Load career stats
+  const stats = JSON.parse(localStorage.getItem('oo_stats')||'{"wins":0,"losses":0,"ties":0,"coins":0,"played":0}');
+  const winPct = stats.played > 0 ? Math.round(stats.wins/stats.played*100) : 0;
+
+  // Confetti if player wins
+  let confetti = '';
+  if(winnerCls==='player') {
+    const colors=['#d4a548','#f0c060','#4ade80','#60a5fa','#f472b6'];
+    confetti = '<div class="confetti-wrap">' +
+      Array.from({length:30},(_,i)=>{
+        const col = colors[i%colors.length];
+        const left = Math.random()*100;
+        const dur = 1.5+Math.random()*2;
+        const delay = Math.random()*1.5;
+        return `<div class="cpiece" style="left:${left}%;background:${col};animation-duration:${dur}s;animation-delay:${delay}s"></div>`;
+      }).join('') + '</div>';
+  }
+
+  const pc=G.coins.player, ac=G.coins.ai;
+  let chipWinnerHTML;
+  if(coinDiff>0){
+    chipWinnerHTML=`<div class="bet-chip-bar" style="max-width:280px;border-color:rgba(74,222,128,0.3)">
+      <div class="bet-stack"><div class="bet-stack-label">YOU</div><div style="font-family:'Bebas Neue',sans-serif;font-size:30px;color:var(--green)">🪙${pc}</div></div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:var(--green);text-align:center;padding:4px 8px;background:rgba(74,222,128,0.1);border-radius:6px">SKILL<br>LEAD</div>
+      <div class="bet-stack"><div class="bet-stack-label">${G.mpMode?'OPP':'AI'}</div><div style="font-family:'Bebas Neue',sans-serif;font-size:30px;color:var(--red)">🪙${ac}</div></div>
+    </div>`;
+  } else if(coinDiff<0){
+    chipWinnerHTML=`<div class="bet-chip-bar" style="max-width:280px;border-color:rgba(230,57,70,0.3)">
+      <div class="bet-stack"><div class="bet-stack-label">YOU</div><div style="font-family:'Bebas Neue',sans-serif;font-size:30px;color:var(--red)">🪙${pc}</div></div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:var(--red);text-align:center;padding:4px 8px;background:rgba(230,57,70,0.08);border-radius:6px">${G.mpMode?'OPP':'AI'}<br>LEADS</div>
+      <div class="bet-stack"><div class="bet-stack-label">${G.mpMode?'OPP':'AI'}</div><div style="font-family:'Bebas Neue',sans-serif;font-size:30px;color:var(--green)">🪙${ac}</div></div>
+    </div>`;
+  } else {
+    chipWinnerHTML=`<div style="font-size:14px;color:var(--muted);text-align:center">🤝 Skill points all square — 🪙${pc} each</div>`;
+  }
+
+  return `
+  <div class="screen end-bg">
+    ${confetti}
+    <div class="end-eyebrow">MATCH RESULT</div>
+    <div class="end-winner ${winnerCls}">${winnerText}</div>
+    <div class="end-scoreboard">
+      <div class="end-block">
+        <div class="end-block-label">${G.mpMode?'HOST':'YOUR'} SCORE</div>
+        <div class="end-block-score">${inn1.runs}/${inn1.wickets}</div>
+        <div class="end-block-detail">${getOvStr(inn1.balls)} overs</div>
+      </div>
+      <div class="end-block">
+        <div class="end-block-label">${G.mpMode?'GUEST':'AI'} SCORE</div>
+        <div class="end-block-score">${inn2.runs}/${inn2.wickets}</div>
+        <div class="end-block-detail">${getOvStr(inn2.balls)} overs</div>
+      </div>
+    </div>
+    <div class="end-margin">${marginText}</div>
+    ${chipWinnerHTML}
+    <div class="career-strip">
+      <div class="career-stat"><div class="cs-val">${stats.played}</div><div class="cs-label">PLAYED</div></div>
+      <div class="career-stat"><div class="cs-val" style="color:#4ade80">${stats.wins}</div><div class="cs-label">WINS</div></div>
+      <div class="career-stat"><div class="cs-val" style="color:#e63946">${stats.losses}</div><div class="cs-label">LOSSES</div></div>
+      <div class="career-stat"><div class="cs-val" style="color:var(--gold)">${winPct}%</div><div class="cs-label">WIN %</div></div>
+      <div class="career-stat"><div class="cs-val" style="color:${stats.coins>=0?'#4ade80':'#e63946'}">${stats.coins>=0?'+':''}${stats.coins}</div><div class="cs-label">NET SP</div></div>
+    </div>
+    <div style="font-size:10px;color:var(--muted);text-align:center;opacity:0.5">SP = Skill Points · tracks your decision-making quality across sessions</div>
+    <div style="display:flex;gap:8px;width:100%;max-width:280px">
+      <button class="end-play-again" onclick="playAgain()" style="flex:1">PLAY AGAIN</button>
+      <button class="end-play-again" onclick="showLeaderboard()" style="flex:0.6;background:rgba(212,165,72,0.1);border:1px solid rgba(212,165,72,0.3);color:var(--gold)">HISTORY</button>
+    </div>
+  </div>`;
+}
+
+// Firebase multiplayer implemented above (createRoom, joinRoom, etc.)
+
+
+// ================================================================
+// FIREBASE MULTIPLAYER
+// ================================================================
+// SETUP INSTRUCTIONS:
+//   1. In Firebase Console → Realtime Database → Rules, set:
+//      { "rules": { ".read": true, ".write": true } }
+//      (for production, use auth-based rules)
+//   2. Fill in DB_URL below with your Firebase project's RTDB URL.
+//
+const DB_URL = 'https://overnout-155e1-default-rtdb.asia-southeast1.firebasedatabase.app';
+
+// Detect if running inside an iframe/preview (Claude.ai blocks external fetch)
+const IS_PREVIEW = (() => {
+  try { return window.self !== window.top; } catch(e) { return true; }
+})();
+
+// Simple REST helpers (no SDK needed)
+async function dbGet(path) {
+  if(IS_PREVIEW) throw new Error('preview_blocked');
+  const r = await fetch(`${DB_URL}/${path}.json`);
+  if(!r.ok) throw new Error('DB read failed');
+  return r.json();
+}
+async function dbSet(path, data) {
+  if(IS_PREVIEW) throw new Error('preview_blocked');
+  const r = await fetch(`${DB_URL}/${path}.json`, {
+    method:'PUT',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify(data)
+  });
+  if(!r.ok) throw new Error('DB write failed');
+  return r.json();
+}
+async function dbPatch(path, data) {
+  if(IS_PREVIEW) throw new Error('preview_blocked');
+  const r = await fetch(`${DB_URL}/${path}.json`, {
+    method:'PATCH',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify(data)
+  });
+  if(!r.ok) throw new Error('DB patch failed');
+  return r.json();
+}
+
+// Generate a short room code
+function genCode() {
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  return Array.from({length:4}, () => chars[Math.floor(Math.random()*chars.length)]).join('');
+}
+
+// Lobby event handlers
+window.openLobby = function() {
+  G.phase = 'lobby';
+  G.mpLobbyMode = null;
+  G.mpStatus = '';
+  render();
+};
+window.lobbyBack = function() {
+  _clearPolls();
+  G.phase = 'home';
+  render();
+};
+window.setLobbyMode = function(mode) {
+  G.mpLobbyMode = mode;
+  G.mpJoinInput = '';
+  G.mpStatus = '';
+  render();
+};
+window.lobbyInputChange = function(val) {
+  G.mpJoinInput = val.toUpperCase().slice(0,4);
+  // Directly toggle button without re-rendering (re-render would reset input focus)
+  const btn = document.getElementById('lobby-join-btn');
+  if(btn) btn.disabled = G.mpJoinInput.length !== 4;
+};
+
+window.createRoom = async function() {
+  if(IS_PREVIEW) {
+    G.mpStatus = 'err:Multiplayer needs the file open directly in your browser — not inside a preview. Download the HTML and open it in Chrome/Safari.';
+    render(); return;
+  }
+  const code = genCode();
+  G.mpRoomCode = code;
+  G.mpIsHost = true;
+  G.mpStatus = 'creating…';
+  render();
+  try {
+    await dbSet(`rooms/${code}`, {
+      created: Date.now(),
+      host: 'player',
+      guest: null,
+      phase: 'waiting',
+      pitchId: null,
+    });
+    G.mpStatus = 'ok';
+    G.mpMode = true;
+    G.phase = 'lobbyWaiting';
+    // Start polling for guest join
+    _pollForGuest(code);
+    render();
+  } catch(e) {
+    G.mpStatus = 'err:Could not reach server. Check your internet connection and open the file directly in your browser (not an embed).';
+    render();
+  }
+};
+
+window.joinRoom = async function() {
+  if(IS_PREVIEW) {
+    G.mpStatus = 'err:Multiplayer needs the file open directly in your browser — not inside a preview. Download the HTML and open it in Chrome/Safari.';
+    render(); return;
+  }
+  const code = G.mpJoinInput.trim().toUpperCase();
+  if(code.length !== 4) { G.mpStatus = 'err:Enter 4-letter code'; render(); return; }
+  G.mpStatus = 'joining…';
+  render();
+  try {
+    const room = await dbGet(`rooms/${code}`);
+    if(!room || room.phase === 'playing') {
+      G.mpStatus = 'err:Room not found or already started';
+      render();
+      return;
+    }
+    await dbPatch(`rooms/${code}`, { guest: 'player2', phase: 'ready' });
+    G.mpRoomCode = code;
+    G.mpIsHost = false;
+    G.mpMode = true;
+    G.mpStatus = 'ok';
+    G.phase = 'lobbyWaiting';
+    render();
+    // Guest gets host pitch choice pushed
+    _pollForGameStart(code);
+  } catch(e) {
+    G.mpStatus = 'err:' + e.message;
+    render();
+  }
+};
+
+let _pollTimer = null;
+let _pollTimer2 = null;
+function _clearPolls() {
+  if(_pollTimer)  { clearInterval(_pollTimer);  _pollTimer  = null; }
+  if(_pollTimer2) { clearInterval(_pollTimer2); _pollTimer2 = null; }
+}
+
+function _pollForGuest(code) {
+  _clearPolls();
+  _pollTimer = setInterval(async () => {
+    try {
+      const room = await dbGet(`rooms/${code}`);
+      if(room && room.guest) {
+        _clearPolls();
+        G.mpStatus = 'Guest joined! Setting stakes…';
+        G.phase = 'mpStakes';
+        G.mpStakeAmt = 0;
+        render();
+      }
+    } catch(e) {}
+  }, 2000);
+}
+
+function _pollForGameStart(code) {
+  _clearPolls();
+  _pollTimer = setInterval(async () => {
+    try {
+      const room = await dbGet(`rooms/${code}`);
+      if(!room) return;
+      // Step 1: host picked a stake — surface it to guest on mpStakes screen
+      if(room.stakeAmt && G.phase === 'lobbyWaiting') {
+        G.mpStakeAmt = room.stakeAmt;
+        G.phase = 'mpStakes';
+        render();
+        return;
+      }
+      // Step 2: host updated stake while guest is already on mpStakes — refresh
+      if(room.stakeAmt && G.phase === 'mpStakes' && G.mpStakeAmt !== room.stakeAmt) {
+        G.mpStakeAmt = room.stakeAmt;
+        render();
+      }
+      // Step 3: fallback — phase flipped to playing before guest saw mpStakes
+      if(room.phase === 'playing' && G.phase === 'lobbyWaiting') {
+        _clearPolls();
+        initGame();
+      }
+    } catch(e) {}
+  }, 2000);
+}
+
+// Lobby waiting screen renderer (shared for host+guest)
+// ================================================================
+// MP STAKES SCREEN
+// ================================================================
+function renderMpStakes() {
+  const isHost = G.mpIsHost;
+  const selected = G.mpStakeAmt || 0;
+  const opts = [50, 100, 200, 500];
+  const optsHTML = opts.map(v => {
+    const isSel = selected === v;
+    const canPick = isHost;
+    return `<div class="mpstakes-opt${isSel?' selected':''}${!canPick?' disabled-opt':''}"
+      ${canPick?`onclick="mpStakeSelect(${v})"`:''}>🪙${v}</div>`;
+  }).join('');
+
+  const balance = G.coins ? G.coins.player : 1000;
+
+  if(isHost) {
+    return `
+    <div class="screen mpstakes-screen">
+      <div class="mpstakes-title">SET MATCH STAKES</div>
+      <div class="mpstakes-sub">How many coins per over?<br>Both players put this in — winner takes the pot.</div>
+      <div class="mpstakes-grid">${optsHTML}</div>
+      <div class="mpstakes-balance">Your balance: 🪙${balance}</div>
+      <button class="mpstakes-confirm" onclick="mpStakeConfirm()" ${selected?'':'disabled'}>
+        CONFIRM STAKES →
+      </button>
+      <div style="font-size:11px;color:var(--muted);text-align:center">Both players must confirm before the match begins</div>
+    </div>`;
+  } else {
+    const hostAmt = G.mpStakeAmt;
+    return `
+    <div class="screen mpstakes-screen">
+      <div class="mpstakes-title">MATCH STAKES</div>
+      <div class="mpstakes-sub">Host is setting the coin stake per over. Wait for their choice.</div>
+      ${hostAmt
+        ? `<div class="mpstakes-opt selected" style="width:120px;margin:0 auto">🪙${hostAmt}</div>
+           <div class="mpstakes-balance">Your balance: 🪙${balance}</div>
+           <button class="mpstakes-confirm" onclick="mpStakeConfirm()">ACCEPT & PLAY →</button>`
+        : `<div class="mpstakes-waiting">Waiting for host to pick stakes…</div>`
+      }
+    </div>`;
+  }
+}
+
+window.mpStakeSelect = function(amt) {
+  if(!G.mpIsHost) return;
+  G.mpStakeAmt = amt;
+  render();
+  // Write to Firebase so guest can see
+  if(G.mpRoomCode) dbPatch(`rooms/${G.mpRoomCode}`, { stakeAmt: amt }).catch(()=>{});
+};
+
+window.mpStakeConfirm = function() {
+  if(!G.mpStakeAmt) return;
+  G.overStakeAmt = G.mpStakeAmt;
+  _clearPolls(); // stop all polling before game starts
+  if(G.mpIsHost) {
+    if(G.mpRoomCode) {
+      dbPatch(`rooms/${G.mpRoomCode}`, { stakeReady: true, phase: 'playing' }).catch(()=>{});
+    }
+    initGame();
+  } else {
+    // Guest confirmed — start game independently (in-game sync is the next milestone)
+    if(G.mpRoomCode) dbPatch(`rooms/${G.mpRoomCode}`, { guestStakeOk: true }).catch(()=>{});
+    initGame();
+  }
+};
+
+function renderLobbyWaiting() {
+  const isHost = G.mpIsHost;
+  const code = G.mpRoomCode || '----';
+  const statusMsg = isHost
+    ? 'Share this code with your opponent — waiting for them to join'
+    : 'Connected! Waiting for host to start the game…';
+  return `
+  <div class="screen lobby-screen">
+    <div class="lobby-title">${isHost ? 'ROOM CREATED' : 'JOINED!'}</div>
+    <div class="lobby-code-label">ROOM CODE</div>
+    <div class="lobby-code-display">${code}</div>
+    <div class="lobby-waiting">${statusMsg}</div>
+    <div class="lobby-back" onclick="lobbyBack()">← CANCEL & GO BACK</div>
+  </div>`;
+}
+
+function renderLobby() {
+  const mode = G.mpLobbyMode;
+  const status = G.mpStatus;
+  const statusHTML = status.startsWith('err:')
+    ? `<div class="lobby-status err">${status.slice(4)}</div>`
+    : status === 'ok' ? '' : (status ? `<div class="lobby-status ok">${status}</div>` : '');
+
+  if(!mode) {
+    const previewBanner = IS_PREVIEW
+      ? `<div style="background:rgba(251,191,36,0.12);border:1px solid rgba(251,191,36,0.3);border-radius:6px;padding:10px 14px;font-size:11px;color:#fbbf24;text-align:center;max-width:280px;line-height:1.5">
+          ⚠️ Multiplayer requires the HTML file opened directly in your browser.<br>Download it and open in Chrome/Safari.
+         </div>` : '';
+    return `
+    <div class="screen lobby-screen">
+      <div class="lobby-title">MULTIPLAYER</div>
+      <div class="lobby-sub">Play against a friend on two devices. Both need this page open.</div>
+      ${previewBanner}
+      <div class="lobby-btn-row">
+        <button class="lobby-btn create" onclick="setLobbyMode('create')">CREATE<br>ROOM</button>
+        <button class="lobby-btn join" onclick="setLobbyMode('join')">JOIN<br>ROOM</button>
+      </div>
+      <div class="lobby-back" onclick="lobbyBack()">← BACK</div>
+    </div>`;
+  }
+
+  if(mode === 'create') {
+    return `
+    <div class="screen lobby-screen">
+      <div class="lobby-title">CREATE ROOM</div>
+      <div class="lobby-sub">A room code will be generated. Share it with your opponent.</div>
+      ${statusHTML}
+      <button class="lobby-btn create" onclick="createRoom()" style="max-width:200px;width:100%">
+        GENERATE CODE
+      </button>
+      <div class="lobby-back" onclick="setLobbyMode(null)">← BACK</div>
+    </div>`;
+  }
+
+  if(mode === 'join') {
+    return `
+    <div class="screen lobby-screen">
+      <div class="lobby-title">JOIN ROOM</div>
+      <div class="lobby-sub">Enter the 4-letter code your opponent shared with you.</div>
+      <input class="lobby-input" type="text" maxlength="4" placeholder="CODE"
+             oninput="lobbyInputChange(this.value)"
+             value="${G.mpJoinInput||''}" autocomplete="off" autocorrect="off" spellcheck="false"/>
+      ${statusHTML}
+      <button id="lobby-join-btn" class="lobby-btn join" onclick="joinRoom()"
+              style="max-width:200px;width:100%" ${(G.mpJoinInput||'').length===4?'':'disabled'}>
+        JOIN →
+      </button>
+      <div class="lobby-back" onclick="setLobbyMode(null)">← BACK</div>
+    </div>`;
+  }
+
+  return renderHome();
+}
+
+// ================================================================
+// INIT
+// ================================================================
+document.addEventListener('DOMContentLoaded', () => {
+  G = newState();
+  render();
+});
+</script>
+</body>
+</html>
