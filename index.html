@@ -346,7 +346,13 @@ body{
 .sBtn.active{border-color:var(--gold);background:rgba(212,165,72,0.14);color:var(--gold)}
 .sBtn.capped{opacity:0.25;cursor:not-allowed;text-decoration:line-through}
 .sBtn:not(.capped):not([disabled]):active{background:rgba(212,165,72,0.08)}
+.sBtn.ft-risk{border-color:rgba(230,57,70,0.3);color:rgba(230,57,70,0.7)}
+.sBtn.ft-risk.active{border-color:var(--red);background:rgba(230,57,70,0.1);color:var(--red)}
 .sBtn-dots{font-size:8px;color:var(--gold);opacity:0.7}
+.sBadge{font-size:7px;font-weight:700;border-radius:3px;padding:1px 3px;margin-left:2px;white-space:nowrap}
+.sBadge.read{background:rgba(251,191,36,0.15);color:#fbbf24}
+.sBadge.warn{background:rgba(251,191,36,0.1);color:#f59e0b}
+.sBadge.danger{background:rgba(230,57,70,0.15);color:var(--red)}
 .go-wrap{display:flex;flex-direction:column;gap:5px;justify-content:flex-end}
 .go-btn{
   width:100%;padding:10px 8px;background:linear-gradient(135deg,#e0b050,#c08828);
@@ -630,6 +636,11 @@ body{
   font-size:11px;color:var(--gold);background:rgba(212,165,72,0.1);
   border:1px solid rgba(212,165,72,0.3);border-radius:4px;
   padding:4px 8px;margin-top:6px;text-align:center;font-weight:700;
+}
+.res-balance{
+  font-size:10px;font-weight:700;color:#fbbf24;background:rgba(251,191,36,0.07);
+  border:1px solid rgba(251,191,36,0.2);border-radius:4px;
+  padding:3px 8px;margin-top:4px;text-align:center;
 }
 .res-commentary{
   font-size:13px;color:var(--white);text-align:center;font-weight:500;
@@ -1011,6 +1022,14 @@ body{
 .prv-role{font-size:8px;font-weight:700;letter-spacing:3px;color:var(--muted);margin-bottom:4px}
 .prv-rating{font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--gold);line-height:1}
 .prv-pitch-bump{font-size:14px;color:#86efac;vertical-align:middle}
+.prv-ovr{font-family:'Bebas Neue',sans-serif;font-size:36px;line-height:1;letter-spacing:1px}
+.prv-ovr-label{font-size:7px;letter-spacing:2px;color:var(--muted);font-weight:700;margin-bottom:3px}
+.prv-substats{display:flex;flex-direction:column;gap:2px;margin:4px 0}
+.prv-sstat{display:flex;align-items:center;gap:3px}
+.prv-sstat-key{font-size:7px;font-weight:700;color:var(--muted);min-width:20px;letter-spacing:0.3px}
+.prv-sstat-bar{flex:1;height:3px;background:rgba(255,255,255,0.08);border-radius:2px;overflow:hidden}
+.prv-sstat-fill{height:100%;border-radius:2px}
+.prv-sstat-val{font-size:7px;color:var(--muted);min-width:14px;text-align:right}
 .prv-name{font-size:11px;font-weight:700;color:var(--white);line-height:1.3;margin:3px 0}
 .prv-nick{font-size:9px;color:var(--muted);font-style:italic}
 .prv-choice{
@@ -1828,7 +1847,9 @@ function applyPitchToCard(card, pitch, homeGround) {
 }
 
 // resolveBall — pure function, all inputs explicit
-function resolveBall({ batterCard, shot, bowlerCard, delivery, batterDice, bowlerDice, pitch, homeGround, overBall, prevOutcome, batterBallsPlayed }) {
+function resolveBall({ batterCard, shot, bowlerCard, delivery, batterDice, bowlerDice,
+                       pitch, homeGround, overBall, prevOutcome, batterBallsPlayed,
+                       prevShot, prevDelivery }) {
   // Modified ratings via pitch
   let bRating = applyPitchToCard({...batterCard}, pitch, homeGround).rating;
   let wRating = applyPitchToCard({...bowlerCard}, pitch, homeGround).rating;
@@ -1848,8 +1869,43 @@ function resolveBall({ batterCard, shot, bowlerCard, delivery, batterDice, bowle
       commentary: pick(COMMENTARY.DOT), specialNote:'tail-ender flinched on 1!' };
   }
 
-  // Matchup modifier
-  const matchupMod = getMatchupMod(delivery, shot, pitch, homeGround, bowlerCard);
+  // Matchup modifier (base)
+  let effectiveDelivery = delivery;
+  let matchupMod = getMatchupMod(delivery, shot, pitch, homeGround, bowlerCard);
+
+  // ── BALANCE MECHANICS ────────────────────────────────────────────────────────
+  let balanceNote = '';
+
+  // 1. YORKER MISFIRE: bowler dice 1 → execution fails, slips to FullToss trajectory
+  //    Real cricket: a missed Yorker often ends up a full-toss gift
+  if(delivery==='Yorker' && bowlerDice===1) {
+    effectiveDelivery = 'FullToss';
+    matchupMod = getMatchupMod('FullToss', shot, pitch, homeGround, bowlerCard);
+    balanceNote = '⚡ Yorker slipped — Full Toss!';
+  }
+
+  // 2. PATTERN READ: same shot as last ball → bowler "clocked" the tendency, -1
+  //    Doesn't apply on ball 1 (no prevShot), or for defensive shots (GroundShot/Drive = smart repeat)
+  let patternPenalty = 0;
+  const aggressiveShots = ['Slog','StepDown','ReverseScoop','Pull'];
+  if(prevShot && prevShot === shot && aggressiveShots.includes(shot)) {
+    patternPenalty = -1;
+    if(!balanceNote) balanceNote = '📖 Pattern read! −1';
+  }
+
+  // 3. FULLTOSS PUNISHMENT: If bowler deliberately bowls FullToss vs attacking shot,
+  //    bowler pays an extra -1 (reflecting real risk of gift delivery)
+  //    This is already handled by the matrix (+3 for Slog vs FullToss), but
+  //    we add a further disincentive: FullToss vs any attacking shot gives bowler -1 extra
+  //    so bowler is penalised doubly for choosing it — matching real cricket
+  let ftPunish = 0;
+  const attackingShots = ['Slog','StepDown','Pull','Drive'];
+  if(delivery==='FullToss' && attackingShots.includes(shot) && effectiveDelivery!=='FullToss') {
+    // Only for INTENTIONAL FullToss (not misfires — effectiveDelivery check skips misfires)
+    ftPunish = 1; // batter gets +1 extra — the bowler "gifted" it
+    if(!balanceNote) balanceNote = '🎁 Full Toss punished! +1';
+  }
+  // ─────────────────────────────────────────────────────────────────────────────
 
   const bDiceMod = applyDiceMod(effectiveBDice);
   const wDiceMod = applyDiceMod(effectiveWDice);
@@ -1870,7 +1926,7 @@ function resolveBall({ batterCard, shot, bowlerCard, delivery, batterDice, bowle
   if(batterCard.special==='underrated' && bowlerCard.rating>=3)                   { batSpecial+=2; specialNote='Underrated!'; }
 
   // ── BOWLER SPECIALS ──
-  if(bowlerCard.special==='yorkerSpecialist' && delivery==='Yorker')              { bowlSpecial+=1; }
+  if(bowlerCard.special==='yorkerSpecialist' && delivery==='Yorker' && effectiveDelivery==='Yorker') { bowlSpecial+=1; }
   if(bowlerCard.special==='deathBowler' && overBall>=4)                           { bowlSpecial+=2; if(!specialNote)specialNote='Death Bowler!'; }
   if(bowlerCard.special==='strikeFirst' && overBall<=3)                           { bowlSpecial+=2; if(!specialNote)specialNote='Strike First!'; }
   if(bowlerCard.special==='unreadable')                                            { bowlSpecial+=1; if(!specialNote)specialNote='Unreadable!'; }
@@ -1879,7 +1935,7 @@ function resolveBall({ batterCard, shot, bowlerCard, delivery, batterDice, bowle
   if(bowlerCard.special==='underdog' && batterCard.rating>=5)                     { bowlSpecial+=3; if(!specialNote)specialNote='Underdog!'; }
   if(bowlerCard.special==='phoenix' && prevOutcome==='SIX')                       { bowlSpecial+=2; if(!specialNote)specialNote='Phoenix!'; }
 
-  const batterTotal = bRating + matchupMod + batSpecial + bDiceMod;
+  const batterTotal = bRating + matchupMod + batSpecial + bDiceMod + patternPenalty + ftPunish;
   const bowlerTotal = wRating + bowlSpecial + wDiceMod;
   const difference = batterTotal - bowlerTotal;
 
@@ -1921,8 +1977,9 @@ function resolveBall({ batterCard, shot, bowlerCard, delivery, batterDice, bowle
     outcome, runs, isWicket, anchorSaved,
     batterTotal, bowlerTotal, difference,
     matchupMod, bDiceMod, wDiceMod, batterDice, bowlerDice,
-    batterCard, bowlerCard, shot, delivery, commentary,
+    batterCard, bowlerCard, shot, delivery, effectiveDelivery, commentary,
     batSpecial, bowlSpecial, bRating, wRating, specialNote,
+    balanceNote, patternPenalty, ftPunish,
   };
 }
 
@@ -2292,25 +2349,36 @@ function showBettingOverlay() {
   const powerRowHTML=powers.length
     ?`<div class="prv-power-row">${powers.map(p=>`<div class="prv-power-badge">${p}</div>`).join('')}</div>`:'';
   const pCoins=G.coins.player;
+  // Build card face HTML for the betting overlay
+  function prvCardFace(card, buffedCard, choice, role) {
+    const st = getCardStats(buffedCard);
+    const isBatter = card.type === 'batter';
+    const keys = isBatter ? ['PWR','TIM','TEC','SPL'] : ['SPD','LNE','VAR','SPL'];
+    const vals = [st.a, st.b, st.c, st.d];
+    const tierColor = st.tier==='gold'?'#f0c060':st.tier==='silver'?'#c8d0dc':'#a07840';
+    const pitchBump = buffedCard.rating !== card.rating ? ' <span class="prv-pitch-bump">⛰</span>' : '';
+    return `
+      <div class="prv-role">${role}</div>
+      <div class="prv-ovr" style="color:${tierColor}">${st.ovr}${pitchBump}</div>
+      <div class="prv-ovr-label">OVR</div>
+      <div class="prv-name">${card.name}</div>
+      <div class="prv-nick">${card.nick||''}</div>
+      <div class="prv-substats">
+        ${keys.map((k,j)=>`<div class="prv-sstat">
+          <span class="prv-sstat-key">${k}</span>
+          <div class="prv-sstat-bar"><div class="prv-sstat-fill" style="width:${vals[j]}%;background:${tierColor}"></div></div>
+          <span class="prv-sstat-val">${vals[j]}</span>
+        </div>`).join('')}
+      </div>
+      <div class="prv-choice">${dispName(choice)}</div>`;
+  }
   const html=`
     <div class="bet-eyebrow">BALL ${ballNum} OF 6</div>
     <div class="bet-overpot">OVER POT 🪙${G.overPot} RIDING THIS INNINGS</div>
     <div class="prv-reveal-row" style="animation:prvCardIn 0.3s 0.05s both">
-      <div class="prv-card batter">
-        <div class="prv-role">BATTER</div>
-        <div class="prv-rating">★${buffedBat.rating}${buffedBat.rating !== batterCard.rating ? '<span class="prv-pitch-bump"> ⛰</span>' : ''}</div>
-        <div class="prv-name">${batterCard.name}</div>
-        <div class="prv-nick">${batterCard.nick||''}</div>
-        <div class="prv-choice">${dispName(shot)}</div>
-      </div>
+      <div class="prv-card batter">${prvCardFace(batterCard,buffedBat,shot,'BATTER')}</div>
       <div class="prv-vs">VS</div>
-      <div class="prv-card bowler">
-        <div class="prv-role">BOWLER</div>
-        <div class="prv-rating">★${buffedBowl.rating}${buffedBowl.rating !== bowlerCard.rating ? '<span class="prv-pitch-bump"> ⛰</span>' : ''}</div>
-        <div class="prv-name">${bowlerCard.name}</div>
-        <div class="prv-nick">${bowlerCard.nick||''}</div>
-        <div class="prv-choice">${dispName(delivery)}</div>
-      </div>
+      <div class="prv-card bowler">${prvCardFace(bowlerCard,buffedBowl,delivery,'BOWLER')}</div>
     </div>
     <div class="prv-matchup-banner" style="animation:prvCardIn 0.3s 0.12s both">
       <div class="prv-matchup-label">MATCHUP MODIFIER</div>
@@ -2535,6 +2603,8 @@ function finalizeBall(bDice, wDice, batterCard, bowlerCard, shot, delivery, home
   const inn = getCurrentInn();
   const overBall = (inn.balls % 6) + 1;
   const prevOutcome = inn.ballLog.length > 0 ? inn.ballLog[inn.ballLog.length-1].outcome : null;
+  const prevShot    = inn.ballLog.length > 0 ? inn.ballLog[inn.ballLog.length-1].shot : null;
+  const prevDelivery= inn.ballLog.length > 0 ? inn.ballLog[inn.ballLog.length-1].delivery : null;
   const batterBallsPlayed = inn.batterBallsPlayed || 0;
   const isPlayerBatting = G.currentInnings===1;
 
@@ -2553,6 +2623,7 @@ function finalizeBall(bDice, wDice, batterCard, bowlerCard, shot, delivery, home
     batterDice: bDice, bowlerDice: wDice,
     pitch: G.pitch, homeGround,
     overBall, prevOutcome, batterBallsPlayed,
+    prevShot, prevDelivery,
   });
 
   // Capture powers used this ball (before state reset)
@@ -2577,8 +2648,9 @@ function finalizeBall(bDice, wDice, batterCard, bowlerCard, shot, delivery, home
   inn.balls++;
   inn.batterBallsPlayed = (inn.batterBallsPlayed||0) + 1;
 
-  // Log this ball
-  inn.ballLog.push({ ball: inn.balls, outcome: result.outcome, runs: result.runs });
+  // Log this ball — include shot/delivery for pattern read system
+  inn.ballLog.push({ ball: inn.balls, outcome: result.outcome, runs: result.runs,
+                     shot: result.shot, delivery: result.delivery });
 
   // Remove played cards from hands (marks _played=true, stores outcome)
   const pCard = G.playerCard, aCard = G.aiCard;
@@ -2667,6 +2739,11 @@ function buildResultHTML(result) {
     ? `<div class="res-special">${result.anchorSaved?'⚓':'⚡'} ${result.specialNote||'Saved!'}</div>`
     : '';
 
+  // Balance mechanic note (pattern read, yorker misfire, etc.)
+  const balanceNoteHTML = result.balanceNote
+    ? `<div class="res-balance">${result.balanceNote}</div>`
+    : '';
+
   // Power badges
   const powerBadges = [];
   if(result.playerPowerThisBall) powerBadges.push(`YOU: ${result.playerPowerThisBall.icon} ${result.playerPowerThisBall.name}`);
@@ -2720,13 +2797,13 @@ function buildResultHTML(result) {
         <div class="res-pc-name">${result.bowlerCard.name}</div>
         <div class="res-pc-rating">${starStr(result.wRating)} <span style="font-size:12px;color:var(--muted)">(${result.wRating}${result.wRating !== result.bowlerCard.rating ? ' buffed' : ''})</span></div>
         ${bowlSpecialLabel ? `<div class="res-pc-special">${bowlSpecialLabel} +${result.bowlSpecial}</div>` : ''}
-        <div class="res-pc-action">${dispName(result.delivery)}</div>
+        <div class="res-pc-action">${dispName(result.effectiveDelivery||result.delivery)}${result.effectiveDelivery&&result.effectiveDelivery!==result.delivery?` <span style="font-size:9px;color:var(--red)">(slipped from ${dispName(result.delivery)})</span>`:''}</div>
       </div>
     </div>
 
     <!-- MATCHUP LINE -->
     <div style="font-size:10px;color:var(--muted);text-align:center;font-weight:700">
-      Matchup: ${matchModStr} (${dispName(result.delivery)} vs ${dispName(result.shot)})
+      Matchup: ${matchModStr} (${dispName(result.effectiveDelivery||result.delivery)} vs ${dispName(result.shot)})
     </div>
 
     <!-- DICE -->
@@ -2751,6 +2828,7 @@ function buildResultHTML(result) {
       <div class="res-calc-line">${result.batterTotal} − ${result.bowlerTotal} = ${diffSign}${result.difference}</div>
       <div class="res-thresh-line">${thresholdDesc}</div>
       ${specialNote}
+      ${balanceNoteHTML}
     </div>
 
     ${chipFeedbackHTML}
@@ -3157,6 +3235,10 @@ function buildChoiceButtons(inn, isPlayerBatting, selectedCard, selectedChoice) 
     : (selectedCard ? getAvailableDeliveries(selectedCard, inn) : PACE_DELIVERIES);
   const label = isPlayerBatting ? 'SHOT' : 'DELIVERY';
   const isSpin = !isPlayerBatting && selectedCard && selectedCard.spinner;
+  const lastShot     = inn.ballLog.length>0 ? inn.ballLog[inn.ballLog.length-1].shot     : null;
+  const lastDelivery = inn.ballLog.length>0 ? inn.ballLog[inn.ballLog.length-1].delivery : null;
+  const aggressiveShots = ['Slog','StepDown','ReverseScoop','Pull'];
+
   const btns = choices.map(ch=>{
     const isSel=ch===selectedChoice;
     let capped=false;
@@ -3173,8 +3255,21 @@ function buildChoiceButtons(inn, isPlayerBatting, selectedCard, selectedChoice) 
     const usedCount=isPlayerBatting?(inn.shotsUsed[ch]||0):(inn.deliveriesUsed[ch]||0);
     const hasCap=['Slog','ReverseScoop','Yorker','Bouncer','Googly','Doosra','ShortBall'].includes(ch);
     const dots=hasCap?`<span class="sBtn-dots">${usedCount>=1?'●':'○'}${usedCount>=2?'●':'○'}</span>`:'';
-    return `<button class="sBtn${isSel?' active':''}${capped?' capped':''}" onclick="selectChoice('${ch}')" ${capped?'disabled':''}>
-      ${dispName(ch)}${dots}
+
+    // Risk/warning badges
+    let badge='';
+    if(isPlayerBatting){
+      if(ch===lastShot && aggressiveShots.includes(ch) && !capped)
+        badge=`<span class="sBadge read" title="Repeat aggressive shot — bowler expects it! −1">📖−1</span>`;
+    } else {
+      if(ch==='FullToss')
+        badge=`<span class="sBadge danger" title="Real bowlers don't bowl these. Big gift vs attacking shots.">⚠️</span>`;
+      else if(ch==='Yorker')
+        badge=`<span class="sBadge warn" title="Dice 1 = misfire becomes Full Toss. High risk/reward.">⚡</span>`;
+    }
+
+    return `<button class="sBtn${isSel?' active':''}${capped?' capped':''}${ch==='FullToss'?' ft-risk':''}" onclick="selectChoice('${ch}')" ${capped?'disabled':''}>
+      ${dispName(ch)}${dots}${badge}
     </button>`;
   }).join('');
   const hint=selectedChoice?buildMatrixHint(selectedChoice,isPlayerBatting,selectedCard):'';
