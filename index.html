@@ -404,7 +404,7 @@ body{
   border-radius:8px;border:1.5px solid rgba(212,165,72,0.18);
   background:var(--card-bg);cursor:pointer;position:relative;overflow:hidden;
   transition:border-color 0.15s,transform 0.15s,box-shadow 0.15s,opacity 0.25s;
-  padding:6px 7px 5px;min-height:62px;
+  padding:5px 6px 4px;min-height:82px;
 }
 .bcard.selected{
   border-color:var(--gold)!important;
@@ -422,6 +422,32 @@ body{
   font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--gold);
   line-height:1;
 }
+.bc-ovr{
+  font-family:'Bebas Neue',sans-serif;font-size:20px;line-height:1;
+  letter-spacing:1px;
+}
+.bc-ovr-label{font-size:6px;letter-spacing:1px;font-weight:700;opacity:0.6;line-height:1}
+.bcard.tier-gold{border-color:rgba(212,165,72,0.5);background:linear-gradient(160deg,#0d1e35,#0a1628)}
+.bcard.tier-silver{border-color:rgba(192,192,192,0.35);background:linear-gradient(160deg,#111c2e,#0a1628)}
+.bcard.tier-bronze{border-color:rgba(160,120,60,0.3);background:linear-gradient(160deg,#0f1a2c,#0a1628)}
+.bcard.tier-gold .bc-ovr{color:#f0c060}
+.bcard.tier-silver .bc-ovr{color:#c8d0dc}
+.bcard.tier-bronze .bc-ovr{color:#a07840}
+.bc-stats{display:grid;grid-template-columns:1fr 1fr;gap:1px 4px;margin-top:3px}
+.bc-stat{display:flex;align-items:center;gap:2px}
+.bc-stat-key{font-size:6px;color:var(--muted);font-weight:700;letter-spacing:0.3px;min-width:18px}
+.bc-stat-bar{flex:1;height:3px;background:rgba(255,255,255,0.08);border-radius:2px;overflow:hidden}
+.bc-stat-bar-fill{height:100%;border-radius:2px;background:var(--gold);transition:width 0.3s}
+.bcard.tier-silver .bc-stat-bar-fill{background:#a0b0c8}
+.bcard.tier-bronze .bc-stat-bar-fill{background:#907038}
+.bc-stat-val{font-size:6px;color:var(--muted);min-width:12px;text-align:right}
+/* HUD selected card sub-stats (larger bars) */
+.hsc-substats{margin-top:5px;display:flex;flex-direction:column;gap:3px}
+.hsc-sstat{display:flex;align-items:center;gap:4px}
+.hsc-sstat-key{font-size:8px;font-weight:700;color:var(--muted);min-width:24px;letter-spacing:0.5px}
+.hsc-sstat-bar{flex:1;height:4px;background:rgba(255,255,255,0.08);border-radius:2px;overflow:hidden}
+.hsc-sstat-fill{height:100%;background:var(--gold);border-radius:2px}
+.hsc-sstat-val{font-size:8px;color:var(--gold);min-width:20px;text-align:right;font-weight:700}
 .bc-name{font-size:8.5px;font-weight:700;color:var(--white);line-height:1.2;margin-top:1px}
 .bc-nick{font-size:7px;color:var(--muted);font-style:italic;line-height:1}
 .bc-special{
@@ -1705,6 +1731,60 @@ function applyDiceMod(roll) {
 }
 
 function cloneCard(c) { return {...c, _anchorFired:false}; }
+
+// ── OPTION B SUB-STATS (display only — does not affect formula) ──────────────
+// Generates 4 deterministic sub-stats per card based on rating + special + type.
+// Batter stats: PWR (power), TIM (timing), TEC (technique), SPL (special)
+// Bowler stats: SPD (speed/flight), LNE (line/accuracy), VAR (variation), SPL
+function getCardStats(card) {
+  // Base from star rating: ★1→54 ★2→63 ★3→72 ★4→82 ★5→93
+  const base = [0,54,63,72,82,93][card.rating] || 60;
+  // Deterministic pseudo-random from card id (FNV-1a style)
+  let h = 2166136261;
+  for(let i=0;i<card.id.length;i++){ h ^= card.id.charCodeAt(i); h = (h*16777619)>>>0; }
+  const rng = (n, range) => (((h ^ (h>>>n*5)) * (n*2654435769))>>>0) % range;
+  const clamp = n => Math.max(30, Math.min(99, Math.round(n)));
+
+  // Special bonuses to specific stat slots
+  const B = {a:0,b:0,c:0,d:0};
+  if(card.type === 'batter') {
+    // a=PWR  b=TIM  c=TEC  d=SPL
+    if(card.bigHitter)                                        { B.a+=8; }
+    if(card.special==='bigHitter'||card.special==='rangeHitter') { B.a+=10; B.d+=6; }
+    if(card.special==='anchor'||card.special==='wicketShield')   { B.b+=10; B.c+=6; }
+    if(card.special==='steadyEddie')                             { B.b+=8; }
+    if(card.special==='fastStarter'||card.special==='powerSurge'){ B.a+=7; B.d+=5; }
+    if(card.special==='counterPunch'||card.special==='resilient'){ B.c+=8; B.d+=5; }
+    if(card.special==='antiPace'||card.special==='antiSpin')     { B.c+=10; B.d+=8; }
+    if(card.special==='underrated')                              { B.d+=14; }
+    if(card.special==='finisher')                                { B.a+=6; B.d+=10; }
+    if(card.special==='hookShot')                                { B.c+=10; }
+    if(card.special==='tieWinner')                               { B.b+=8; B.d+=8; }
+    if(card.special==='tailEnder')                               { B.a+=12; B.b-=8; B.d+=10; }
+  } else {
+    // a=SPD  b=LNE  c=VAR  d=SPL
+    if(card.seamer)                                              { B.a+=5; }
+    if(card.spinner)                                             { B.c+=5; }
+    if(card.special==='deathBowler')                             { B.b+=10; B.d+=8; }
+    if(card.special==='strikeFirst')                             { B.a+=8; B.d+=6; }
+    if(card.special==='paceDemon')                               { B.a+=12; B.d+=8; }
+    if(card.special==='unreadable')                              { B.c+=12; B.d+=10; }
+    if(card.special==='googly'||card.special==='yorkerSpecialist'){ B.c+=10; B.d+=8; }
+    if(card.special==='netBowler')                               { B.b+=10; }
+    if(card.special==='luckyBreak'||card.special==='phoenix')    { B.d+=12; }
+    if(card.special==='steadyBowler')                            { B.b+=10; }
+    if(card.special==='underdog')                                { B.d+=14; }
+  }
+
+  return {
+    a: clamp(base - 8 + rng(1,16) + B.a),
+    b: clamp(base - 7 + rng(2,14) + B.b),
+    c: clamp(base - 7 + rng(3,14) + B.c),
+    d: clamp(base - 9 + rng(4,18) + B.d),
+    ovr: clamp(Math.round((base + B.a*0.25 + B.b*0.1 + B.c*0.1 + B.d*0.1) * 0.95)),
+    tier: card.rating>=5?'gold':card.rating>=4?'gold':card.rating>=3?'silver':'bronze',
+  };
+}
 function getAvailableDeliveries(bowlerCard,inn) {
   const base=(bowlerCard&&bowlerCard.spinner)?SPIN_DELIVERIES:PACE_DELIVERIES;
   return base.filter(d=>{
@@ -3117,9 +3197,28 @@ function renderMidHud(inn, isPlayerBatting) {
     centerContent = `
     <div class="hud-selection">
       <div class="hud-selected-card">
-        <div class="hsc-rating">★${selectedCard.rating}</div>
-        <div class="hsc-name">${selectedCard.name}</div>
-        <div class="hsc-nick">${selectedCard.nick||''}</div>
+        ${(() => {
+          const st = getCardStats(selectedCard);
+          const isBatter = selectedCard.type === 'batter';
+          const keys = isBatter ? ['PWR','TIM','TEC','SPL'] : ['SPD','LNE','VAR','SPL'];
+          const vals = [st.a, st.b, st.c, st.d];
+          const barsHTML = keys.map((k,j)=>`
+            <div class="hsc-sstat">
+              <span class="hsc-sstat-key">${k}</span>
+              <div class="hsc-sstat-bar"><div class="hsc-sstat-fill" style="width:${vals[j]}%"></div></div>
+              <span class="hsc-sstat-val">${vals[j]}</span>
+            </div>`).join('');
+          return `<div style="display:flex;align-items:flex-start;gap:5px;margin-bottom:3px">
+            <div><div style="font-size:7px;color:var(--muted);letter-spacing:1px">OVR</div>
+              <div class="hsc-rating" style="color:${st.tier==='gold'?'#f0c060':st.tier==='silver'?'#c8d0dc':'#a07840'}">${st.ovr}</div>
+            </div>
+            <div style="flex:1">
+              <div class="hsc-name">${selectedCard.name}</div>
+              <div class="hsc-nick">${selectedCard.nick||''}</div>
+            </div>
+          </div>
+          <div class="hsc-substats">${barsHTML}</div>`;
+        })()}
         ${specialTag}
       </div>
       <div class="shot-col">
@@ -3211,14 +3310,29 @@ function renderPlayerZone(inn, isPlayerBatting) {
       </div>`;
     }
 
+    const st = getCardStats(c);
+    const isBatter = c.type === 'batter';
+    const keys = isBatter ? ['PWR','TIM','TEC','SPL'] : ['SPD','LNE','VAR','SPL'];
+    const vals = [st.a, st.b, st.c, st.d];
+    const statsHTML = `<div class="bc-stats">${keys.map((k,j)=>`
+      <div class="bc-stat">
+        <span class="bc-stat-key">${k}</span>
+        <div class="bc-stat-bar"><div class="bc-stat-bar-fill" style="width:${vals[j]}%"></div></div>
+        <span class="bc-stat-val">${vals[j]}</span>
+      </div>`).join('')}</div>`;
     const specialTag = c.special ? `<div class="bc-special">${SPECIAL_LABELS[c.special]||c.special}</div>` : '';
-    const cls = `bcard${isSel?' selected':''}${isCaptain?' captain-swap':''}`;
+    const cls = `bcard tier-${st.tier}${isSel?' selected':''}${isCaptain?' captain-swap':''}`;
     const onclick = isCaptain ? `onclick="captainSwap(${i})"` : `onclick="selectCard(${i})"`;
     return `<div class="${cls}" ${onclick}>
-      <div class="bc-rating">★${c.rating}</div>
-      <div class="bc-name">${c.name}</div>
-      <div class="bc-nick">${c.nick||''}</div>
-      ${specialTag}
+      <div style="display:flex;align-items:flex-start;gap:4px">
+        <div><div class="bc-ovr-label">OVR</div><div class="bc-ovr">${st.ovr}</div></div>
+        <div style="flex:1;overflow:hidden">
+          <div class="bc-name">${c.name}</div>
+          <div class="bc-nick">${c.nick||''}</div>
+          ${specialTag}
+        </div>
+      </div>
+      ${statsHTML}
     </div>`;
   }).join('');
 
@@ -3430,6 +3544,7 @@ window.openLobby = function() {
   render();
 };
 window.lobbyBack = function() {
+  _clearPolls();
   G.phase = 'home';
   render();
 };
@@ -3441,6 +3556,9 @@ window.setLobbyMode = function(mode) {
 };
 window.lobbyInputChange = function(val) {
   G.mpJoinInput = val.toUpperCase().slice(0,4);
+  // Directly toggle button without re-rendering (re-render would reset input focus)
+  const btn = document.getElementById('lobby-join-btn');
+  if(btn) btn.disabled = G.mpJoinInput.length !== 4;
 };
 
 window.createRoom = async function() {
@@ -3505,40 +3623,50 @@ window.joinRoom = async function() {
 };
 
 let _pollTimer = null;
+let _pollTimer2 = null;
+function _clearPolls() {
+  if(_pollTimer)  { clearInterval(_pollTimer);  _pollTimer  = null; }
+  if(_pollTimer2) { clearInterval(_pollTimer2); _pollTimer2 = null; }
+}
+
 function _pollForGuest(code) {
+  _clearPolls();
   _pollTimer = setInterval(async () => {
     try {
       const room = await dbGet(`rooms/${code}`);
       if(room && room.guest) {
-        clearInterval(_pollTimer);
+        _clearPolls();
         G.mpStatus = 'Guest joined! Setting stakes…';
+        G.phase = 'mpStakes';
+        G.mpStakeAmt = 0;
         render();
-        // Both players go to mpStakes phase
-        setTimeout(() => {
-          G.phase = 'mpStakes';
-          G.mpStakeAmt = 0;
-          render();
-        }, 800);
       }
     } catch(e) {}
   }, 2000);
 }
+
 function _pollForGameStart(code) {
-  // Guest: first poll for host's stakeAmt, then for game start
+  _clearPolls();
   _pollTimer = setInterval(async () => {
     try {
       const room = await dbGet(`rooms/${code}`);
-      if(room && room.stakeAmt && G.phase === 'lobbyWaiting') {
-        // Host picked stakes — show mpStakes to guest
+      if(!room) return;
+      // Step 1: host picked a stake — surface it to guest on mpStakes screen
+      if(room.stakeAmt && G.phase === 'lobbyWaiting') {
         G.mpStakeAmt = room.stakeAmt;
         G.phase = 'mpStakes';
         render();
+        return;
       }
-      if(room && room.phase === 'playing' && G.phase !== 'mpStakes') {
-        clearInterval(_pollTimer);
-        G.mpStatus = 'Game starting…';
+      // Step 2: host updated stake while guest is already on mpStakes — refresh
+      if(room.stakeAmt && G.phase === 'mpStakes' && G.mpStakeAmt !== room.stakeAmt) {
+        G.mpStakeAmt = room.stakeAmt;
         render();
-        setTimeout(() => { initGame(); }, 500);
+      }
+      // Step 3: fallback — phase flipped to playing before guest saw mpStakes
+      if(room.phase === 'playing' && G.phase === 'lobbyWaiting') {
+        _clearPolls();
+        initGame();
       }
     } catch(e) {}
   }, 2000);
@@ -3600,16 +3728,16 @@ window.mpStakeSelect = function(amt) {
 window.mpStakeConfirm = function() {
   if(!G.mpStakeAmt) return;
   G.overStakeAmt = G.mpStakeAmt;
+  _clearPolls(); // stop all polling before game starts
   if(G.mpIsHost) {
-    // Write confirmed flag and transition to pitchReveal
     if(G.mpRoomCode) {
       dbPatch(`rooms/${G.mpRoomCode}`, { stakeReady: true, phase: 'playing' }).catch(()=>{});
     }
     initGame();
   } else {
-    // Guest confirmed — wait for host to also confirm, then poll for game start
+    // Guest confirmed — start game independently (in-game sync is the next milestone)
     if(G.mpRoomCode) dbPatch(`rooms/${G.mpRoomCode}`, { guestStakeOk: true }).catch(()=>{});
-    initGame(); // Guest mirrors host; both start independently (sync is per existing design)
+    initGame();
   }
 };
 
@@ -3676,7 +3804,7 @@ function renderLobby() {
              oninput="lobbyInputChange(this.value)"
              value="${G.mpJoinInput||''}" autocomplete="off" autocorrect="off" spellcheck="false"/>
       ${statusHTML}
-      <button class="lobby-btn join" onclick="joinRoom()"
+      <button id="lobby-join-btn" class="lobby-btn join" onclick="joinRoom()"
               style="max-width:200px;width:100%" ${(G.mpJoinInput||'').length===4?'':'disabled'}>
         JOIN →
       </button>
